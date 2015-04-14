@@ -15,7 +15,7 @@ _errors:
     prefix:   /_error
 
 _main:
-    resource: routing.yml
+    resource: routing.yml	
 
 # AcmeDemoBundle routes (to be removed)
 _acme_demo:
