@@ -21,4 +21,4 @@ UPDATE f_cd SET type=4 WHERE type IN (SELECT DISTINCT type FROM f_type t WHERE l
 UPDATE f_cd SET type=12 WHERE type IN (SELECT DISTINCT type FROM f_type t WHERE libelle = 'n/a' AND type != 4);
 
 /*Suppresion des "inutiles" dans f_type*/
-DELETE FROM f_type WHERE (libelle = 'Album' or libelle = 'Single' or libelle = 'Maxi-Single' or libelle = 'n/a') AND type != 1 AND type != 2 AND type != 4 AND type!=12;
+DELETE FROM f_type WHERE libelle IN ('Album','Single','Maxi-Single','n/a') AND type NOT IN(1,2,4,12);

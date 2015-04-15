@@ -20,4 +20,4 @@ UPDATE f_cd SET support = 4 WHERE support = 6;
 UPDATE f_cd SET support = 12 WHERE support = 14;
 
 /* Suppresion des entrées de la table f_support "inutiles" */
-DELETE FROM f_support WHERE support = 2 or support = 3 or support = 13 or support = 6 or support = 14;
+DELETE FROM f_support WHERE support IN (2,3,13,6,14);
