@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FCdComment" table="f_cd_comment">
+    <indexes>
+      <index name="cd" columns="cd"/>
+    </indexes>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="chrono" type="datetime" column="chrono" nullable="false"/>
+    <field name="user" type="integer" column="user" nullable="false"/>
+    <field name="comment" type="text" column="comment" nullable="false"/>
+    <field name="cd" type="integer" column="cd" nullable="false"/>
+    <field name="idForum" type="integer" column="id_forum" nullable="false"/>
+  </entity>
+</doctrine-mapping>

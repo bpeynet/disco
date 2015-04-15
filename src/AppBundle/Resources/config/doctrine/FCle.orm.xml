@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FCle" table="f_cle">
+    <unique-constraints>
+      <unique-constraint name="champ" columns="champ"/>
+    </unique-constraints>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="champ" type="string" column="champ" length="45" nullable="false"/>
+    <field name="cle" type="integer" column="cle" nullable="false"/>
+    <field name="chrono" type="datetime" column="chrono" nullable="false"/>
+  </entity>
+</doctrine-mapping>

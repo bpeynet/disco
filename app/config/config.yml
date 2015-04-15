@@ -60,6 +60,10 @@ doctrine:
         #   3. Uncomment next line:
         #     path:     "%database_path%"
 
+        #added o 15/04/2015 for the enum BD fields
+        mapping_types:
+            enum: string
+
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true

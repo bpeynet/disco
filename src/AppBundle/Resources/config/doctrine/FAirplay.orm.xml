@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FAirplay" table="f_airplay">
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="airplay" type="integer" column="airplay" nullable="false"/>
+    <field name="libelle" type="string" column="libelle" length="200" nullable="false"/>
+    <field name="dcreat" type="datetime" column="dcreat" nullable="false"/>
+    <field name="annee" type="integer" column="annee" nullable="false"/>
+    <field name="mois" type="integer" column="mois" nullable="false"/>
+    <field name="dmodif" type="datetime" column="dmodif" nullable="false"/>
+    <field name="cUser" type="integer" column="c_user" nullable="false"/>
+    <field name="mUser" type="integer" column="m_user" nullable="false"/>
+    <field name="publie" type="boolean" column="publie" nullable="false"/>
+    <field name="chrono" type="datetime" column="chrono" nullable="false"/>
+    <field name="courant" type="boolean" column="courant" nullable="false"/>
+  </entity>
+</doctrine-mapping>

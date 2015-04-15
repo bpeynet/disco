@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FArtiste" table="f_artiste">
+    <indexes>
+      <index name="libelle" columns="libelle"/>
+      <index name="nom" columns="nom"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="artiste" columns="artiste"/>
+    </unique-constraints>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="artiste" type="integer" column="artiste" nullable="false"/>
+    <field name="prenom" type="string" column="prenom" length="50" nullable="false"/>
+    <field name="nom" type="string" column="nom" length="250" nullable="false"/>
+    <field name="libelle" type="string" column="libelle" length="300" nullable="false"/>
+    <field name="siteweb" type="string" column="siteweb" length="150" nullable="false"/>
+    <field name="myspace" type="string" column="myspace" length="150" nullable="false"/>
+  </entity>
+</doctrine-mapping>

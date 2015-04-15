@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FHisto" table="f_histo">
+    <indexes>
+      <index name="type_his" columns="jour,typ_his"/>
+      <index name="jour" columns="jour"/>
+      <index name="user" columns="user"/>
+    </indexes>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="chrono" type="datetime" column="chrono" nullable="false"/>
+    <field name="jour" type="integer" column="jour" nullable="false"/>
+    <field name="cd" type="integer" column="cd" nullable="false"/>
+    <field name="typHis" type="string" column="typ_his" nullable="false"/>
+    <field name="user" type="integer" column="user" nullable="false"/>
+    <field name="nomUser" type="string" column="nom_user" length="100" nullable="false"/>
+    <field name="ip" type="string" column="ip" length="20" nullable="false"/>
+    <field name="comment" type="string" column="comment" length="250" nullable="false"/>
+    <field name="version" type="string" column="version" length="10" nullable="false"/>
+    <field name="rotation" type="integer" column="rotation" nullable="false"/>
+  </entity>
+</doctrine-mapping>

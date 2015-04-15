@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FCd" table="f_cd">
+    <indexes>
+      <index name="artiste" columns="artiste"/>
+      <index name="genre" columns="genre"/>
+      <index name="support" columns="support"/>
+      <index name="type" columns="type"/>
+      <index name="airplay" columns="cd,airplay"/>
+      <index name="dprogra" columns="dprogra"/>
+      <index name="jsaisie" columns="jsaisie"/>
+      <index name="alllabel" columns="label,maison,distrib"/>
+      <index name="jsaisie_anne" columns="jsaisie,annee"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="cd" columns="cd"/>
+    </unique-constraints>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="cd" type="integer" column="cd" nullable="false"/>
+    <field name="artiste" type="integer" column="artiste" nullable="false"/>
+    <field name="titre" type="string" column="titre" length="250" nullable="false"/>
+    <field name="label" type="integer" column="label" nullable="false"/>
+    <field name="maison" type="integer" column="maison" nullable="false"/>
+    <field name="distrib" type="integer" column="distrib" nullable="false"/>
+    <field name="dsortie" type="datetime" column="dsortie" nullable="false"/>
+    <field name="annee" type="string" column="annee" length="4" nullable="false"/>
+    <field name="type" type="integer" column="type" nullable="false"/>
+    <field name="support" type="integer" column="support" nullable="false"/>
+    <field name="genre" type="integer" column="genre" nullable="false"/>
+    <field name="langue" type="integer" column="langue" nullable="false"/>
+    <field name="rotation" type="integer" column="rotation" nullable="false"/>
+    <field name="userProgra" type="integer" column="user_progra" nullable="false"/>
+    <field name="dprogra" type="integer" column="dprogra" nullable="false"/>
+    <field name="comment" type="text" column="comment" nullable="false"/>
+    <field name="dsaisie" type="datetime" column="dsaisie" nullable="false"/>
+    <field name="jsaisie" type="integer" column="jsaisie" nullable="false"/>
+    <field name="dvd" type="boolean" column="dvd" nullable="false"/>
+    <field name="noteMoy" type="float" column="note_moy" precision="5" scale="2" nullable="false"/>
+    <field name="airplay" type="boolean" column="airplay" nullable="false"/>
+    <field name="retourMail" type="string" column="retour_mail" length="100" nullable="false"/>
+    <field name="retourLabel" type="boolean" column="retour_label" nullable="false"/>
+    <field name="retourComment" type="text" column="retour_comment" nullable="false"/>
+    <field name="various" type="boolean" column="various" nullable="false"/>
+    <field name="nbPiste" type="integer" column="nb_piste" nullable="false"/>
+    <field name="paulo" type="boolean" column="paulo" nullable="false"/>
+    <field name="etiquette" type="boolean" column="etiquette" nullable="false"/>
+    <field name="libartiste" type="string" column="libartiste" length="100" nullable="false"/>
+    <field name="libelle" type="string" column="libelle" length="250" nullable="false"/>
+    <field name="discid" type="string" column="discid" length="10" nullable="false"/>
+    <field name="refLabel" type="string" column="ref_label" length="45" nullable="false"/>
+    <field name="suppr" type="boolean" column="suppr" nullable="false"/>
+    <field name="retourAttendu" type="integer" column="retour_attendu" nullable="false"/>
+    <field name="img" type="string" column="img" length="15" nullable="false"/>
+  </entity>
+</doctrine-mapping>

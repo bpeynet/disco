@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FCdEmprunt" table="f_cd_emprunt">
+    <indexes>
+      <index name="cle" columns="cd,numex"/>
+      <index name="user" columns="user"/>
+      <index name="disparu" columns="disparu"/>
+      <index name="cd" columns="cd"/>
+    </indexes>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="cd" type="integer" column="cd" nullable="false"/>
+    <field name="numex" type="integer" column="numex" nullable="false"/>
+    <field name="user" type="integer" column="user" nullable="false"/>
+    <field name="disparu" type="boolean" column="disparu" nullable="false"/>
+    <field name="chrono" type="datetime" column="chrono" nullable="false"/>
+    <field name="retUser" type="integer" column="ret_user" nullable="false"/>
+    <field name="retChrono" type="datetime" column="ret_chrono" nullable="false"/>
+    <field name="empUser" type="integer" column="emp_user" nullable="false"/>
+    <field name="empChrono" type="datetime" column="emp_chrono" nullable="false"/>
+  </entity>
+</doctrine-mapping>

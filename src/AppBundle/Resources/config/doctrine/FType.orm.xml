@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FType" table="f_type">
+    <indexes>
+      <index name="type" columns="type"/>
+      <index name="libelle" columns="libelle"/>
+    </indexes>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="type" type="integer" column="type" nullable="false"/>
+    <field name="libelle" type="string" column="libelle" length="45" nullable="false"/>
+    <field name="airplay" type="boolean" column="airplay" nullable="false"/>
+  </entity>
+</doctrine-mapping>

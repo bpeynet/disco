@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FCdGenre" table="f_cd_genre">
+    <indexes>
+      <index name="cd" columns="cd"/>
+      <index name="cle" columns="cd,genre"/>
+    </indexes>
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="cd" type="integer" column="cd" nullable="false"/>
+    <field name="genre" type="integer" column="genre" nullable="false"/>
+  </entity>
+</doctrine-mapping>

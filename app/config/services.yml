@@ -1,9 +1,16 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
-#    parameter_name: value
+    AppBundle.db.table_prefix: f_
 
 services:
 #    service_name:
-#        class: AppBundle\Directory\ClassName
+#        class: AcmeBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    
+    #added on 14/05/2015 in order to remove the 'f_' prefix to the generated entities by Doctrine
+    appbundle.tblprefix_subscriber:
+        class: AppBundle\Subscriber\TablePrefixSubscriber
+        arguments: [%AppBundle.db.table_prefix%]
+        tags:
+            - { name: doctrine.event_subscriber }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\FEspion" table="f_espion">
+    <id name="dbkey" type="integer" column="dbkey">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="user" type="integer" column="user" nullable="false"/>
+    <field name="chrono" type="datetime" column="chrono" nullable="false"/>
+    <field name="appli" type="string" column="appli" length="10" nullable="false"/>
+  </entity>
+</doctrine-mapping>
