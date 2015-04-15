@@ -12,14 +12,14 @@ UPDATE f_langue SET libelle = "Arabe" WHERE langue = 37;
 UPDATE f_langue SET libelle = "Japonais" WHERE langue = 47;
 
 /*Regroupement dans une même table des identiques*/
-UPDATE f_cd SET langue=1 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Anglais' AND langue != 1 GROUP BY langue);
-UPDATE f_cd SET langue=2 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Français' AND langue != 2 GROUP BY langue);
-UPDATE f_cd SET langue=5 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Instru' AND langue != 5 GROUP BY langue);
-UPDATE f_cd SET langue=8 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Autre' AND langue != 8 GROUP BY langue);
-UPDATE f_cd SET langue=9 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Espagnol' AND langue != 9 GROUP BY langue);
-UPDATE f_cd SET langue=12 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Allemand' AND langue != 12 GROUP BY langue);
-UPDATE f_cd SET langue=21 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Portuguais' AND langue != 21 GROUP BY langue);
-UPDATE f_cd SET langue=32 WHERE langue IN (SELECT langue FROM f_langue t WHERE libelle = 'Italien' AND langue != 32 GROUP BY langue);
+UPDATE f_cd SET langue=1 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Anglais' AND langue != 1);
+UPDATE f_cd SET langue=2 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Français' AND langue != 2);
+UPDATE f_cd SET langue=5 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Instru' AND langue != 5);
+UPDATE f_cd SET langue=8 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Autre' AND langue != 8);
+UPDATE f_cd SET langue=9 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Espagnol' AND langue != 9);
+UPDATE f_cd SET langue=12 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Allemand' AND langue != 12);
+UPDATE f_cd SET langue=21 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Portuguais' AND langue != 21);
+UPDATE f_cd SET langue=32 WHERE langue IN (SELECT DISTINCT langue FROM f_langue t WHERE libelle = 'Italien' AND langue != 32);
 
 /*Suppression des tables "inutiles"*/
 DELETE FROM f_langue WHERE (libelle = 'Anglais' or libelle = 'Français' or libelle = 'Instru' or libelle = 'Autre' or libelle = 'Espagnol' or libelle = 'Allemand' or libelle = 'Portuguais' or libelle = 'Italien') AND langue != 1 AND langue != 2 AND langue != 5 AND langue!=8 AND langue!=9 AND langue!=12 AND langue!=21 AND langue!=32;

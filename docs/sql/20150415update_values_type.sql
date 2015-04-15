@@ -15,10 +15,10 @@ UPDATE f_type SET libelle="n/a" WHERE type = 14;
 UPDATE f_type SET libelle="Compilation" WHERE type = 13;
 
 /*Mise à jour des Formats dans f_cd*/
-UPDATE f_cd SET type=1 WHERE type IN (SELECT type FROM f_type t WHERE libelle = 'Album' AND type != 1 GROUP BY type);
-UPDATE f_cd SET type=2 WHERE type IN (SELECT type FROM f_type t WHERE libelle = 'Single' AND type != 2 GROUP BY type);
-UPDATE f_cd SET type=4 WHERE type IN (SELECT type FROM f_type t WHERE libelle = 'Maxi-Single' AND type != 12 GROUP BY type);
-UPDATE f_cd SET type=12 WHERE type IN (SELECT type FROM f_type t WHERE libelle = 'n/a' AND type != 4 GROUP BY type);
+UPDATE f_cd SET type=1 WHERE type IN (SELECT DISTINCT type FROM f_type t WHERE libelle = 'Album' AND type != 1);
+UPDATE f_cd SET type=2 WHERE type IN (SELECT DISTINCT type FROM f_type t WHERE libelle = 'Single' AND type != 2);
+UPDATE f_cd SET type=4 WHERE type IN (SELECT DISTINCT type FROM f_type t WHERE libelle = 'Maxi-Single' AND type != 12);
+UPDATE f_cd SET type=12 WHERE type IN (SELECT DISTINCT type FROM f_type t WHERE libelle = 'n/a' AND type != 4);
 
 /*Suppresion des "inutiles" dans f_type*/
 DELETE FROM f_type WHERE (libelle = 'Album' or libelle = 'Single' or libelle = 'Maxi-Single' or libelle = 'n/a') AND type != 1 AND type != 2 AND type != 4 AND type!=12;

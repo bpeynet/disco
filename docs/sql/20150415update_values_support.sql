@@ -15,7 +15,7 @@ UPDATE f_support SET libelle="n/a" WHERE support = 12;
 UPDATE f_support SET libelle="n/a" WHERE support = 14;
 
 /* Mise à jour de la table f_cd */
-UPDATE f_cd SET support = 1 WHERE support IN (SELECT support FROM f_support WHERE libelle = 'CD' AND support != 1 GROUP BY support);
+UPDATE f_cd SET support = 1 WHERE support IN (SELECT DISTINCT support FROM f_support WHERE libelle = 'CD' AND support != 1);
 UPDATE f_cd SET support = 4 WHERE support = 6;
 UPDATE f_cd SET support = 12 WHERE support = 14;
 
