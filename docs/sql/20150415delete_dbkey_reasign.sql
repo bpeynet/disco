@@ -1,0 +1,39 @@
+ALTER TABLE `f_airplay` 
+	DROP dbkey, CHANGE `airplay` `airplay` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`airplay`);
+
+ALTER TABLE `f_artiste` 
+	DROP dbkey, CHANGE `artiste` `artiste` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`artiste`);
+
+ALTER TABLE `f_cd` 
+	DROP dbkey, CHANGE `cd` `cd` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`cd`);
+	
+ALTER TABLE `f_genre` 
+	DROP dbkey, CHANGE `genre` `genre` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`genre`);
+	
+ALTER TABLE `f_label` 
+	DROP dbkey, CHANGE `label` `label` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`label`);
+
+ALTER TABLE `f_langue` 
+	DROP dbkey, CHANGE `langue` `langue` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`langue`);
+
+ALTER TABLE `f_rotation` 
+	DROP dbkey, CHANGE `rotation` `rotation` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`rotation`);
+
+ALTER TABLE `f_support` 
+	DROP dbkey, CHANGE `support` `support` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`support`);
+
+ALTER TABLE `f_type` 
+	DROP dbkey, CHANGE `type` `type` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`type`);
+
+ALTER TABLE `f_user` 
+	DROP dbkey, CHANGE `user` `user` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	ADD PRIMARY KEY(`user`);
