@@ -3,8 +3,10 @@
   <entity name="AppBundle\Entity\FCdGenre" table="f_cd_genre">
     <indexes>
       <index name="cd" columns="cd"/>
-      <index name="cle" columns="cd,genre"/>
     </indexes>
+    <unique-constraints>
+      <unique-constraint name="tmp" columns="cd,genre"/>
+    </unique-constraints>
     <id name="dbkey" type="integer" column="dbkey">
       <generator strategy="IDENTITY"/>
     </id>

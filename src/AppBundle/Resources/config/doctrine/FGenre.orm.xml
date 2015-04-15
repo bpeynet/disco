@@ -7,10 +7,9 @@
     <unique-constraints>
       <unique-constraint name="genre" columns="genre"/>
     </unique-constraints>
-    <id name="dbkey" type="integer" column="dbkey">
+    <id name="genre" type="integer" column="genre">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="genre" type="integer" column="genre" nullable="false"/>
     <field name="libelle" type="string" column="libelle" length="45" nullable="false"/>
     <field name="actif" type="boolean" column="actif" nullable="false"/>
   </entity>

@@ -1,0 +1,263 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * FCd
+ *
+ * @ORM\Table(name="f_cd", uniqueConstraints={@ORM\UniqueConstraint(name="cd", columns={"cd"})}, indexes={@ORM\Index(name="artiste", columns={"artiste"}), @ORM\Index(name="genre", columns={"genre"}), @ORM\Index(name="support", columns={"support"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="airplay", columns={"cd", "airplay"}), @ORM\Index(name="dprogra", columns={"dprogra"}), @ORM\Index(name="jsaisie", columns={"jsaisie"}), @ORM\Index(name="alllabel", columns={"label", "maison", "distrib"}), @ORM\Index(name="jsaisie_anne", columns={"jsaisie", "annee"})})
+ * @ORM\Entity
+ */
+class FCd
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cd", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $cd;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="artiste", type="integer", nullable=false)
+     */
+    private $artiste = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titre", type="string", length=250, nullable=false)
+     */
+    private $titre = '';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="label", type="integer", nullable=false)
+     */
+    private $label = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="maison", type="integer", nullable=false)
+     */
+    private $maison = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="distrib", type="integer", nullable=false)
+     */
+    private $distrib = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dsortie", type="datetime", nullable=false)
+     */
+    private $dsortie = '0000-00-00 00:00:00';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="annee", type="string", length=4, nullable=false)
+     */
+    private $annee = '';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="integer", nullable=false)
+     */
+    private $type = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="support", type="integer", nullable=false)
+     */
+    private $support = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="genre", type="integer", nullable=false)
+     */
+    private $genre = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="langue", type="integer", nullable=false)
+     */
+    private $langue = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rotation", type="integer", nullable=false)
+     */
+    private $rotation = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_progra", type="integer", nullable=false)
+     */
+    private $userProgra = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="dprogra", type="integer", nullable=false)
+     */
+    private $dprogra = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", nullable=false)
+     */
+    private $comment;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dsaisie", type="datetime", nullable=false)
+     */
+    private $dsaisie = '0000-00-00 00:00:00';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="jsaisie", type="integer", nullable=false)
+     */
+    private $jsaisie = '0';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="dvd", type="boolean", nullable=false)
+     */
+    private $dvd = '0';
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="note_moy", type="float", precision=5, scale=2, nullable=false)
+     */
+    private $noteMoy = '0.00';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="airplay", type="boolean", nullable=false)
+     */
+    private $airplay = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retour_mail", type="string", length=100, nullable=false)
+     */
+    private $retourMail = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="retour_label", type="boolean", nullable=false)
+     */
+    private $retourLabel = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retour_comment", type="text", nullable=false)
+     */
+    private $retourComment;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="various", type="boolean", nullable=false)
+     */
+    private $various = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nb_piste", type="integer", nullable=false)
+     */
+    private $nbPiste = '0';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="paulo", type="boolean", nullable=false)
+     */
+    private $paulo = '0';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="etiquette", type="boolean", nullable=false)
+     */
+    private $etiquette = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libartiste", type="string", length=100, nullable=false)
+     */
+    private $libartiste = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=250, nullable=false)
+     */
+    private $libelle = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discid", type="string", length=10, nullable=false)
+     */
+    private $discid = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref_label", type="string", length=45, nullable=false)
+     */
+    private $refLabel = '';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="suppr", type="boolean", nullable=false)
+     */
+    private $suppr = '0';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="retour_attendu", type="integer", nullable=false)
+     */
+    private $retourAttendu = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="img", type="string", length=15, nullable=false)
+     */
+    private $img = '';
+
+
+}

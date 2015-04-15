@@ -2,13 +2,11 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="AppBundle\Entity\FLabel" table="f_label">
     <indexes>
-      <index name="label" columns="label"/>
       <index name="libelle" columns="libelle"/>
     </indexes>
-    <id name="dbkey" type="integer" column="dbkey">
+    <id name="label" type="integer" column="label">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="label" type="integer" column="label" nullable="false"/>
     <field name="libelle" type="string" column="libelle" length="45" nullable="false"/>
     <field name="email" type="string" column="email" length="45" nullable="false"/>
     <field name="telephone" type="string" column="telephone" length="45" nullable="false"/>

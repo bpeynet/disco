@@ -1,0 +1,46 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * FEspion
+ *
+ * @ORM\Table(name="f_espion")
+ * @ORM\Entity
+ */
+class FEspion
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="dbkey", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $dbkey;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user", type="integer", nullable=false)
+     */
+    private $user = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="chrono", type="datetime", nullable=false)
+     */
+    private $chrono = '0000-00-00 00:00:00';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="appli", type="string", length=10, nullable=false)
+     */
+    private $appli = '';
+
+
+}

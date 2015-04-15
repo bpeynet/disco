@@ -1,0 +1,39 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Connect
+ *
+ * @ORM\Table(name="connect")
+ * @ORM\Entity
+ */
+class Connect
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="x_pk", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $xPk;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="x_user", type="string", length=45, nullable=false)
+     */
+    private $xUser = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="x_pass", type="string", length=45, nullable=false)
+     */
+    private $xPass = '';
+
+
+}

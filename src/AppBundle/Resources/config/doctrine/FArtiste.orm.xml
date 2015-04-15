@@ -8,10 +8,9 @@
     <unique-constraints>
       <unique-constraint name="artiste" columns="artiste"/>
     </unique-constraints>
-    <id name="dbkey" type="integer" column="dbkey">
+    <id name="artiste" type="integer" column="artiste">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="artiste" type="integer" column="artiste" nullable="false"/>
     <field name="prenom" type="string" column="prenom" length="50" nullable="false"/>
     <field name="nom" type="string" column="nom" length="250" nullable="false"/>
     <field name="libelle" type="string" column="libelle" length="300" nullable="false"/>

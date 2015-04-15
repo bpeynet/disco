@@ -15,10 +15,9 @@
     <unique-constraints>
       <unique-constraint name="cd" columns="cd"/>
     </unique-constraints>
-    <id name="dbkey" type="integer" column="dbkey">
+    <id name="cd" type="integer" column="cd">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="cd" type="integer" column="cd" nullable="false"/>
     <field name="artiste" type="integer" column="artiste" nullable="false"/>
     <field name="titre" type="string" column="titre" length="250" nullable="false"/>
     <field name="label" type="integer" column="label" nullable="false"/>

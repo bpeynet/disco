@@ -1,0 +1,39 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ForumPrograBodies
+ *
+ * @ORM\Table(name="forum_progra_bodies", indexes={@ORM\Index(name="thread", columns={"thread"})})
+ * @ORM\Entity
+ */
+class ForumPrograBodies
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="body", type="text", nullable=false)
+     */
+    private $body;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="thread", type="integer", nullable=false)
+     */
+    private $thread = '0';
+
+
+}

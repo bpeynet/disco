@@ -2,13 +2,11 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="AppBundle\Entity\FRotation" table="f_rotation">
     <indexes>
-      <index name="rotation" columns="rotation"/>
       <index name="libelle" columns="libelle"/>
     </indexes>
-    <id name="dbkey" type="integer" column="dbkey">
+    <id name="rotation" type="integer" column="rotation">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="rotation" type="integer" column="rotation" nullable="false"/>
     <field name="libelle" type="string" column="libelle" length="45" nullable="false"/>
     <field name="ordre" type="integer" column="ordre" nullable="false"/>
     <field name="airplay" type="boolean" column="airplay" nullable="false"/>

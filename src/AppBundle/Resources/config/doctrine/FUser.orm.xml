@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="AppBundle\Entity\FUser" table="f_user">
-    <indexes>
-      <index name="user" columns="user"/>
-    </indexes>
-    <id name="dbkey" type="integer" column="dbkey">
+    <id name="user" type="integer" column="user">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="user" type="integer" column="user" nullable="false"/>
     <field name="suppr" type="boolean" column="suppr" nullable="false"/>
     <field name="inactif" type="boolean" column="inactif" nullable="false"/>
     <field name="nom" type="string" column="nom" length="200" nullable="false"/>
