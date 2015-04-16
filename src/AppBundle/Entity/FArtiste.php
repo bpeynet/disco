@@ -67,7 +67,7 @@ class FArtiste
      * @param ArrayCollection $disques
      * return @FArtiste
      */
-    public fonction setDisques($disques) {
+    public function setDisques($disques) {
         $this->disques = $disques;
     }
 
@@ -76,7 +76,7 @@ class FArtiste
      * @return ArrayCollection
      */
     public function getDisques() {
-        return this->disques;
+        return $this->disques;
     }
 
     /**
@@ -95,7 +95,7 @@ class FArtiste
     /**
      * Get prenom
      *
-     * @return string 
+     * @return string
      */
     public function getPrenom()
     {
@@ -118,7 +118,7 @@ class FArtiste
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -141,7 +141,7 @@ class FArtiste
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -164,7 +164,7 @@ class FArtiste
     /**
      * Get siteweb
      *
-     * @return string 
+     * @return string
      */
     public function getSiteweb()
     {
@@ -187,7 +187,7 @@ class FArtiste
     /**
      * Get myspace
      *
-     * @return string 
+     * @return string
      */
     public function getMyspace()
     {
@@ -197,7 +197,7 @@ class FArtiste
     /**
      * Get artiste
      *
-     * @return integer 
+     * @return integer
      */
     public function getArtiste()
     {

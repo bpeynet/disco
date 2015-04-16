@@ -20,6 +20,13 @@ class FCd
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $cd;
+
+    /**
+     * @var FArtiste
+     *
+     * @ORM\ManyToOne(targetEntity="FArtiste")
+     * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
+     */
     protected $artiste;
 
     /**
@@ -260,7 +267,7 @@ class FCd
      *
      * @param FArtiste $artiste
      */
-    public function setArtiste(FArtiste $artiste) 
+    public function setArtiste(FArtiste $artiste)
     {
         $this->artiste = $artiste;
     }
@@ -268,7 +275,7 @@ class FCd
     /**
      * Get artiste
      *
-     * @return FArtiste 
+     * @return FArtiste
      */
     public function getArtiste()
     {
@@ -291,7 +298,7 @@ class FCd
     /**
      * Get titre
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -314,7 +321,7 @@ class FCd
     /**
      * Get label
      *
-     * @return integer 
+     * @return integer
      */
     public function getLabel()
     {
@@ -337,7 +344,7 @@ class FCd
     /**
      * Get maison
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaison()
     {
@@ -360,7 +367,7 @@ class FCd
     /**
      * Get distrib
      *
-     * @return integer 
+     * @return integer
      */
     public function getDistrib()
     {
@@ -383,7 +390,7 @@ class FCd
     /**
      * Get dsortie
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDsortie()
     {
@@ -406,7 +413,7 @@ class FCd
     /**
      * Get annee
      *
-     * @return string 
+     * @return string
      */
     public function getAnnee()
     {
@@ -429,7 +436,7 @@ class FCd
     /**
      * Get type
      *
-     * @return integer 
+     * @return integer
      */
     public function getType()
     {
@@ -452,7 +459,7 @@ class FCd
     /**
      * Get support
      *
-     * @return integer 
+     * @return integer
      */
     public function getSupport()
     {
@@ -475,7 +482,7 @@ class FCd
     /**
      * Get genre
      *
-     * @return integer 
+     * @return integer
      */
     public function getGenre()
     {
@@ -498,7 +505,7 @@ class FCd
     /**
      * Get langue
      *
-     * @return integer 
+     * @return integer
      */
     public function getLangue()
     {
@@ -521,7 +528,7 @@ class FCd
     /**
      * Get rotation
      *
-     * @return integer 
+     * @return integer
      */
     public function getRotation()
     {
@@ -544,7 +551,7 @@ class FCd
     /**
      * Get userProgra
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserProgra()
     {
@@ -567,7 +574,7 @@ class FCd
     /**
      * Get dprogra
      *
-     * @return integer 
+     * @return integer
      */
     public function getDprogra()
     {
@@ -590,7 +597,7 @@ class FCd
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -613,7 +620,7 @@ class FCd
     /**
      * Get dsaisie
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDsaisie()
     {
@@ -636,7 +643,7 @@ class FCd
     /**
      * Get jsaisie
      *
-     * @return integer 
+     * @return integer
      */
     public function getJsaisie()
     {
@@ -659,7 +666,7 @@ class FCd
     /**
      * Get dvd
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDvd()
     {
@@ -682,7 +689,7 @@ class FCd
     /**
      * Get noteMoy
      *
-     * @return float 
+     * @return float
      */
     public function getNoteMoy()
     {
@@ -705,7 +712,7 @@ class FCd
     /**
      * Get airplay
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAirplay()
     {
@@ -728,7 +735,7 @@ class FCd
     /**
      * Get retourMail
      *
-     * @return string 
+     * @return string
      */
     public function getRetourMail()
     {
@@ -751,7 +758,7 @@ class FCd
     /**
      * Get retourLabel
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getRetourLabel()
     {
@@ -774,7 +781,7 @@ class FCd
     /**
      * Get retourComment
      *
-     * @return string 
+     * @return string
      */
     public function getRetourComment()
     {
@@ -797,7 +804,7 @@ class FCd
     /**
      * Get various
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVarious()
     {
@@ -820,7 +827,7 @@ class FCd
     /**
      * Get nbPiste
      *
-     * @return integer 
+     * @return integer
      */
     public function getNbPiste()
     {
@@ -843,7 +850,7 @@ class FCd
     /**
      * Get paulo
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPaulo()
     {
@@ -866,7 +873,7 @@ class FCd
     /**
      * Get etiquette
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEtiquette()
     {
@@ -889,7 +896,7 @@ class FCd
     /**
      * Get libartiste
      *
-     * @return string 
+     * @return string
      */
     public function getLibartiste()
     {
@@ -912,7 +919,7 @@ class FCd
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -935,7 +942,7 @@ class FCd
     /**
      * Get discid
      *
-     * @return string 
+     * @return string
      */
     public function getDiscid()
     {
@@ -958,7 +965,7 @@ class FCd
     /**
      * Get refLabel
      *
-     * @return string 
+     * @return string
      */
     public function getRefLabel()
     {
@@ -981,7 +988,7 @@ class FCd
     /**
      * Get suppr
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSuppr()
     {
@@ -1004,7 +1011,7 @@ class FCd
     /**
      * Get retourAttendu
      *
-     * @return integer 
+     * @return integer
      */
     public function getRetourAttendu()
     {
@@ -1027,7 +1034,7 @@ class FCd
     /**
      * Get img
      *
-     * @return string 
+     * @return string
      */
     public function getImg()
     {
@@ -1037,7 +1044,7 @@ class FCd
     /**
      * Get cd
      *
-     * @return integer 
+     * @return integer
      */
     public function getCd()
     {
