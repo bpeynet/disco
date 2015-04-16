@@ -22,6 +22,12 @@ class FArtiste
     private $artiste;
 
     /**
+     * @ORM\OneToMany(targetEntity="FCd", mappedBy="artiste")
+     * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
+     */
+    private $disques;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="prenom", type="string", length=50, nullable=false)
@@ -56,7 +62,22 @@ class FArtiste
      */
     private $myspace = '';
 
+    /**
+     * Set Disques
+     * @param ArrayCollection $disques
+     * return @FArtiste
+     */
+    public fonction setDisques($disques) {
+        $this->disques = $disques;
+    }
 
+    /**
+     * Get Disques
+     * @return ArrayCollection
+     */
+    public function getDisques() {
+        return this->disques;
+    }
 
     /**
      * Set prenom
