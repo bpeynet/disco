@@ -20,13 +20,7 @@ class FCd
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $cd;
-
-    /**
-     * @var FArtiste
-     *
-     * @ORM\OneToOne(targetEntity="src\AppBundle\Entity\FArtiste", cascade={"persist"})
-    */
-    private $artiste = '0';
+    protected $artiste;
 
     /**
      * @var string
@@ -264,20 +258,17 @@ class FCd
     /**
      * Set artiste
      *
-     * @param integer $artiste
-     * @return FCd
+     * @param FArtiste $artiste
      */
-    public function setArtiste(FArtiste $artiste = null) 
+    public function setArtiste(FArtiste $artiste) 
     {
         $this->artiste = $artiste;
-
-        return $this;
     }
 
     /**
      * Get artiste
      *
-     * @return integer 
+     * @return FArtiste 
      */
     public function getArtiste()
     {
