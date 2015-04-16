@@ -1,4 +1,5 @@
 <?php
+/*
 namespace AppBundle\Subscriber;
          
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
@@ -39,3 +40,4 @@ class TablePrefixSubscriber implements \Doctrine\Common\EventSubscriber
         }
     }
 }
+*/

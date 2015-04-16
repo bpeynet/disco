@@ -22,10 +22,10 @@ class FCd
     private $cd;
 
     /**
-     * @var integer
+     * @var FArtiste
      *
-     * @ORM\Column(name="artiste", type="integer", nullable=false)
-     */
+     * @ORM\OneToOne(targetEntity="src\AppBundle\Entity\FArtiste", cascade={"persist"})
+    */
     private $artiste = '0';
 
     /**
@@ -267,7 +267,7 @@ class FCd
      * @param integer $artiste
      * @return FCd
      */
-    public function setArtiste($artiste)
+    public function setArtiste(FArtiste $artiste = null) 
     {
         $this->artiste = $artiste;
 
