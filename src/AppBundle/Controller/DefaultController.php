@@ -28,6 +28,8 @@ class DefaultController extends Controller
         	);
 		}
 
+		dump($cd);
+
 		return $this->render(
 		    'default/index.html.twig',
 		    array('cd' => $cd)

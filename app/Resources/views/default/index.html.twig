@@ -1,6 +1,142 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{cd.getTitre}}
-    {{cd.getArtiste}}
+	<table>
+		<tr>
+			<th>N°</th>
+			<td> {{cd.getCd}}</td>
+		</tr>
+		<tr>
+			<th>Titre</th>
+			<td> {{cd.getTitre}}</td>
+		</tr>
+		<tr>
+			<th>Numéro d'artiste</th>
+			<td> {{cd.getArtiste}}</td>
+		</tr>
+		<tr>
+			<th>Numéro Label</th>
+			<td> {{cd.getLabel}}</td>
+		</tr>
+		<tr>
+			<th>Numéro Maison</th>
+			<td> {{cd.getMaison}}</td>
+		</tr>
+		<tr>
+			<th>Date sortie</th>
+			<td> {{cd.getDsortie|date("d/m/Y")}}</td>
+		</tr>
+		<tr>
+			<th>Année</th>
+			<td> {{cd.getAnnee}}</td>
+		</tr>
+		<tr>
+			<th>Type</th>
+			<td> {{cd.getType}}</td>
+		</tr>
+		<tr>
+			<th>Support</th>
+			<td> {{cd.getSupport}}</td>
+		</tr>
+		<tr>
+			<th>Genre</th>
+			<td> {{cd.getGenre}}</td>
+		</tr>
+		<tr>
+			<th>Langue</th>
+			<td> {{cd.getLangue}}</td>
+		</tr>
+		<tr>
+			<th>Rotation</th>
+			<td> {{cd.getRotation}}</td>
+		</tr>
+		<tr>
+			<th>Programmateur</th>
+			<td> {{cd.getUserprogra}}</td>
+		</tr>
+		<tr>
+			<th>Dprogra ?</th>
+			<td> {{cd.getDprogra}}</td>
+		</tr>
+		<tr>
+			<th>Commentaire</th>
+			<td> {{cd.getComment}}</td>
+		</tr>
+		<tr>
+			<th>Date de saisie</th>
+			<td> {{cd.getDsaisie|date("d/m/Y")}}</td>
+		</tr>
+		<tr>
+			<th>Jour de saisie</th>
+			<td> {{cd.getJsaisie}}</td>
+		</tr>
+		<tr>
+			<th>Présence de DVD ?</th>
+			<td> {{cd.getDvd}}</td>
+		</tr>
+		<tr>
+			<th>Note moyenne</th>
+			<td> {{cd.getNotemoy}}</td>
+		</tr>
+		<tr>
+			<th>Présence dans l'airplay ?</th>
+			<td> {{cd.getAirplay}}</td>
+		</tr>
+		<tr>
+			<th>Mail de retour </th>
+			<td> {{cd.getRetourmail}}</td>
+		</tr>
+		<tr>
+			<th>Retour Label effectué ?</th>
+			<td> {{cd.getRetourlabel}}</td>
+		</tr>
+		<tr>
+			<th>Retour Comment effectué ?</th>
+			<td> {{cd.getRetourcomment}}</td>
+		</tr>
+		<tr>
+			<th>various ? x)</th>
+			<td> {{cd.getVarious}}</td>
+		</tr>
+		<tr>
+			<th>Nombre de pistes</th>
+			<td> {{cd.getNbpiste}}</td>
+		</tr>
+		<tr>
+			<th>Paulo ?</th>
+			<td> {{cd.getPaulo}}</td>
+		</tr>
+		<tr>
+			<th>Etiquette ?</th>
+			<td> {{cd.getEtiquette}}</td>
+		</tr>
+		<tr>
+			<th>Librairie Artiste</th>
+			<td> {{cd.getLibartiste}}</td>
+		</tr>
+		<tr>
+			<th>Libelle</th>
+			<td> {{cd.getLibelle}}</td>
+		</tr>
+		<tr>
+			<th>Id Disque</th>
+			<td> {{cd.getDiscid}}</td>
+		</tr>
+		<tr>
+			<th>Référence du label</th>
+			<td> {{cd.getReflabel}}</td>
+		</tr>
+		<tr>
+			<th>Supprimé de la base ?</th>
+			<td> {{cd.getSuppr}}</td>
+		</tr>
+		<tr>
+			<th>Retour attendu ?</th>
+			<td> {{cd.getRetourattendu}}</td>
+		</tr>
+		<tr>
+			<th>Image</th>
+			<td> {{cd.getImg}}</td>
+		</tr>
+	</table>
 {% endblock %}
