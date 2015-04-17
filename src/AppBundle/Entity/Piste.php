@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FPiste
+ * Piste
  *
  * @ORM\Table(name="f_piste", indexes={@ORM\Index(name="cd", columns={"cd"}), @ORM\Index(name="artiste", columns={"artiste"}), @ORM\Index(name="piste", columns={"cd", "disque", "piste"})})
  * @ORM\Entity
  */
-class FPiste
+class Piste
 {
     /**
      * @var integer
@@ -27,13 +27,6 @@ class FPiste
      * @ORM\Column(name="piste", type="integer", nullable=false)
      */
     private $piste = '0';
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="cd", type="integer", nullable=false)
-     */
-    private $cd = '0';
 
     /**
      * @var integer
@@ -90,7 +83,7 @@ class FPiste
      * Set piste
      *
      * @param integer $piste
-     * @return FPiste
+     * @return Piste
      */
     public function setPiste($piste)
     {
@@ -113,7 +106,7 @@ class FPiste
      * Set cd
      *
      * @param integer $cd
-     * @return FPiste
+     * @return Piste
      */
     public function setCd($cd)
     {
@@ -136,7 +129,7 @@ class FPiste
      * Set disque
      *
      * @param integer $disque
-     * @return FPiste
+     * @return Piste
      */
     public function setDisque($disque)
     {
@@ -159,7 +152,7 @@ class FPiste
      * Set titre
      *
      * @param string $titre
-     * @return FPiste
+     * @return Piste
      */
     public function setTitre($titre)
     {
@@ -182,7 +175,7 @@ class FPiste
      * Set artiste
      *
      * @param integer $artiste
-     * @return FPiste
+     * @return Piste
      */
     public function setArtiste($artiste)
     {
@@ -205,7 +198,7 @@ class FPiste
      * Set langue
      *
      * @param integer $langue
-     * @return FPiste
+     * @return Piste
      */
     public function setLangue($langue)
     {
@@ -228,7 +221,7 @@ class FPiste
      * Set anim
      *
      * @param boolean $anim
-     * @return FPiste
+     * @return Piste
      */
     public function setAnim($anim)
     {
@@ -251,7 +244,7 @@ class FPiste
      * Set paulo
      *
      * @param boolean $paulo
-     * @return FPiste
+     * @return Piste
      */
     public function setPaulo($paulo)
     {
@@ -274,7 +267,7 @@ class FPiste
      * Set star
      *
      * @param boolean $star
-     * @return FPiste
+     * @return Piste
      */
     public function setStar($star)
     {

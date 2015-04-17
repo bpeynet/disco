@@ -30,6 +30,14 @@ class Cd
     protected $artiste;
 
     /**
+     * @var Piste
+     *
+     * @ORM\OneToMany(targetEntity="Piste", mappedBy="disque")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="disque")
+     */
+    protected $pistes;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="titre", type="string", length=250, nullable=false)
@@ -288,6 +296,26 @@ class Cd
     public function getArtiste()
     {
         return $this->artiste;
+    }
+
+    /**
+     * Set pistes
+     *
+     * @param ArrayCollection $pistes
+     */
+    public function setpistes($pistes)
+    {
+        $this->pistes = $pistes;
+    }
+
+    /**
+     * Get pistes
+     *
+     * @return ArrayCollection
+     */
+    public function getpistes()
+    {
+        return $this->pistes;
     }
 
     /**
