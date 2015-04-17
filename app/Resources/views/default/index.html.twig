@@ -12,16 +12,16 @@
 			<td> {{cd.getTitre}}</td>
 		</tr>
 		<tr>
-			<th>Numéro d'artiste</th>
+			<th>Artiste</th>
 			<td>{{cd.getArtiste.getLibelle}}</td>
 		</tr>
 		<tr>
-			<th>Numéro Label</th>
-			<td> {{cd.getLabel.getLibelle}}</td>
+			<th>Label</th>
+			<td>{% if cd.getLabel.getLabel != 0 %} {{cd.getLabel.getLibelle}}{% endif %}</td>
 		</tr>
 		<tr>
-			<th>Numéro Maison</th>
-			<td> {{cd.getMaison.getLibelle}}</td>
+			<th>Maison</th>
+			<td>{% if cd.getMaison.getLabel != 0 %} {{cd.getMaison.getLibelle}} {% endif %} </td>
 		</tr>
 		<tr>
 			<th>Date sortie</th>
@@ -96,7 +96,7 @@
 			<td> {{cd.getRetourcomment}}</td>
 		</tr>
 		<tr>
-			<th>various ? x)</th>
+			<th>Artistes variés ?</th>
 			<td> {{cd.getVarious}}</td>
 		</tr>
 		<tr>
