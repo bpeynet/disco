@@ -404,7 +404,11 @@ BEGIN
 delimiter ;
 
 
+CALL update_genre();
+
 DROP INDEX tmp ON f_cd_genre;
 
-CALL update_genre();
 drop procedure update_genre;
+
+DELETE f_cd_genre FROM f_cd_genre INNER JOIN f_cd ON f_cd.cd = f_cd_genre.cd WHERE f_cd.genre = f_cd_genre.genre;
+
