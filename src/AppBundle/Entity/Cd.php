@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FCd
+ * Cd
  *
  * @ORM\Table(name="f_cd", uniqueConstraints={@ORM\UniqueConstraint(name="cd", columns={"cd"})}, indexes={@ORM\Index(name="artiste", columns={"artiste"}), @ORM\Index(name="genre", columns={"genre"}), @ORM\Index(name="support", columns={"support"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="airplay", columns={"cd", "airplay"}), @ORM\Index(name="dprogra", columns={"dprogra"}), @ORM\Index(name="jsaisie", columns={"jsaisie"}), @ORM\Index(name="alllabel", columns={"label", "maison", "distrib"}), @ORM\Index(name="jsaisie_anne", columns={"jsaisie", "annee"})})
  * @ORM\Entity
  */
-class FCd
+class Cd
 {
     /**
      * @var integer
@@ -22,12 +22,52 @@ class FCd
     private $cd;
 
     /**
-     * @var FArtiste
+     * @var Artiste
      *
-     * @ORM\ManyToOne(targetEntity="FArtiste")
+     * @ORM\ManyToOne(targetEntity="Artiste")
      * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
      */
     protected $artiste;
+
+    /**
+     * @var Piste
+     *
+     * @ORM\OneToMany(targetEntity="Piste", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $pistes;
+
+    /**
+     * @var CdComment
+     *
+     * @ORM\OneToMany(targetEntity="CdComment", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $comments;
+
+    /**
+     * @var CdComment
+     *
+     * @ORM\OneToMany(targetEntity="CdNote", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $notes;
+
+    /**
+     * @var CdEmprunt
+     *
+     * @ORM\OneToMany(targetEntity="CdEmprunt", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $emprunts;
+
+    /**
+     * @var CdGenre
+     *
+     * @ORM\OneToMany(targetEntity="CdGenre", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $styles;
 
     /**
      * @var string
@@ -37,18 +77,20 @@ class FCd
     private $titre = '';
 
     /**
-     * @var integer
+     * @var Label
      *
-     * @ORM\Column(name="label", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Label")
+     * @ORM\JoinColumn(name="label", referencedColumnName="label")
      */
-    private $label = '0';
+    private $label;
 
     /**
-     * @var integer
+     * @var Label
      *
-     * @ORM\Column(name="maison", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Label")
+     * @ORM\JoinColumn(name="maison", referencedColumnName="label")
      */
-    private $maison = '0';
+    private $maison;
 
     /**
      * @var integer
@@ -72,53 +114,59 @@ class FCd
     private $annee = '';
 
     /**
-     * @var integer
+     * @var Type
      *
-     * @ORM\Column(name="type", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Type")
+     * @ORM\JoinColumn(name="type", referencedColumnName="type")
      */
     private $type = '0';
 
     /**
-     * @var integer
+     * @var Support
      *
-     * @ORM\Column(name="support", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Support")
+     * @ORM\JoinColumn(name="support", referencedColumnName="support")
      */
-    private $support = '0';
+    private $support;
 
     /**
-     * @var integer
+     * @var Genre
      *
-     * @ORM\Column(name="genre", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Genre")
+     * @ORM\JoinColumn(name="genre", referencedColumnName="genre")
      */
-    private $genre = '0';
+    private $genre;
 
     /**
-     * @var integer
+     * @var Langue
      *
-     * @ORM\Column(name="langue", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Langue")
+     * @ORM\JoinColumn(name="langue", referencedColumnName="langue")
      */
-    private $langue = '0';
+    private $langue;
 
     /**
-     * @var integer
+     * @var Rotation
      *
-     * @ORM\Column(name="rotation", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Rotation")
+     * @ORM\JoinColumn(name="rotation", referencedColumnName="rotation")
      */
-    private $rotation = '0';
+    private $rotation;
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="user_progra", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_progra", referencedColumnName="user")
      */
-    private $userProgra = '0';
+    private $userProgra;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="dprogra", type="integer", nullable=false)
      */
-    private $dprogra = '0';
+    private $dprogra;
 
     /**
      * @var string
@@ -265,9 +313,9 @@ class FCd
     /**
      * Set artiste
      *
-     * @param FArtiste $artiste
+     * @param Artiste $artiste
      */
-    public function setArtiste(FArtiste $artiste)
+    public function setArtiste($artiste)
     {
         $this->artiste = $artiste;
     }
@@ -275,7 +323,7 @@ class FCd
     /**
      * Get artiste
      *
-     * @return FArtiste
+     * @return Artiste
      */
     public function getArtiste()
     {
@@ -283,10 +331,110 @@ class FCd
     }
 
     /**
+     * Set pistes
+     *
+     * @param ArrayCollection $pistes
+     */
+    public function setpistes($pistes)
+    {
+        $this->pistes = $pistes;
+    }
+
+    /**
+     * Get pistes
+     *
+     * @return ArrayCollection
+     */
+    public function getpistes()
+    {
+        return $this->pistes;
+    }
+
+    /**
+     * Set comments
+     *
+     * @param ArrayCollection $comments
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+
+    /**
+     * Get comments
+     *
+     * @return ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param ArrayCollection $notes
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+    }
+
+    /**
+     * Get emprunts
+     *
+     * @return ArrayCollection
+     */
+    public function getEmprunts()
+    {
+        return $this->emprunts;
+    }
+
+    /**
+     * Set emprunts
+     *
+     * @param ArrayCollection $emprunts
+     */
+    public function setEmprunts($emprunts)
+    {
+        $this->emprunts = $emprunts;
+    }
+
+    /**
+     * Get styles
+     *
+     * @return ArrayCollection
+     */
+    public function getStyles()
+    {
+        return $this->styles;
+    }
+
+    /**
+     * Set styles
+     *
+     * @param ArrayCollection $styles
+     */
+    public function setStyles($styles)
+    {
+        $this->styles = $styles;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return ArrayCollection
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
      * Set titre
      *
      * @param string $titre
-     * @return FCd
+     * @return Cd
      */
     public function setTitre($titre)
     {
@@ -308,8 +456,8 @@ class FCd
     /**
      * Set label
      *
-     * @param integer $label
-     * @return FCd
+     * @param Label $label
+     * @return Cd
      */
     public function setLabel($label)
     {
@@ -321,7 +469,11 @@ class FCd
     /**
      * Get label
      *
+<<<<<<< HEAD:src/AppBundle/Entity/FCd.php
      * @return integer
+=======
+     * @return Label
+>>>>>>> gilles/master:src/AppBundle/Entity/Cd.php
      */
     public function getLabel()
     {
@@ -331,8 +483,8 @@ class FCd
     /**
      * Set maison
      *
-     * @param integer $maison
-     * @return FCd
+     * @param Label $maison
+     * @return Cd
      */
     public function setMaison($maison)
     {
@@ -344,7 +496,11 @@ class FCd
     /**
      * Get maison
      *
+<<<<<<< HEAD:src/AppBundle/Entity/FCd.php
      * @return integer
+=======
+     * @return Label
+>>>>>>> gilles/master:src/AppBundle/Entity/Cd.php
      */
     public function getMaison()
     {
@@ -355,7 +511,7 @@ class FCd
      * Set distrib
      *
      * @param integer $distrib
-     * @return FCd
+     * @return Cd
      */
     public function setDistrib($distrib)
     {
@@ -378,7 +534,7 @@ class FCd
      * Set dsortie
      *
      * @param \DateTime $dsortie
-     * @return FCd
+     * @return Cd
      */
     public function setDsortie($dsortie)
     {
@@ -401,7 +557,7 @@ class FCd
      * Set annee
      *
      * @param string $annee
-     * @return FCd
+     * @return Cd
      */
     public function setAnnee($annee)
     {
@@ -423,8 +579,8 @@ class FCd
     /**
      * Set type
      *
-     * @param integer $type
-     * @return FCd
+     * @param Type $type
+     * @return Cd
      */
     public function setType($type)
     {
@@ -436,7 +592,11 @@ class FCd
     /**
      * Get type
      *
+<<<<<<< HEAD:src/AppBundle/Entity/FCd.php
      * @return integer
+=======
+     * @return Type
+>>>>>>> gilles/master:src/AppBundle/Entity/Cd.php
      */
     public function getType()
     {
@@ -447,7 +607,7 @@ class FCd
      * Set support
      *
      * @param integer $support
-     * @return FCd
+     * @return Cd
      */
     public function setSupport($support)
     {
@@ -470,7 +630,7 @@ class FCd
      * Set genre
      *
      * @param integer $genre
-     * @return FCd
+     * @return Cd
      */
     public function setGenre($genre)
     {
@@ -493,7 +653,7 @@ class FCd
      * Set langue
      *
      * @param integer $langue
-     * @return FCd
+     * @return Cd
      */
     public function setLangue($langue)
     {
@@ -516,7 +676,7 @@ class FCd
      * Set rotation
      *
      * @param integer $rotation
-     * @return FCd
+     * @return Cd
      */
     public function setRotation($rotation)
     {
@@ -539,7 +699,7 @@ class FCd
      * Set userProgra
      *
      * @param integer $userProgra
-     * @return FCd
+     * @return Cd
      */
     public function setUserProgra($userProgra)
     {
@@ -562,7 +722,7 @@ class FCd
      * Set dprogra
      *
      * @param integer $dprogra
-     * @return FCd
+     * @return Cd
      */
     public function setDprogra($dprogra)
     {
@@ -585,7 +745,7 @@ class FCd
      * Set comment
      *
      * @param string $comment
-     * @return FCd
+     * @return Cd
      */
     public function setComment($comment)
     {
@@ -608,7 +768,7 @@ class FCd
      * Set dsaisie
      *
      * @param \DateTime $dsaisie
-     * @return FCd
+     * @return Cd
      */
     public function setDsaisie($dsaisie)
     {
@@ -631,7 +791,7 @@ class FCd
      * Set jsaisie
      *
      * @param integer $jsaisie
-     * @return FCd
+     * @return Cd
      */
     public function setJsaisie($jsaisie)
     {
@@ -654,7 +814,7 @@ class FCd
      * Set dvd
      *
      * @param boolean $dvd
-     * @return FCd
+     * @return Cd
      */
     public function setDvd($dvd)
     {
@@ -677,7 +837,7 @@ class FCd
      * Set noteMoy
      *
      * @param float $noteMoy
-     * @return FCd
+     * @return Cd
      */
     public function setNoteMoy($noteMoy)
     {
@@ -700,7 +860,7 @@ class FCd
      * Set airplay
      *
      * @param boolean $airplay
-     * @return FCd
+     * @return Cd
      */
     public function setAirplay($airplay)
     {
@@ -723,7 +883,7 @@ class FCd
      * Set retourMail
      *
      * @param string $retourMail
-     * @return FCd
+     * @return Cd
      */
     public function setRetourMail($retourMail)
     {
@@ -746,7 +906,7 @@ class FCd
      * Set retourLabel
      *
      * @param boolean $retourLabel
-     * @return FCd
+     * @return Cd
      */
     public function setRetourLabel($retourLabel)
     {
@@ -769,7 +929,7 @@ class FCd
      * Set retourComment
      *
      * @param string $retourComment
-     * @return FCd
+     * @return Cd
      */
     public function setRetourComment($retourComment)
     {
@@ -792,7 +952,7 @@ class FCd
      * Set various
      *
      * @param boolean $various
-     * @return FCd
+     * @return Cd
      */
     public function setVarious($various)
     {
@@ -815,7 +975,7 @@ class FCd
      * Set nbPiste
      *
      * @param integer $nbPiste
-     * @return FCd
+     * @return Cd
      */
     public function setNbPiste($nbPiste)
     {
@@ -838,7 +998,7 @@ class FCd
      * Set paulo
      *
      * @param boolean $paulo
-     * @return FCd
+     * @return Cd
      */
     public function setPaulo($paulo)
     {
@@ -861,7 +1021,7 @@ class FCd
      * Set etiquette
      *
      * @param boolean $etiquette
-     * @return FCd
+     * @return Cd
      */
     public function setEtiquette($etiquette)
     {
@@ -884,7 +1044,7 @@ class FCd
      * Set libartiste
      *
      * @param string $libartiste
-     * @return FCd
+     * @return Cd
      */
     public function setLibartiste($libartiste)
     {
@@ -907,7 +1067,7 @@ class FCd
      * Set libelle
      *
      * @param string $libelle
-     * @return FCd
+     * @return Cd
      */
     public function setLibelle($libelle)
     {
@@ -930,7 +1090,7 @@ class FCd
      * Set discid
      *
      * @param string $discid
-     * @return FCd
+     * @return Cd
      */
     public function setDiscid($discid)
     {
@@ -953,7 +1113,7 @@ class FCd
      * Set refLabel
      *
      * @param string $refLabel
-     * @return FCd
+     * @return Cd
      */
     public function setRefLabel($refLabel)
     {
@@ -976,7 +1136,7 @@ class FCd
      * Set suppr
      *
      * @param boolean $suppr
-     * @return FCd
+     * @return Cd
      */
     public function setSuppr($suppr)
     {
@@ -999,7 +1159,7 @@ class FCd
      * Set retourAttendu
      *
      * @param integer $retourAttendu
-     * @return FCd
+     * @return Cd
      */
     public function setRetourAttendu($retourAttendu)
     {
@@ -1022,7 +1182,7 @@ class FCd
      * Set img
      *
      * @param string $img
-     * @return FCd
+     * @return Cd
      */
     public function setImg($img)
     {

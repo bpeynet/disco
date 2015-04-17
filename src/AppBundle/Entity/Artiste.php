@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FArtiste
+ * Artiste
  *
  * @ORM\Table(name="f_artiste", uniqueConstraints={@ORM\UniqueConstraint(name="artiste", columns={"artiste"})}, indexes={@ORM\Index(name="libelle", columns={"libelle"}), @ORM\Index(name="nom", columns={"nom"})})
  * @ORM\Entity
  */
-class FArtiste
+class Artiste
 {
     /**
      * @var integer
@@ -22,7 +22,7 @@ class FArtiste
     private $artiste;
 
     /**
-     * @ORM\OneToMany(targetEntity="FCd", mappedBy="artiste")
+     * @ORM\OneToMany(targetEntity="Cd", mappedBy="artiste")
      * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
      */
     private $disques;
@@ -65,7 +65,7 @@ class FArtiste
     /**
      * Set Disques
      * @param ArrayCollection $disques
-     * return @FArtiste
+     * return @Artiste
      */
     public function setDisques($disques) {
         $this->disques = $disques;
@@ -83,7 +83,7 @@ class FArtiste
      * Set prenom
      *
      * @param string $prenom
-     * @return FArtiste
+     * @return Artiste
      */
     public function setPrenom($prenom)
     {
@@ -106,7 +106,7 @@ class FArtiste
      * Set nom
      *
      * @param string $nom
-     * @return FArtiste
+     * @return Artiste
      */
     public function setNom($nom)
     {
@@ -129,7 +129,7 @@ class FArtiste
      * Set libelle
      *
      * @param string $libelle
-     * @return FArtiste
+     * @return Artiste
      */
     public function setLibelle($libelle)
     {
@@ -152,7 +152,7 @@ class FArtiste
      * Set siteweb
      *
      * @param string $siteweb
-     * @return FArtiste
+     * @return Artiste
      */
     public function setSiteweb($siteweb)
     {
@@ -175,7 +175,7 @@ class FArtiste
      * Set myspace
      *
      * @param string $myspace
-     * @return FArtiste
+     * @return Artiste
      */
     public function setMyspace($myspace)
     {

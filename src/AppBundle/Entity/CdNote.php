@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FCdNote
+ * CdNote
  *
  * @ORM\Table(name="f_cd_note", indexes={@ORM\Index(name="cd", columns={"cd"})})
  * @ORM\Entity
  */
-class FCdNote
+class CdNote
 {
     /**
      * @var integer
@@ -22,16 +22,18 @@ class FCdNote
     private $dbkey;
 
     /**
-     * @var integer
+     * @var Cd
      *
-     * @ORM\Column(name="cd", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     private $cd = '0';
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="user", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user", referencedColumnName="user")
      */
     private $user = '0';
 
@@ -48,7 +50,7 @@ class FCdNote
      * Set cd
      *
      * @param integer $cd
-     * @return FCdNote
+     * @return CdNote
      */
     public function setCd($cd)
     {
@@ -60,7 +62,7 @@ class FCdNote
     /**
      * Get cd
      *
-     * @return integer 
+     * @return Cd 
      */
     public function getCd()
     {
@@ -70,8 +72,8 @@ class FCdNote
     /**
      * Set user
      *
-     * @param integer $user
-     * @return FCdNote
+     * @param User $user
+     * @return CdNote
      */
     public function setUser($user)
     {
@@ -83,7 +85,7 @@ class FCdNote
     /**
      * Get user
      *
-     * @return integer 
+     * @return User 
      */
     public function getUser()
     {
@@ -94,7 +96,7 @@ class FCdNote
      * Set note
      *
      * @param float $note
-     * @return FCdNote
+     * @return CdNote
      */
     public function setNote($note)
     {

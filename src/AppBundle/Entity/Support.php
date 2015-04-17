@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FSupport
+ * Support
  *
  * @ORM\Table(name="f_support", indexes={@ORM\Index(name="libelle", columns={"libelle"})})
  * @ORM\Entity
  */
-class FSupport
+class Support
 {
     /**
      * @var integer
@@ -20,6 +20,12 @@ class FSupport
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $support;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Cd", mappedBy="support")
+     * @ORM\JoinColumn(name="support", referencedColumnName="support")
+     */
+    private $disques;
 
     /**
      * @var string
@@ -49,13 +55,34 @@ class FSupport
      */
     private $recep = '1';
 
+    /**
+     * Set disques
+     *
+     * @param ArrayCollection $disques
+     * @return Type
+     */
+    public function setDisques($disques)
+    {
+        $this->disques = $disques;
 
+        return $this;
+    }
+
+    /**
+     * Get disques
+     *
+     * @return ArrayCollection 
+     */
+    public function getDisques()
+    {
+        return $this->disques;
+    }
 
     /**
      * Set libelle
      *
      * @param string $libelle
-     * @return FSupport
+     * @return Support
      */
     public function setLibelle($libelle)
     {
@@ -78,7 +105,7 @@ class FSupport
      * Set actif
      *
      * @param boolean $actif
-     * @return FSupport
+     * @return Support
      */
     public function setActif($actif)
     {
@@ -101,7 +128,7 @@ class FSupport
      * Set alerteProgra
      *
      * @param boolean $alerteProgra
-     * @return FSupport
+     * @return Support
      */
     public function setAlerteProgra($alerteProgra)
     {
@@ -124,7 +151,7 @@ class FSupport
      * Set recep
      *
      * @param boolean $recep
-     * @return FSupport
+     * @return Support
      */
     public function setRecep($recep)
     {

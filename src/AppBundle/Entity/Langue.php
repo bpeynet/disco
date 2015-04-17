@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FLangue
+ * Langue
  *
  * @ORM\Table(name="f_langue", uniqueConstraints={@ORM\UniqueConstraint(name="langue", columns={"langue"})}, indexes={@ORM\Index(name="libelle", columns={"libelle"})})
  * @ORM\Entity
  */
-class FLangue
+class Langue
 {
     /**
      * @var integer
@@ -20,6 +20,12 @@ class FLangue
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $langue;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Cd", mappedBy="langue")
+     * @ORM\JoinColumn(name="langue", referencedColumnName="langue")
+     */
+    private $disques;
 
     /**
      * @var string
@@ -35,13 +41,34 @@ class FLangue
      */
     private $actif = '0';
 
+    /**
+     * Set disques
+     *
+     * @param ArrayCollection $disques
+     * @return Type
+     */
+    public function setDisques($disques)
+    {
+        $this->disques = $disques;
 
+        return $this;
+    }
+
+    /**
+     * Get disques
+     *
+     * @return ArrayCollection 
+     */
+    public function getDisques()
+    {
+        return $this->disques;
+    }
 
     /**
      * Set libelle
      *
      * @param string $libelle
-     * @return FLangue
+     * @return Langue
      */
     public function setLibelle($libelle)
     {
@@ -64,7 +91,7 @@ class FLangue
      * Set actif
      *
      * @param boolean $actif
-     * @return FLangue
+     * @return Langue
      */
     public function setActif($actif)
     {

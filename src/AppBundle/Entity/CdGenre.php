@@ -5,14 +5,14 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FCdGenre
+ * CdGenre
  *
- * @ORM\Table(name="f_cd_genre", uniqueConstraints={@ORM\UniqueConstraint(name="tmp", columns={"cd", "genre"})}, indexes={@ORM\Index(name="cd", columns={"cd"})})
+ * @ORM\Table(name="f_cd_genre", indexes={@ORM\Index(name="cd", columns={"cd"})})
  * @ORM\Entity
  */
-class FCdGenre
+class CdGenre
 {
-    /**
+	/**
      * @var integer
      *
      * @ORM\Column(name="dbkey", type="integer", nullable=false)
@@ -22,26 +22,27 @@ class FCdGenre
     private $dbkey;
 
     /**
-     * @var integer
+     * @var Cd
      *
-     * @ORM\Column(name="cd", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     private $cd = '0';
 
     /**
-     * @var integer
+     * @var Genre
      *
-     * @ORM\Column(name="genre", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Genre")
+     * @ORM\JoinColumn(name="genre", referencedColumnName="genre")
      */
-    private $genre = '0';
-
+    private $genre;
 
 
     /**
      * Set cd
      *
-     * @param integer $cd
-     * @return FCdGenre
+     * @param Cd $cd
+     * @return CdComment
      */
     public function setCd($cd)
     {
@@ -53,7 +54,7 @@ class FCdGenre
     /**
      * Get cd
      *
-     * @return integer 
+     * @return Cd 
      */
     public function getCd()
     {
@@ -63,8 +64,8 @@ class FCdGenre
     /**
      * Set genre
      *
-     * @param integer $genre
-     * @return FCdGenre
+     * @param Genre $genre
+     * @return Cd
      */
     public function setGenre($genre)
     {
@@ -76,20 +77,10 @@ class FCdGenre
     /**
      * Get genre
      *
-     * @return integer 
+     * @return Genre
      */
     public function getGenre()
     {
         return $this->genre;
-    }
-
-    /**
-     * Get dbkey
-     *
-     * @return integer 
-     */
-    public function getDbkey()
-    {
-        return $this->dbkey;
     }
 }

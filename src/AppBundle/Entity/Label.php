@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FLabel
+ * Label
  *
  * @ORM\Table(name="f_label", indexes={@ORM\Index(name="libelle", columns={"libelle"})})
  * @ORM\Entity
  */
-class FLabel
+class Label
 {
     /**
      * @var integer
@@ -20,6 +20,12 @@ class FLabel
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $label;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Cd", mappedBy="label")
+     * @ORM\JoinColumn(name="label", referencedColumnName="label")
+     */
+    private $estLabelDe;
 
     /**
      * @var string
@@ -111,7 +117,7 @@ class FLabel
      * Set libelle
      *
      * @param string $libelle
-     * @return FLabel
+     * @return Label
      */
     public function setLibelle($libelle)
     {
@@ -130,11 +136,35 @@ class FLabel
         return $this->libelle;
     }
 
+
+    /**
+     * Set estLabelDe
+     *
+     * @param ArrayCollection $estLabelDe
+     * @return Label
+     */
+    public function setEstLabelDe($estLabelDe)
+    {
+        $this->estLabelDe = $estLabelDe;
+
+        return $this;
+    }
+
+    /**
+     * Get estLabelDe
+     *
+     * @return ArrayCollection 
+     */
+    public function getEstLabelDe()
+    {
+        return $this->estLabelDe;
+    }
+
     /**
      * Set email
      *
      * @param string $email
-     * @return FLabel
+     * @return Label
      */
     public function setEmail($email)
     {
@@ -157,7 +187,7 @@ class FLabel
      * Set telephone
      *
      * @param string $telephone
-     * @return FLabel
+     * @return Label
      */
     public function setTelephone($telephone)
     {
@@ -180,7 +210,7 @@ class FLabel
      * Set adresse
      *
      * @param string $adresse
-     * @return FLabel
+     * @return Label
      */
     public function setAdresse($adresse)
     {
@@ -203,7 +233,7 @@ class FLabel
      * Set adresse2
      *
      * @param string $adresse2
-     * @return FLabel
+     * @return Label
      */
     public function setAdresse2($adresse2)
     {
@@ -226,7 +256,7 @@ class FLabel
      * Set cp
      *
      * @param string $cp
-     * @return FLabel
+     * @return Label
      */
     public function setCp($cp)
     {
@@ -249,7 +279,7 @@ class FLabel
      * Set ville
      *
      * @param string $ville
-     * @return FLabel
+     * @return Label
      */
     public function setVille($ville)
     {
@@ -272,7 +302,7 @@ class FLabel
      * Set mailProgra
      *
      * @param string $mailProgra
-     * @return FLabel
+     * @return Label
      */
     public function setMailProgra($mailProgra)
     {
@@ -295,7 +325,7 @@ class FLabel
      * Set contact1
      *
      * @param string $contact1
-     * @return FLabel
+     * @return Label
      */
     public function setContact1($contact1)
     {
@@ -318,7 +348,7 @@ class FLabel
      * Set siteweb
      *
      * @param string $siteweb
-     * @return FLabel
+     * @return Label
      */
     public function setSiteweb($siteweb)
     {
@@ -341,7 +371,7 @@ class FLabel
      * Set suppr
      *
      * @param boolean $suppr
-     * @return FLabel
+     * @return Label
      */
     public function setSuppr($suppr)
     {
@@ -364,7 +394,7 @@ class FLabel
      * Set info
      *
      * @param string $info
-     * @return FLabel
+     * @return Label
      */
     public function setInfo($info)
     {

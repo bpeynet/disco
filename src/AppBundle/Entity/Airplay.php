@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FAirplay
+ * Airplay
  *
  * @ORM\Table(name="f_airplay")
  * @ORM\Entity
  */
-class FAirplay
+class Airplay
 {
     /**
      * @var integer
@@ -57,16 +57,18 @@ class FAirplay
     private $dmodif = '0000-00-00 00:00:00';
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="c_user", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="mUser", referencedColumnName="user")
      */
     private $cUser = '0';
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="m_user", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="mUser", referencedColumnName="user")
      */
     private $mUser = '0';
 
@@ -97,7 +99,7 @@ class FAirplay
      * Set libelle
      *
      * @param string $libelle
-     * @return FAirplay
+     * @return Airplay
      */
     public function setLibelle($libelle)
     {
@@ -120,7 +122,7 @@ class FAirplay
      * Set dcreat
      *
      * @param \DateTime $dcreat
-     * @return FAirplay
+     * @return Airplay
      */
     public function setDcreat($dcreat)
     {
@@ -143,7 +145,7 @@ class FAirplay
      * Set annee
      *
      * @param integer $annee
-     * @return FAirplay
+     * @return Airplay
      */
     public function setAnnee($annee)
     {
@@ -166,7 +168,7 @@ class FAirplay
      * Set mois
      *
      * @param integer $mois
-     * @return FAirplay
+     * @return Airplay
      */
     public function setMois($mois)
     {
@@ -189,7 +191,7 @@ class FAirplay
      * Set dmodif
      *
      * @param \DateTime $dmodif
-     * @return FAirplay
+     * @return Airplay
      */
     public function setDmodif($dmodif)
     {
@@ -211,8 +213,8 @@ class FAirplay
     /**
      * Set cUser
      *
-     * @param integer $cUser
-     * @return FAirplay
+     * @param User $cUser
+     * @return Airplay
      */
     public function setCUser($cUser)
     {
@@ -224,7 +226,7 @@ class FAirplay
     /**
      * Get cUser
      *
-     * @return integer 
+     * @return User 
      */
     public function getCUser()
     {
@@ -234,8 +236,8 @@ class FAirplay
     /**
      * Set mUser
      *
-     * @param integer $mUser
-     * @return FAirplay
+     * @param User $mUser
+     * @return Airplay
      */
     public function setMUser($mUser)
     {
@@ -247,7 +249,7 @@ class FAirplay
     /**
      * Get mUser
      *
-     * @return integer 
+     * @return User 
      */
     public function getMUser()
     {
@@ -258,7 +260,7 @@ class FAirplay
      * Set publie
      *
      * @param boolean $publie
-     * @return FAirplay
+     * @return Airplay
      */
     public function setPublie($publie)
     {
@@ -281,7 +283,7 @@ class FAirplay
      * Set chrono
      *
      * @param \DateTime $chrono
-     * @return FAirplay
+     * @return Airplay
      */
     public function setChrono($chrono)
     {
@@ -304,7 +306,7 @@ class FAirplay
      * Set courant
      *
      * @param boolean $courant
-     * @return FAirplay
+     * @return Airplay
      */
     public function setCourant($courant)
     {

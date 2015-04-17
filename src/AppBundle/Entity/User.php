@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FUser
+ * User
  *
  * @ORM\Table(name="f_user")
  * @ORM\Entity
  */
-class FUser
+class User
 {
     /**
      * @var integer
@@ -20,6 +20,12 @@ class FUser
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Cd", mappedBy="userProgra")
+     * @ORM\JoinColumn(name="user", referencedColumnName="user_progra")
+     */
+    private $disquesManipules;
 
     /**
      * @var boolean
@@ -105,13 +111,34 @@ class FUser
      */
     private $alerteProgra = '0';
 
+    /**
+     * Set disquesManipules
+     *
+     * @param ArrayCollection $disquesManipules
+     * @return Type
+     */
+    public function setDisquesmanipules($disquesManipules)
+    {
+        $this->disquesManipules = $disquesManipules;
 
+        return $this;
+    }
+
+    /**
+     * Get disquesManipules
+     *
+     * @return ArrayCollection 
+     */
+    public function getDisquesmanipules()
+    {
+        return $this->disquesManipules;
+    }
 
     /**
      * Set suppr
      *
      * @param boolean $suppr
-     * @return FUser
+     * @return User
      */
     public function setSuppr($suppr)
     {
@@ -134,7 +161,7 @@ class FUser
      * Set inactif
      *
      * @param boolean $inactif
-     * @return FUser
+     * @return User
      */
     public function setInactif($inactif)
     {
@@ -157,7 +184,7 @@ class FUser
      * Set nom
      *
      * @param string $nom
-     * @return FUser
+     * @return User
      */
     public function setNom($nom)
     {
@@ -180,7 +207,7 @@ class FUser
      * Set prenom
      *
      * @param string $prenom
-     * @return FUser
+     * @return User
      */
     public function setPrenom($prenom)
     {
@@ -203,7 +230,7 @@ class FUser
      * Set cotisation
      *
      * @param boolean $cotisation
-     * @return FUser
+     * @return User
      */
     public function setCotisation($cotisation)
     {
@@ -226,7 +253,7 @@ class FUser
      * Set groupe
      *
      * @param string $groupe
-     * @return FUser
+     * @return User
      */
     public function setGroupe($groupe)
     {
@@ -249,7 +276,7 @@ class FUser
      * Set emission
      *
      * @param string $emission
-     * @return FUser
+     * @return User
      */
     public function setEmission($emission)
     {
@@ -272,7 +299,7 @@ class FUser
      * Set email
      *
      * @param string $email
-     * @return FUser
+     * @return User
      */
     public function setEmail($email)
     {
@@ -295,7 +322,7 @@ class FUser
      * Set libelle
      *
      * @param string $libelle
-     * @return FUser
+     * @return User
      */
     public function setLibelle($libelle)
     {
@@ -318,7 +345,7 @@ class FUser
      * Set pwd
      *
      * @param string $pwd
-     * @return FUser
+     * @return User
      */
     public function setPwd($pwd)
     {
@@ -341,7 +368,7 @@ class FUser
      * Set login
      *
      * @param string $login
-     * @return FUser
+     * @return User
      */
     public function setLogin($login)
     {
@@ -364,7 +391,7 @@ class FUser
      * Set alerteProgra
      *
      * @param boolean $alerteProgra
-     * @return FUser
+     * @return User
      */
     public function setAlerteProgra($alerteProgra)
     {

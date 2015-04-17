@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FCdEmprunt
+ * CdEmprunt
  *
  * @ORM\Table(name="f_cd_emprunt", indexes={@ORM\Index(name="cle", columns={"cd", "numex"}), @ORM\Index(name="user", columns={"user"}), @ORM\Index(name="disparu", columns={"disparu"}), @ORM\Index(name="cd", columns={"cd"})})
  * @ORM\Entity
  */
-class FCdEmprunt
+class CdEmprunt
 {
     /**
      * @var integer
@@ -22,9 +22,10 @@ class FCdEmprunt
     private $dbkey;
 
     /**
-     * @var integer
+     * @var Cd
      *
-     * @ORM\Column(name="cd", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     private $cd = '0';
 
@@ -36,9 +37,10 @@ class FCdEmprunt
     private $numex = '1';
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="user", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user", referencedColumnName="user")
      */
     private $user = '0';
 
@@ -89,8 +91,8 @@ class FCdEmprunt
     /**
      * Set cd
      *
-     * @param integer $cd
-     * @return FCdEmprunt
+     * @param Cd $cd
+     * @return CdEmprunt
      */
     public function setCd($cd)
     {
@@ -102,7 +104,7 @@ class FCdEmprunt
     /**
      * Get cd
      *
-     * @return integer 
+     * @return Cd 
      */
     public function getCd()
     {
@@ -113,7 +115,7 @@ class FCdEmprunt
      * Set numex
      *
      * @param integer $numex
-     * @return FCdEmprunt
+     * @return CdEmprunt
      */
     public function setNumex($numex)
     {
@@ -135,8 +137,8 @@ class FCdEmprunt
     /**
      * Set user
      *
-     * @param integer $user
-     * @return FCdEmprunt
+     * @param User $user
+     * @return CdEmprunt
      */
     public function setUser($user)
     {
@@ -148,7 +150,7 @@ class FCdEmprunt
     /**
      * Get user
      *
-     * @return integer 
+     * @return User 
      */
     public function getUser()
     {
@@ -159,7 +161,7 @@ class FCdEmprunt
      * Set disparu
      *
      * @param boolean $disparu
-     * @return FCdEmprunt
+     * @return CdEmprunt
      */
     public function setDisparu($disparu)
     {
@@ -182,7 +184,7 @@ class FCdEmprunt
      * Set chrono
      *
      * @param \DateTime $chrono
-     * @return FCdEmprunt
+     * @return CdEmprunt
      */
     public function setChrono($chrono)
     {
@@ -205,7 +207,7 @@ class FCdEmprunt
      * Set retUser
      *
      * @param integer $retUser
-     * @return FCdEmprunt
+     * @return CdEmprunt
      */
     public function setRetUser($retUser)
     {
@@ -228,7 +230,7 @@ class FCdEmprunt
      * Set retChrono
      *
      * @param \DateTime $retChrono
-     * @return FCdEmprunt
+     * @return CdEmprunt
      */
     public function setRetChrono($retChrono)
     {
@@ -251,7 +253,7 @@ class FCdEmprunt
      * Set empUser
      *
      * @param integer $empUser
-     * @return FCdEmprunt
+     * @return CdEmprunt
      */
     public function setEmpUser($empUser)
     {
@@ -274,7 +276,7 @@ class FCdEmprunt
      * Set empChrono
      *
      * @param \DateTime $empChrono
-     * @return FCdEmprunt
+     * @return CdEmprunt
      */
     public function setEmpChrono($empChrono)
     {

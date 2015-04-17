@@ -4,8 +4,8 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Entity\FCd;
-use AppBundle\Form\FCdType;
+use AppBundle\Entity\Cd;
+use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -22,7 +22,7 @@ class DefaultController extends Controller
 
 	public function showAction($id) {
 		$cd = $this->getDoctrine()
-			->getRepository('AppBundle:FCd')
+			->getRepository('AppBundle:Cd')
 			->find($id);
 
 		//$artiste = $this->getDoctrine()->getRepository('AppBundle:FArtiste')->find($cd->getArtiste());
@@ -42,8 +42,8 @@ class DefaultController extends Controller
 	}
 
 	public function formAction(Request $request) {
-		$post = new FCd();
-		$form = $this->createForm(new FCdType(),$post);
+		$post = new Cd();
+		$form = $this->createForm(new CdType(),$post);
 		$form->add('submit', 'submit', array(
 				'label' => 'Create',
 				'attr' => array('class' => 'btn btn-default pull-right')

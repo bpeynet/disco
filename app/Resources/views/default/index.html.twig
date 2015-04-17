@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{{dump(cd)}}
+	<h1>Fiche de disque #{{cd.getCD}}</h1>
 	<table>
 		<tr>
 			<th>N°</th>
@@ -12,16 +12,16 @@
 			<td> {{cd.getTitre}}</td>
 		</tr>
 		<tr>
-			<th>Nom d'artiste</th>
-			<td>{{cd.getArtiste.getNom}}</td>
+			<th>Artiste</th>
+			<td>{{cd.getArtiste.getLibelle}}</td>
 		</tr>
 		<tr>
-			<th>Numéro Label</th>
-			<td> {{cd.getLabel}}</td>
+			<th>Label</th>
+			<td>{% if cd.getLabel.getLabel != 0 %} {{cd.getLabel.getLibelle}}{% endif %}</td>
 		</tr>
 		<tr>
-			<th>Numéro Maison</th>
-			<td> {{cd.getMaison}}</td>
+			<th>Maison</th>
+			<td>{% if cd.getMaison.getLabel != 0 %} {{cd.getMaison.getLibelle}} {% endif %} </td>
 		</tr>
 		<tr>
 			<th>Date sortie</th>
@@ -33,27 +33,37 @@
 		</tr>
 		<tr>
 			<th>Type</th>
-			<td> {{cd.getType}}</td>
+			<td> {{cd.getType.getLibelle}}</td>
 		</tr>
 		<tr>
 			<th>Support</th>
-			<td> {{cd.getSupport}}</td>
+			<td> {{cd.getSupport.getLibelle}}</td>
 		</tr>
 		<tr>
-			<th>Genre</th>
-			<td> {{cd.getGenre}}</td>
+			<th>Genre principal</th>
+			<td> {{cd.getGenre.getLibelle}}</td>
+		</tr>
+		<tr>
+			<th>Styles secondaires</th>
+			<td>
+				<ul>
+					{% for style in cd.getStyles.toArray %}
+						<li>{{style.getGenre.getLibelle}}</li>
+					{% endfor %}
+				</ul>
+			</td>
 		</tr>
 		<tr>
 			<th>Langue</th>
-			<td> {{cd.getLangue}}</td>
+			<td> {{cd.getLangue.getLibelle}}</td>
 		</tr>
 		<tr>
 			<th>Rotation</th>
-			<td> {{cd.getRotation}}</td>
+			<td>{% if cd.getRotation.getRotation <= 8 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
 		</tr>
 		<tr>
 			<th>Programmateur</th>
-			<td> {{cd.getUserprogra}}</td>
+			<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
 		</tr>
 		<tr>
 			<th>Dprogra ?</th>
@@ -77,7 +87,7 @@
 		</tr>
 		<tr>
 			<th>Note moyenne</th>
-			<td> {{cd.getNotemoy}}</td>
+			<td> {{cd.getNotemoy|round(1, 'ceil')}}</td>
 		</tr>
 		<tr>
 			<th>Présence dans l'airplay ?</th>
@@ -96,7 +106,7 @@
 			<td> {{cd.getRetourcomment}}</td>
 		</tr>
 		<tr>
-			<th>various ? x)</th>
+			<th>Artistes variés ?</th>
 			<td> {{cd.getVarious}}</td>
 		</tr>
 		<tr>
@@ -140,4 +150,59 @@
 			<td> {{cd.getImg}}</td>
 		</tr>
 	</table>
+
+	<h2>Pistes :</h2>
+	<table>
+		<tr><th>titre de la piste</th><th>Artiste</th><th>Langue</th><th>Anim</th><th>Paulo</th><th>Star</th></tr>
+		{% for piste in cd.getPistes.toArray %}
+			<tr>
+				<td>{{piste.getTitre}}</td>
+				<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
+				<td>{% if piste.getLangue.getLangue != 0 %}{{piste.getLangue}}{% else %}{{cd.getLangue.getLibelle}}{% endif %}</td>
+				<td>{{piste.getAnim}}</td>
+				<td>{{piste.getPaulo}}</td>
+				<td>{{piste.getStar}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<h2>Commentaires :</h2>
+	{% for commentaire in cd.getComments.toArray %}
+		<div style="border:1px solid grey">
+			<div style="font-weight:bold">Ecrit par {{commentaire.getUser.getLibelle}}</div>
+			{{commentaire.getComment}}
+		</div>
+	{% endfor %}
+
+	<h2>Toutes les notes :</h2>
+	<table>
+		<tr><th>Utilisateur</th><th>Note</th></tr>
+		{% for note in cd.getNotes.toArray %}
+			<tr>
+				<td>{{note.getUser.getLibelle}}</td>
+				<td>{{note.getNote|round(1, 'ceil')}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<h2>Historique des emprunts</h2>
+	<table>
+		<tr>
+			<th>N° d'exemplaire</th>
+			<th>Utilisateur</th>
+			<th>Date</th>
+			<th>Perdu ?</th>
+		</tr>
+		{% for emprunt in cd.getEmprunts.toArray %}
+			<tr>
+				<td>{{emprunt.getNumex}}</td>
+				<td>{% if emprunt.getUser.getUser !=0 %}{{emprunt.getUser.getLibelle}}{% endif %}</td>
+				<td>{{emprunt.getChrono|date("d/m/Y")}}</td>
+				<td>{{emprunt.getDisparu}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{{dump(cd.getPistes)}}
+
 {% endblock %}
