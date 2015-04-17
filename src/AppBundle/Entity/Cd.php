@@ -32,10 +32,34 @@ class Cd
     /**
      * @var Piste
      *
-     * @ORM\OneToMany(targetEntity="Piste", mappedBy="disque")
-     * @ORM\JoinColumn(name="cd", referencedColumnName="disque")
+     * @ORM\OneToMany(targetEntity="Piste", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     protected $pistes;
+
+    /**
+     * @var CdComment
+     *
+     * @ORM\OneToMany(targetEntity="CdComment", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $comments;
+
+    /**
+     * @var CdComment
+     *
+     * @ORM\OneToMany(targetEntity="CdNote", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $notes;
+
+    /**
+     * @var CdEmprunt
+     *
+     * @ORM\OneToMany(targetEntity="CdEmprunt", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $emprunts;
 
     /**
      * @var string
@@ -316,6 +340,66 @@ class Cd
     public function getpistes()
     {
         return $this->pistes;
+    }
+
+    /**
+     * Set comments
+     *
+     * @param ArrayCollection $comments
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+
+    /**
+     * Get comments
+     *
+     * @return ArrayCollection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Set notes
+     *
+     * @param ArrayCollection $notes
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+    }
+
+    /**
+     * Get emprunts
+     *
+     * @return ArrayCollection
+     */
+    public function getEmprunts()
+    {
+        return $this->emprunts;
+    }
+
+    /**
+     * Set emprunts
+     *
+     * @param ArrayCollection $emprunts
+     */
+    public function setEmprunts($emprunts)
+    {
+        $this->emprunts = $emprunts;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return ArrayCollection
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 
     /**

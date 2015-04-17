@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FCdComment
+ * CdComment
  *
  * @ORM\Table(name="f_cd_comment", indexes={@ORM\Index(name="cd", columns={"cd"})})
  * @ORM\Entity
  */
-class FCdComment
+class CdComment
 {
     /**
      * @var integer
@@ -29,9 +29,10 @@ class FCdComment
     private $chrono = '0000-00-00 00:00:00';
 
     /**
-     * @var integer
+     * @var User
      *
-     * @ORM\Column(name="user", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user", referencedColumnName="user")
      */
     private $user = '0';
 
@@ -43,9 +44,10 @@ class FCdComment
     private $comment;
 
     /**
-     * @var integer
+     * @var Cd
      *
-     * @ORM\Column(name="cd", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     private $cd = '0';
 
@@ -62,7 +64,7 @@ class FCdComment
      * Set chrono
      *
      * @param \DateTime $chrono
-     * @return FCdComment
+     * @return CdComment
      */
     public function setChrono($chrono)
     {
@@ -84,8 +86,8 @@ class FCdComment
     /**
      * Set user
      *
-     * @param integer $user
-     * @return FCdComment
+     * @param User $user
+     * @return CdComment
      */
     public function setUser($user)
     {
@@ -97,7 +99,7 @@ class FCdComment
     /**
      * Get user
      *
-     * @return integer 
+     * @return User 
      */
     public function getUser()
     {
@@ -108,7 +110,7 @@ class FCdComment
      * Set comment
      *
      * @param string $comment
-     * @return FCdComment
+     * @return CdComment
      */
     public function setComment($comment)
     {
@@ -131,7 +133,7 @@ class FCdComment
      * Set cd
      *
      * @param integer $cd
-     * @return FCdComment
+     * @return CdComment
      */
     public function setCd($cd)
     {
@@ -154,7 +156,7 @@ class FCdComment
      * Set idForum
      *
      * @param integer $idForum
-     * @return FCdComment
+     * @return CdComment
      */
     public function setIdForum($idForum)
     {

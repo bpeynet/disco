@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{{dump(cd)}}
+	<h1>Fiche de disque #{{cd.getCD}}</h1>
 	<table>
 		<tr>
 			<th>N°</th>
@@ -77,7 +77,7 @@
 		</tr>
 		<tr>
 			<th>Note moyenne</th>
-			<td> {{cd.getNotemoy}}</td>
+			<td> {{cd.getNotemoy|round(1, 'ceil')}}</td>
 		</tr>
 		<tr>
 			<th>Présence dans l'airplay ?</th>
@@ -141,5 +141,58 @@
 		</tr>
 	</table>
 
+	<h2>Pistes :</h2>
+	<table>
+		<tr><th>titre de la piste</th><th>Artiste</th><th>Langue</th><th>Anim</th><th>Paulo</th><th>Star</th></tr>
+		{% for piste in cd.getPistes.toArray %}
+			<tr>
+				<td>{{piste.getTitre}}</td>
+				<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
+				<td>{% if piste.getLangue.getLangue != 0 %}{{piste.getLangue}}{% else %}{{cd.getLangue.getLibelle}}{% endif %}</td>
+				<td>{{piste.getAnim}}</td>
+				<td>{{piste.getPaulo}}</td>
+				<td>{{piste.getStar}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<h2>Commentaires :</h2>
+	{% for commentaire in cd.getComments.toArray %}
+		<div style="border:1px solid grey">
+			<div style="font-weight:bold">Ecrit par {{commentaire.getUser.getLibelle}}</div>
+			{{commentaire.getComment}}
+		</div>
+	{% endfor %}
+
+	<h2>Toutes les notes :</h2>
+	<table>
+		<tr><th>Utilisateur</th><th>Note</th></tr>
+		{% for note in cd.getNotes.toArray %}
+			<tr>
+				<td>{{note.getUser.getLibelle}}</td>
+				<td>{{note.getNote|round(1, 'ceil')}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+	<h2>Historique des emprunts</h2>
+	<table>
+		<tr>
+			<th>N° d'exemplaire</th>
+			<th>Utilisateur</th>
+			<th>Date</th>
+			<th>Perdu ?</th>
+		</tr>
+		{% for emprunt in cd.getEmprunts.toArray %}
+			<tr>
+				<td>{{emprunt.getNumex}}</td>
+				<td>{% if emprunt.getUser.getUser !=0 %}{{emprunt.getUser.getLibelle}}{% endif %}</td>
+				<td>{{emprunt.getChrono|date("d/m/Y")}}</td>
+				<td>{{emprunt.getDisparu}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+{{dump(cd.getPistes)}}
 
 {% endblock %}

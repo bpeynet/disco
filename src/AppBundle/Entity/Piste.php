@@ -29,6 +29,13 @@ class Piste
     private $piste = '0';
 
     /**
+     * @var Cd
+     * @ORM\ManyToOne(targetEntity="Cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    private $cd = '0';
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="disque", type="integer", nullable=false)
@@ -43,16 +50,18 @@ class Piste
     private $titre = '';
 
     /**
-     * @var integer
+     * @var Artiste
      *
-     * @ORM\Column(name="artiste", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Artiste")
+     * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
      */
     private $artiste = '0';
 
     /**
-     * @var integer
+     * @var Langue
      *
-     * @ORM\Column(name="langue", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Langue")
+     * @ORM\JoinColumn(name="langue", referencedColumnName="langue")
      */
     private $langue = '0';
 
