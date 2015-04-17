@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class FCdType extends AbstractType
+class CdType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -42,7 +42,7 @@ class FCdType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\FCd'
+            'data_class' => 'AppBundle\Entity\Cd'
         ));
     }
 
@@ -51,6 +51,6 @@ class FCdType extends AbstractType
      */
     public function getName()
     {
-        return 'appbundle_fcd';
+        return 'appbundle_cd';
     }
 }
