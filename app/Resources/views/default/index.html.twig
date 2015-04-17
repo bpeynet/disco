@@ -40,8 +40,18 @@
 			<td> {{cd.getSupport.getLibelle}}</td>
 		</tr>
 		<tr>
-			<th>Genre</th>
+			<th>Genre principal</th>
 			<td> {{cd.getGenre.getLibelle}}</td>
+		</tr>
+		<tr>
+			<th>Styles secondaires</th>
+			<td>
+				<ul>
+					{% for style in cd.getStyles.toArray %}
+						<li>{{style.getGenre.getLibelle}}</li>
+					{% endfor %}
+				</ul>
+			</td>
 		</tr>
 		<tr>
 			<th>Langue</th>

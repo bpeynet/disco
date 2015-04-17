@@ -1,4 +1,4 @@
-drop procedure update_genre;
+
 delimiter //
 
 CREATE UNIQUE INDEX tmp ON f_cd_genre(cd,genre);
@@ -419,3 +419,4 @@ DROP INDEX tmp;
 delimiter ;
 
 CALL update_genre();
+drop procedure update_genre;

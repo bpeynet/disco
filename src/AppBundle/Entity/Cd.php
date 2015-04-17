@@ -62,6 +62,14 @@ class Cd
     protected $emprunts;
 
     /**
+     * @var CdGenre
+     *
+     * @ORM\OneToMany(targetEntity="CdGenre", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $styles;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="titre", type="string", length=250, nullable=false)
@@ -390,6 +398,26 @@ class Cd
     public function setEmprunts($emprunts)
     {
         $this->emprunts = $emprunts;
+    }
+
+    /**
+     * Get styles
+     *
+     * @return ArrayCollection
+     */
+    public function getStyles()
+    {
+        return $this->styles;
+    }
+
+    /**
+     * Set styles
+     *
+     * @param ArrayCollection $styles
+     */
+    public function setStyles($styles)
+    {
+        $this->styles = $styles;
     }
 
     /**
