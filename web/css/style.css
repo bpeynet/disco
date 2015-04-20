@@ -1,12 +1,16 @@
-.panel-heading h2 {
+.panel-heading h3 {
 	margin: 0px;
-}
-
-.panel.panel-primary.col-xs-1, .panel.panel-primary.col-sm-1, .panel.panel-primary.col-md-1, .panel.panel-primary.col-lg-1, .panel.panel-primary.col-xs-2, .panel.panel-primary.col-sm-2, .panel.panel-primary.col-md-2, .panel.panel-primary.col-lg-2, .panel.panel-primary.col-xs-3, .panel.panel-primary.col-sm-3, .panel.panel-primary.col-md-3, .panel.panel-primary.col-lg-3, .panel.panel-primary.col-xs-4, .panel.panel-primary.col-sm-4, .panel.panel-primary.col-md-4, .panel.panel-primary.col-lg-4, .panel.panel-primary.col-xs-5, .panel.panel-primary.col-sm-5, .panel.panel-primary.col-md-5, .panel.panel-primary.col-lg-5, .panel.panel-primary.col-xs-6, .panel.panel-primary.col-sm-6, .panel.panel-primary.col-md-6, .panel.panel-primary.col-lg-6, .panel.panel-primary.col-xs-7, .panel.panel-primary.col-sm-7, .panel.panel-primary.col-md-7, .panel.panel-primary.col-lg-7, .panel.panel-primary.col-xs-8, .panel.panel-primary.col-sm-8, .panel.panel-primary.col-md-8, .panel.panel-primary.col-lg-8, .panel.panel-primary.col-xs-9, .panel.panel-primary.col-sm-9, .panel.panel-primary.col-md-9, .panel.panel-primary.col-lg-9, .panel.panel-primary.col-xs-10, .panel.panel-primary.col-sm-10, .panel.panel-primary.col-md-10, .panel.panel-primary.col-lg-10, .panel.panel-primary.col-xs-11, .panel.panel-primary.col-sm-11, .panel.panel-primary.col-md-11, .panel.panel-primary.col-lg-11, .panel.panel-primary.col-xs-12, .panel.panel-primary.col-sm-12, .panel.panel-primary.col-md-12, .panel.panel-primary.col-lg-12 {
-	padding-left: 0px;
-	padding-right: 0px;
 }
 
 .row {
 	margin: 0px;
+}
+
+#tabs > div {
+	border-radius: 0px 0px 5px 5px;
+	border-top: none;
+}
+
+#menu_gauche {
+	
 }

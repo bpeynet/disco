@@ -95,7 +95,8 @@ class Cd
     /**
      * @var integer
      *
-     * @ORM\Column(name="distrib", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Label")
+     * @ORM\JoinColumn(name="distrib", referencedColumnName="label")
      */
     private $distrib = '0';
 
