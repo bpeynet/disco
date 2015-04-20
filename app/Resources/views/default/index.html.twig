@@ -1,181 +1,187 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<h1>Fiche de disque: #{{cd.getCD}}</h1>
-	<table>
-		<tr>
-			<th>N°</th>
-			<td> {{cd.getCd}}</td>
-		</tr>
-		<tr>
-			<th>Titre</th>
-			<td> {{cd.getTitre}}</td>
-		</tr>
-		<tr>
-			<th>Artiste</th>
-			<td>{{cd.getArtiste.getLibelle}}</td>
-		</tr>
-		<tr>
-			<th>Label</th>
-			<td>{% if cd.getLabel.getLabel != 0 %} {{cd.getLabel.getLibelle}}{% endif %}</td>
-		</tr>
-		<tr>
-			<th>Maison</th>
-			<td>{% if cd.getMaison.getLabel != 0 %} {{cd.getMaison.getLibelle}} {% endif %} </td>
-		</tr>
-		<tr>
-			<th>Date sortie</th>
-			<td> {{cd.getDsortie|date("d/m/Y")}}</td>
-		</tr>
-		<tr>
-			<th>Année</th>
-			<td> {{cd.getAnnee}}</td>
-		</tr>
-		<tr>
-			<th>Type</th>
-			<td> {{cd.getType.getLibelle}}</td>
-		</tr>
-		<tr>
-			<th>Support</th>
-			<td> {{cd.getSupport.getLibelle}}</td>
-		</tr>
-		<tr>
-			<th>Genre principal</th>
-			<td> {{cd.getGenre.getLibelle}}</td>
-		</tr>
-		<tr>
-			<th>Styles secondaires</th>
-			<td>
-				<ul>
-					{% for style in cd.getStyles.toArray %}
-						<li>{{style.getGenre.getLibelle}}</li>
-					{% endfor %}
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<th>Langue</th>
-			<td> {{cd.getLangue.getLibelle}}</td>
-		</tr>
-		<tr>
-			<th>Rotation</th>
-			<td>{% if cd.getRotation.getRotation <= 8 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
-		</tr>
-		<tr>
-			<th>Programmateur</th>
-			<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
-		</tr>
-		<tr>
-			<th>Dprogra ?</th>
-			<td> {{cd.getDprogra}}</td>
-		</tr>
-		<tr>
-			<th>Commentaire</th>
-			<td> {{cd.getComment}}</td>
-		</tr>
-		<tr>
-			<th>Date de saisie</th>
-			<td> {{cd.getDsaisie|date("d/m/Y")}}</td>
-		</tr>
-		<tr>
-			<th>Jour de saisie</th>
-			<td> {{cd.getJsaisie}}</td>
-		</tr>
-		<tr>
-			<th>Présence de DVD ?</th>
-			<td> {{cd.getDvd}}</td>
-		</tr>
-		<tr>
-			<th>Note moyenne</th>
-			<td> {{cd.getNotemoy|round(1, 'ceil')}}</td>
-		</tr>
-		<tr>
-			<th>Présence dans l'airplay ?</th>
-			<td> {{cd.getAirplay}}</td>
-		</tr>
-		<tr>
-			<th>Mail de retour </th>
-			<td> {{cd.getRetourmail}}</td>
-		</tr>
-		<tr>
-			<th>Retour Label effectué ?</th>
-			<td> {{cd.getRetourlabel}}</td>
-		</tr>
-		<tr>
-			<th>Retour Comment effectué ?</th>
-			<td> {{cd.getRetourcomment}}</td>
-		</tr>
-		<tr>
-			<th>Artistes variés ?</th>
-			<td> {{cd.getVarious}}</td>
-		</tr>
-		<tr>
-			<th>Nombre de pistes</th>
-			<td> {{cd.getNbpiste}}</td>
-		</tr>
-		<tr>
-			<th>Paulo ?</th>
-			<td> {{cd.getPaulo}}</td>
-		</tr>
-		<tr>
-			<th>Etiquette ?</th>
-			<td> {{cd.getEtiquette}}</td>
-		</tr>
-		<tr>
-			<th>Librairie Artiste</th>
-			<td> {{cd.getLibartiste}}</td>
-		</tr>
-		<tr>
-			<th>Libelle</th>
-			<td> {{cd.getLibelle}}</td>
-		</tr>
-		<tr>
-			<th>Id Disque</th>
-			<td> {{cd.getDiscid}}</td>
-		</tr>
-		<tr>
-			<th>Référence du label</th>
-			<td> {{cd.getReflabel}}</td>
-		</tr>
-		<tr>
-			<th>Supprimé de la base ?</th>
-			<td> {{cd.getSuppr}}</td>
-		</tr>
-		<tr>
-			<th>Retour attendu ?</th>
-			<td> {{cd.getRetourattendu}}</td>
-		</tr>
-		<tr>
-			<th>Image</th>
-			<td> {{cd.getImg}}</td>
-		</tr>
-	</table>
+	<h1>Fiche de disque <small>{{cd.getTitre}} de {{cd.getArtiste.getLibelle}} (#{{cd.getCD}})</small></h1>
+	
+	<div class="label label-info">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
 
-	<h2>Pistes :</h2>
-	<table>
-		<tr><th>titre de la piste</th><th>Artiste</th><th>Langue</th><th>Anim</th><th>Paulo</th><th>Star</th></tr>
-		{% for piste in cd.getPistes.toArray %}
-			<tr>
-				<td>{{piste.getTitre}}</td>
-				<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
-				<td>{% if piste.getLangue.getLangue != 0 %}{{piste.getLangue}}{% else %}{{cd.getLangue.getLibelle}}{% endif %}</td>
-				<td>{{piste.getAnim}}</td>
-				<td>{{piste.getPaulo}}</td>
-				<td>{{piste.getStar}}</td>
-			</tr>
-		{% endfor %}
-	</table>
-
-	<h2>Commentaires :</h2>
-	{% for commentaire in cd.getComments.toArray %}
-		<div style="border:1px solid grey">
-			<div style="font-weight:bold">Ecrit par {{commentaire.getUser.getLibelle}}</div>
-			{{commentaire.getComment}}
+	<div class="row">
+		<div class="panel panel-primary col-md-7">
+			<div class="panel-heading">
+				<h2>Concernant le Disque :</h2>
+			</div>
+			<table class="table table-striped">
+				<tr>
+					<th>Artiste</th>
+					<td>{{cd.getArtiste.getLibelle}}</td>
+				</tr>
+				<tr>
+					<th>Titre</th>
+					<td> {{cd.getTitre}}</td>
+				</tr>
+				<tr>
+					<th>Plusieurs artistes</th>
+					<td class="{%if cd.getVarious%}info{% endif %}">{%if cd.getVarious%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Label</th>
+					<td>{% if cd.getLabel.getLabel != 0 %} {{cd.getLabel.getLibelle}}{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Maison</th>
+					<td>{% if cd.getMaison.getLabel != 0 %} {{cd.getMaison.getLibelle}} {% endif %} </td>
+				</tr>
+				<tr>
+					<th>Libelle Complet</th>
+					<td>{{cd.getLibelle}}</td>
+				</tr>
+				<tr>
+					<th>Date sortie</th>
+					<td>{% if cd.getDsortie|date("Y") != -0001 %}{{cd.getDsortie|date("d/m/Y")}}{% else %}{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Année</th>
+					<td> {{cd.getAnnee}}</td>
+				</tr>
+				<tr>
+					<th>Type</th>
+					<td> {{cd.getType.getLibelle}}</td>
+				</tr>
+				<tr>
+					<th>Support</th>
+					<td> {{cd.getSupport.getLibelle}}</td>
+				</tr>
+				<tr>
+					<th>Genre principal</th>
+					<td> {{cd.getGenre.getLibelle}}</td>
+				</tr>
+				<tr>
+					<th>Styles secondaires</th>
+					<td>
+						<ul class="list-group">
+							{% for style in cd.getStyles.toArray %}
+								<li class="list-group-item">{{style.getGenre.getLibelle}}</li>
+							{% endfor %}
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<th>Langue</th>
+					<td> {{cd.getLangue.getLibelle}}</td>
+				</tr>
+				<tr>
+					<th>Rotation</th>
+					<td>{% if cd.getRotation.getRotation <= 8 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
+				</tr>
+				<tr>
+					<th>Note moyenne</th>
+					<td class="{% if cd.getNotemoy|round(1, 'ceil') >= 3.5 %}sucess{% elseif cd.getNotemoy|round(1, 'ceil') > 2 %}warning{% else %}danger{% endif %}"> {{cd.getNotemoy|round(1, 'ceil')}}</td>
+				</tr>
+				<tr>
+					<th>Présence dans l'airplay ?</th>
+					<td class="{%if cd.getAirplay%}success{% else %}warning{% endif %}">{%if cd.getAirplay%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Mail de retour </th>
+					<td> {{cd.getRetourmail}}</td>
+				</tr>
+				<tr>
+					<th>Retour Label effectué ?</th>
+					<td class="{%if cd.getRetourlabel%}success{% else %}warning{% endif %}">{%if cd.getRetourlabel%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Etat du retour commentaire</th>
+					<td class="{%if cd.getRetourcomment%}success{% else %}warning{% endif %}">{%if cd.getRetourcomment%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Nombre de pistes</th>
+					<td> {{cd.getNbpiste}}</td>
+				</tr>
+				<tr>
+					<th>Enregistré dans Paulo</th>
+					<td class="{%if cd.getPaulo%}success{% else %}warning{% endif %}">{%if cd.getPaulo%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Etiquetté</th>
+					<td class="{%if cd.getEtiquette%}success{% else %}warning{% endif %}">{%if cd.getEtiquette%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Présence de DVD</th>
+					<td class="{%if cd.getDvd%}success{% endif %}">{%if cd.getDvd%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Présence dans la base</th>
+					<td class="{%if not cd.getSuppr%}success{% else %}warning{% endif %}">{%if not cd.getSuppr%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Emprunté</th>
+					<td class="{%if cd.getRetourattendu%}danger{% endif %}">{%if cd.getRetourattendu%}Oui{% else %}Non{% endif %}</td>
+				</tr>
+				<tr>
+					<th>Image</th>
+					<td> {{cd.getImg}}</td>
+				</tr>
+			</table>
 		</div>
+
+		<div class="panel panel-primary col-md-4 pull-right">
+			<div class="panel-heading"><h2>Concernant le Programmateur :</h2></div>
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<tr>
+						<th>Programmateur</th>
+						<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
+					</tr>
+					<tr>
+						<th>Commentaire</th>
+						<td>{% if cd.getComment %}{{cd.getComment}}{% endif %}</td>
+					</tr>
+					<tr>
+						<th>dProgra</th>
+						<td>{{cd.getDprogra}}</td>
+					</tr>
+					<tr>
+						<th>Jour de saisie</th>
+						<td>{{cd.getJsaisie}}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="panel panel-primary col-md-7">
+			<div class="panel-heading">
+				<h2>Pistes en détail</h2>
+			</div>
+				<table class="table table-striped">
+					<tr><th>titre de la piste</th><th>Artiste</th><th>Langue</th><th>Anim</th><th>Paulo</th><th>Star</th></tr>
+					{% for piste in cd.getPistes.toArray %}
+						<tr>
+							<td>{{piste.getTitre}}</td>
+							<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
+							<td>{% if piste.getLangue.getLangue != 0 %}{{piste.getLangue}}{% else %}{{cd.getLangue.getLibelle}}{% endif %}</td>
+							<td class="{% if piste.getAnim %}success{% endif %}">{% if piste.getAnim %}Oui{% else %}Non{% endif %}</td>
+							<td class="{% if piste.getPaulo %}success{% endif %}">{% if piste.getPaulo %}Oui{% else %}Non{% endif %}</td>
+							<td class="{% if piste.getStar %}success{% endif %}">{% if piste.getStar %}Oui{% else %}Non{% endif %}</td>
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<h2>Commentaires</h2>
+	{% for commentaire in cd.getComments.toArray %}
+		<div class="panel panel-primary">
+			<div class="panel-heading">Le {{commentaire.getChrono|date("d M Y")}}, {{commentaire.getUser.getLibelle}} a écrit</div>
+			<div class="panel-body">{{commentaire.getComment}}</div>
+		</div>		
 	{% endfor %}
 
 	<h2>Toutes les notes :</h2>
-	<table>
+	<table class="table table-striped">
 		<tr><th>Utilisateur</th><th>Note</th></tr>
 		{% for note in cd.getNotes.toArray %}
 			<tr>
@@ -186,23 +192,40 @@
 	</table>
 
 	<h2>Historique des emprunts</h2>
-	<table>
+	<table class="table table-striped">
 		<tr>
 			<th>N° d'exemplaire</th>
 			<th>Utilisateur</th>
 			<th>Date</th>
-			<th>Perdu ?</th>
+			<th>Perte</th>
 		</tr>
 		{% for emprunt in cd.getEmprunts.toArray %}
 			<tr>
 				<td>{{emprunt.getNumex}}</td>
 				<td>{% if emprunt.getUser.getUser !=0 %}{{emprunt.getUser.getLibelle}}{% endif %}</td>
-				<td>{{emprunt.getChrono|date("d/m/Y")}}</td>
+				<td>{% if emprunt.getChrono|date("Y") != -0001 %}{{emprunt.getChrono|date("d/m/Y")}}{%endif%}</td>
 				<td>{{emprunt.getDisparu}}</td>
 			</tr>
 		{% endfor %}
 	</table>
 
-{{dump(cd.getPistes)}}
+	<div class="label label-default">Autre ?</div>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<tr>
+				<th>Librairie Artiste</th>
+				<td> {{cd.getLibartiste}}</td>
+			</tr>
+			<tr>
+				<th>Id Disque</th>
+				<td> {{cd.getDiscid}}</td>
+			</tr>
+			<tr>
+				<th>Référence du label</th>
+				<td> {{cd.getReflabel}}</td>
+			</tr>
+		</table>
+	</div>
+
 
 {% endblock %}
