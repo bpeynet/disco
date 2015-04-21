@@ -1,0 +1,307 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1>Fiche de disque <small>{{cd.getTitre}} de {{cd.getArtiste.getLibelle}} (#{{cd.getCD}})</small></h1>
+	
+	<div class="label label-info">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
+
+	<div class="label label-info">Image</div>
+	{{cd.getImg}}
+
+	{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
+
+	{% if cd.getRetourlabel %}<div class="label label-warning">Retour label en attente</div>{% endif %}
+	{% if not cd.getAirplay %}<div class="label label-success">Présent dans un airplay</div>{% endif %}
+	{% if cd.getEmprunts %}<div class="label label-success">CD libre</div>{% endif %}
+
+	<div class="row">
+		<div class="col-md-7">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3>Informations générales</h3>
+				</div>
+				<table class="table table-striped">
+					<tr>
+						<th>Artiste</th>
+						<td>{{cd.getArtiste.getLibelle}}</td>
+					</tr>
+					<tr>
+						<th>Titre</th>
+						<td> {{cd.getTitre}}</td>
+					</tr>
+					{% if cd.getLibelle %}
+					<tr>
+						<th>Libelle Complet</th>
+						<td>{{cd.getLibelle}}</td>
+					</tr>
+					{% endif %}
+					{% if cd.getDsortie|date("Y") != -0001 %}
+					<tr>
+						<th>Date sortie</th>
+						<td>{{cd.getDsortie|date("d/m/Y")}}</td>
+					</tr>
+					{% endif %}
+					{% if cd.getAnnee %}
+					<tr>
+						<th>Année</th>
+						<td> {{cd.getAnnee}}</td>
+					</tr>
+					{% endif %}
+					{% if cd.getLabel.getLabel != 0 %} 
+					<tr>
+						<th>Label</th>
+						<td>{{cd.getLabel.getLibelle}}</td>
+					</tr>
+					{% endif %}
+					{% if cd.getMaison.getLabel != 0 %} 
+					<tr>
+						<th>Maison</th>
+						<td>{{cd.getMaison.getLibelle}}</td>
+					</tr>
+					{% endif %}
+					{% if cd.getDistrib.getLabel != 0 %} 
+					<tr>
+						<th>Distributeur</th>
+						<td>{{cd.getDistrib.getLibelle}}</td>
+					</tr>
+					{% endif %}
+					{% if cd.getReflabel %}
+					<tr>
+						<th>Référence du label</th>
+						<td> {{cd.getReflabel}}</td>
+					</tr>
+					{% endif %}
+					{% if cd.getDiscid %}
+					<tr>
+						<th>Référence du disque (Label)</th>
+						<td> {{cd.getDiscid}}</td>
+					</tr>
+					{% endif %}
+					<tr>
+						<th>Présence dans la base</th>
+						<td class="{%if not cd.getSuppr%}success{% else %}warning{% endif %}">{%if not cd.getSuppr%}Oui{% else %}Non{% endif %}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="col-md-5">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3>Informations techniques</h3>
+				</div>
+				<table class="table table-striped">
+					{%if cd.getDvd%}
+					<tr>
+						<th>Présence de DVD</th>
+					</tr>
+					{% endif %}
+					{%if cd.getEtiquette%}
+					<tr>
+						<th>Etiquetté</th>
+					</tr>
+					{% endif %}
+					{%if cd.getPaulo%}
+					<tr>
+						<th>Enregistré dans Rivendel</th>
+					</tr>
+					{% endif %}
+					<tr>
+						<th>Support</th>
+						<td>{{cd.getSupport.getLibelle}}</td>
+					</tr>
+					<tr>
+						<th>Type</th>
+						<td>{{cd.getType.getLibelle}}</td>
+					</tr>
+					{% if cd.getLangue.getLangue != 0 %}
+					<tr>
+						<th>Langue</th>
+						<td>{{cd.getLangue.getLibelle}}</td>
+					</tr>
+					{% endif %}
+				</table>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3>Genre et Styles</h3>
+				</div>
+				<table class="table table-striped">
+					<tr>
+						<th>Genre principal</th>
+						<td>{{cd.getGenre.getLibelle}}</td>
+					</tr>
+					{% if cd.getStyles.toArray != null %}
+					<tr>
+						<th>Styles secondaires</th>
+						<td>
+							<ul class="list-group">
+								{% for style in cd.getStyles.toArray %}
+									<li class="list-group-item">{{style.getGenre.getLibelle}}</li>
+								{% endfor %}
+							</ul>
+						</td>
+					</tr>
+					{% endif %}
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div id="tabs" class="col-md-12">
+			<ul class="nav nav-tabs nav-justified">
+				<li role="presentation" class="active"><a href="#progra">Programmateur</a></li>
+				<li role="presentation"><a href="#comments">Commentaires</a></li>
+				<li role="presentation"><a href="#divers">Divers</a></li>
+				<li role="presentation"><a href="#retLabel">Retour label</a></li>
+			</ul>
+			<div id="progra" class="panel panel-default">
+				<div class="panel-body">
+					<div class="col-md-8">
+						<table class="table">
+							<tr>
+								{% if cd.getNbpiste %}
+									<th>Nombre de pistes</th>
+									<td>{{cd.getNbpiste}}</td>
+								{% endif %}
+								{%if cd.getVarious %}
+									<th>Plusieurs artistes</th>
+								{% endif %}
+							</tr>
+						</table>
+
+						{% if cd.getPistes.toArray != null %}
+						<h4>Pistes en détail</h4>
+						<table class="table table-striped">
+							<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Langue</th><th>Anim</th><th>Paulo</th><th>Star</th></tr></thead>
+							{% for piste in cd.getPistes.toArray %}
+								<tr>
+									<td>{{piste.getTitre}}</td>
+									<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
+									<td>{% if piste.getLangue.getLangue != 0 %}{{piste.getLangue.getLangue}}{% elseif cd.getLangue.getLangue != 0 %}{{cd.getLangue.getLibelle}}{% endif %}</td>
+									<td class="{% if piste.getAnim %}success{% endif %}"></td>
+									<td class="{% if piste.getPaulo %}success{% endif %}"></td>
+									<td class="{% if piste.getStar %}success{% endif %}"></td>
+								</tr>
+							{% endfor %}
+						</table>
+						{% endif %}
+					</div>
+					<div class="col-md-4">
+						<table class="table table-striped">
+							{% if cd.getUserprogra.getUser %}
+								<tr>
+									<th>Programmateur</th>
+									<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
+								</tr>
+							{% endif %}
+							{% if cd.getRotation.getRotation <= 8 %}
+								<tr>
+									<th>Rotation</th>
+									<td>{% if cd.getRotation.getRotation <= 8 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
+								</tr>
+							{% endif %}
+							{% if cd.getNotemoy %}
+								<tr>
+									<th>Note moyenne</th>
+									<td class="{% if cd.getNotemoy|round(1, 'ceil') >= 3.5 %}sucess{% elseif cd.getNotemoy|round(1, 'ceil') > 2 %}warning{% else %}danger{% endif %}"> {{cd.getNotemoy|round(1, 'ceil')}}</td>
+								</tr>
+							{% endif %}
+							{% if cd.getComment %}
+								<tr>
+									<th colspan="2">Commentaire</th>
+								</tr>
+								<tr><td colspan="2">{% if cd.getComment %}{{cd.getComment}}{% endif %}</td></tr>
+							{% endif %}
+						</table>
+						{% if cd.getNotes.toArray != null %}
+						<h3>Toutes les notes :</h3>
+						<table class="table table-striped">
+							<thead><tr><th>Utilisateur</th><th>Note</th></tr></thead>
+							{% for note in cd.getNotes.toArray %}
+								<tr>
+									<td>{{note.getUser.getLibelle}}</td>
+									<td>{{note.getNote|round(1, 'ceil')}}</td>
+								</tr>
+							{% endfor %}
+						</table>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div id="comments" class="panel panel-default">
+				<div class="panel-body">
+					{% if cd.getComments.toArray %}
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Utilisateur</th>
+									<th>Commentaire</th>
+								</tr>
+							</thead>
+							{% for commentaire in cd.getComments.toArray %}
+								<tr>
+									<td>{{commentaire.getChrono|date("d M Y")}}</td>
+									<td>{{commentaire.getUser.getLibelle}}</td>
+									<td>{{commentaire.getComment}}</td>
+								</tr>		
+							{% endfor %}
+						</table>
+					{% endif %}
+				</div>
+			</div>
+			<div id="divers" class="panel panel-default">
+				<div class="panel-body">
+					
+					<h4>Historique des emprunts</h4>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>N° d'exemplaire</th>
+								<th>Utilisateur</th>
+								<th>Date</th>
+								<th>Perte</th>
+							</tr>
+						</thead>
+						{% for emprunt in cd.getEmprunts.toArray %}
+							<tr>
+								<td>{{emprunt.getNumex}}</td>
+								<td>{% if emprunt.getUser.getUser !=0 %}{{emprunt.getUser.getLibelle}}{% endif %}</td>
+								<td>{% if emprunt.getChrono|date("Y") != -0001 %}{{emprunt.getChrono|date("d/m/Y")}}{%endif%}</td>
+								<td>{{emprunt.getDisparu}}</td>
+							</tr>
+						{% endfor %}
+					</table>
+
+					<h4>Airplays</h4>
+					#TODO
+
+				</div>
+			</div>
+			<div id="retLabel" class="panel panel-default">
+				<div class="panel-body">
+					
+					<h4>Retour Label : <span class="label label-{%if cd.getRetourlabel%}success{% else %}warning{% endif %}">{%if cd.getRetourlabel%}Effectué{% else %}En attente{% endif %}</span></h4>
+					{% if cd.getRetourmail %}<h5>Mail de retour</h5><span>{{cd.getRetourmail}}</span>{% endif %}
+					<div>#TODO</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+
+		$(function() {
+			$("#tabs").tabs();
+		});
+		$(function() {
+			$("#menu_gauche").accordion();
+		});
+
+	</script>
+{% endblock %}

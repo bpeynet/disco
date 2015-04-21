@@ -1,326 +1,137 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<h1>Fiche de disque <small>{{cd.getTitre}} de {{cd.getArtiste.getLibelle}} (#{{cd.getCD}})</small></h1>
-	
-	<div class="label label-info">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
+	<form class="form-horizontal" method="post" >
+	<fieldset>
 
-	<div class="label label-info">Image</div>
-	{{cd.getImg}}
+	<!-- Form Name -->
+	<legend>Recherche de CD</legend>
 
-	{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
+	<div class="row col-lg-12">
+		<div class="col-xs-6">
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="cd">Par Numéro</label>  
+			  <div class="col-md-4">
+			  <input id="cd" name="cd" placeholder="" class="form-control input-md" type="text">
+			    
+			  </div>
+			</div>
 
-	{% if cd.getRetourlabel %}<div class="label label-warning">Retour label en attente</div>{% endif %}
-	{% if not cd.getAirplay %}<div class="label label-success">Présent dans un airplay</div>{% endif %}
-	{% if cd.getEmprunts %}<div class="label label-success">CD libre</div>{% endif %}
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="artiste">Par Artiste</label>  
+			  <div class="col-md-4">
+			  <input id="artiste" name="artiste" placeholder="" class="form-control input-md" type="text">
+			    
+			  </div>
+			</div>
 
-	<div class="row">
-		<div class="col-md-7">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3>Informations générales</h3>
-				</div>
-				<table class="table table-striped">
-					<tr>
-						<th>Artiste</th>
-						<td>{{cd.getArtiste.getLibelle}}</td>
-					</tr>
-					<tr>
-						<th>Titre</th>
-						<td> {{cd.getTitre}}</td>
-					</tr>
-					{% if cd.getLibelle %}
-					<tr>
-						<th>Libelle Complet</th>
-						<td>{{cd.getLibelle}}</td>
-					</tr>
-					{% endif %}
-					{% if cd.getDsortie|date("Y") != -0001 %}
-					<tr>
-						<th>Date sortie</th>
-						<td>{{cd.getDsortie|date("d/m/Y")}}</td>
-					</tr>
-					{% endif %}
-					{% if cd.getAnnee %}
-					<tr>
-						<th>Année</th>
-						<td> {{cd.getAnnee}}</td>
-					</tr>
-					{% endif %}
-					{% if cd.getLabel.getLabel != 0 %} 
-					<tr>
-						<th>Label</th>
-						<td>{{cd.getLabel.getLibelle}}</td>
-					</tr>
-					{% endif %}
-					{% if cd.getMaison.getLabel != 0 %} 
-					<tr>
-						<th>Maison</th>
-						<td>{{cd.getMaison.getLibelle}}</td>
-					</tr>
-					{% endif %}
-					{% if cd.getDistrib.getLabel != 0 %} 
-					<tr>
-						<th>Distributeur</th>
-						<td>{{cd.getDistrib.getLibelle}}</td>
-					</tr>
-					{% endif %}
-					{% if cd.getReflabel %}
-					<tr>
-						<th>Référence du label</th>
-						<td> {{cd.getReflabel}}</td>
-					</tr>
-					{% endif %}
-					{% if cd.getDiscid %}
-					<tr>
-						<th>Référence du disque (Label)</th>
-						<td> {{cd.getDiscid}}</td>
-					</tr>
-					{% endif %}
-					<tr>
-						<th>Présence dans la base</th>
-						<td class="{%if not cd.getSuppr%}success{% else %}warning{% endif %}">{%if not cd.getSuppr%}Oui{% else %}Non{% endif %}</td>
-					</tr>
-				</table>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="titre">Par Titre</label>  
+			  <div class="col-md-4">
+			  <input id="titre" name="titre" placeholder="" class="form-control input-md" type="text">
+			    
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="label">Par Label</label>  
+			  <div class="col-md-4">
+			  <input id="label" name="label" placeholder="" class="form-control input-md" type="text">
+			    
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="annee">Par Annee</label>  
+			  <div class="col-md-4">
+			  <input id="annee" name="annee" placeholder="" class="form-control input-md" type="text">
+			    
+			  </div>
 			</div>
 		</div>
-		<div class="col-md-5">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3>Informations techniques</h3>
+		<div class="col-xs-6">
+			<!-- Select Basic -->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="langue">Par Langue</label>
+				  <div class="col-md-4">
+				    <select id="langue" name="langue" class="form-control">
+					    <option name=""></option>
+					    {% for langue in langues %}
+					    	<option name="{{langue.getLangue}}">{{langue.getLibelle}}</option>
+					    {% endfor %}
+				    </select>
+				  </div>
 				</div>
-				<table class="table table-striped">
-					{%if cd.getDvd%}
-					<tr>
-						<th>Présence de DVD</th>
-					</tr>
-					{% endif %}
-					{%if cd.getEtiquette%}
-					<tr>
-						<th>Etiquetté</th>
-					</tr>
-					{% endif %}
-					{%if cd.getPaulo%}
-					<tr>
-						<th>Enregistré dans Rivendel</th>
-					</tr>
-					{% endif %}
-					<tr>
-						<th>Support</th>
-						<td>{{cd.getSupport.getLibelle}}</td>
-					</tr>
-					<tr>
-						<th>Type</th>
-						<td>{{cd.getType.getLibelle}}</td>
-					</tr>
-					{% if cd.getLangue.getLangue != 0 %}
-					<tr>
-						<th>Langue</th>
-						<td>{{cd.getLangue.getLibelle}}</td>
-					</tr>
-					{% endif %}
-				</table>
-			</div>
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3>Genre et Styles</h3>
+
+				<!-- Select Basic -->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="genre">Par Genre</label>
+				  <div class="col-md-4">
+				    <select id="genre" name="genre" class="form-control">
+					    <option name=""></option>
+				    	{% for genre in genres %}
+					    	<option name="{{genre.getGenre}}">{{genre.getLibelle}}</option>
+					    {% endfor %}
+				    </select>
+				  </div>
 				</div>
-				<table class="table table-striped">
-					<tr>
-						<th>Genre principal</th>
-						<td>{{cd.getGenre.getLibelle}}</td>
-					</tr>
-					{% if cd.getStyles.toArray != null %}
-					<tr>
-						<th>Styles secondaires</th>
-						<td>
-							<ul class="list-group">
-								{% for style in cd.getStyles.toArray %}
-									<li class="list-group-item">{{style.getGenre.getLibelle}}</li>
-								{% endfor %}
-							</ul>
-						</td>
-					</tr>
-					{% endif %}
-				</table>
-			</div>
+
+				<!-- Select Basic -->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="rotation">Par Rotation</label>
+				  <div class="col-md-4">
+				    <select id="rotation" name="rotation" class="form-control">
+					    <option name=""></option>
+				    	{% for rotation in rotations %}
+					    	<option name="{{rotation.getRotation}}">{{rotation.getLibelle}}</option>
+					    {% endfor %}
+				    </select>
+				  </div>
+				</div>
+
+				<!-- Select Basic -->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="support">Par Support</label>
+				  <div class="col-md-4">
+				    <select id="support" name="support" class="form-control">
+					    <option name=""></option>
+				    	{% for support in supports %}
+					    	<option name="{{support.getSupport}}">{{support.getLibelle}}</option>
+					    {% endfor %}
+				    </select>
+				  </div>
+				</div>
+
+				<!-- Select Basic -->
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="type">Par Type</label>
+				  <div class="col-md-4">
+				    <select id="type" name="type" class="form-control">
+					    <option name=""></option>
+				    	{% for type in types %}
+					    	<option name="{{type.getType}}">{{type.getLibelle}}</option>
+					    {% endfor %}
+				    </select>
+				  </div>
+				</div>
 		</div>
 	</div>
 
-	<div class="row">
-		<div id="tabs" class="col-md-12">
-			<ul class="nav nav-tabs nav-justified">
-				<li role="presentation" class="active"><a href="#progra">Programmateur</a></li>
-				<li role="presentation"><a href="#comments">Commentaires</a></li>
-				<li role="presentation"><a href="#divers">Divers</a></li>
-				<li role="presentation"><a href="#retLabel">Retour label</a></li>
-			</ul>
-			<div id="progra" class="panel panel-default">
-				<div class="panel-body">
-					<div class="col-md-8">
-						<table class="table">
-							<tr>
-								{% if cd.getNbpiste %}
-									<th>Nombre de pistes</th>
-									<td>{{cd.getNbpiste}}</td>
-								{% endif %}
-								{%if cd.getVarious %}
-									<th>Plusieurs artistes</th>
-								{% endif %}
-							</tr>
-						</table>
+	<button name="search" type="submit" class="btn btn-block btn-info">Chercher <span class="glyphicon glyphicon-eye-open"></span></button>
+	</fieldset>
+	</form>
 
-						{% if cd.getPistes.toArray != null %}
-						<h4>Pistes en détail</h4>
-						<table class="table table-striped">
-							<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Langue</th><th>Anim</th><th>Paulo</th><th>Star</th></tr></thead>
-							{% for piste in cd.getPistes.toArray %}
-								<tr>
-									<td>{{piste.getTitre}}</td>
-									<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
-									<td>{% if piste.getLangue.getLangue != 0 %}{{piste.getLangue.getLangue}}{% elseif cd.getLangue.getLangue != 0 %}{{cd.getLangue.getLibelle}}{% endif %}</td>
-									<td class="{% if piste.getAnim %}success{% endif %}"></td>
-									<td class="{% if piste.getPaulo %}success{% endif %}"></td>
-									<td class="{% if piste.getStar %}success{% endif %}"></td>
-								</tr>
-							{% endfor %}
-						</table>
-						{% endif %}
-					</div>
-					<div class="col-md-4">
-						<table class="table table-striped">
-							{% if cd.getUserprogra.getUser %}
-								<tr>
-									<th>Programmateur</th>
-									<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
-								</tr>
-							{% endif %}
-							{% if cd.getRotation.getRotation <= 8 %}
-								<tr>
-									<th>Rotation</th>
-									<td>{% if cd.getRotation.getRotation <= 8 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
-								</tr>
-							{% endif %}
-							{% if cd.getNotemoy %}
-								<tr>
-									<th>Note moyenne</th>
-									<td class="{% if cd.getNotemoy|round(1, 'ceil') >= 3.5 %}sucess{% elseif cd.getNotemoy|round(1, 'ceil') > 2 %}warning{% else %}danger{% endif %}"> {{cd.getNotemoy|round(1, 'ceil')}}</td>
-								</tr>
-							{% endif %}
-							{% if cd.getComment %}
-								<tr>
-									<th colspan="2">Commentaire</th>
-								</tr>
-								<tr><td colspan="2">{% if cd.getComment %}{{cd.getComment}}{% endif %}</td></tr>
-							{% endif %}
-						</table>
-						{% if cd.getNotes.toArray != null %}
-						<h3>Toutes les notes :</h3>
-						<table class="table table-striped">
-							<thead><tr><th>Utilisateur</th><th>Note</th></tr></thead>
-							{% for note in cd.getNotes.toArray %}
-								<tr>
-									<td>{{note.getUser.getLibelle}}</td>
-									<td>{{note.getNote|round(1, 'ceil')}}</td>
-								</tr>
-							{% endfor %}
-						</table>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-			<div id="comments" class="panel panel-default">
-				<div class="panel-body">
-					{% if cd.getComments.toArray %}
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th>Date</th>
-									<th>Utilisateur</th>
-									<th>Commentaire</th>
-								</tr>
-							</thead>
-							{% for commentaire in cd.getComments.toArray %}
-								<tr>
-									<td>{{commentaire.getChrono|date("d M Y")}}</td>
-									<td>{{commentaire.getUser.getLibelle}}</td>
-									<td>{{commentaire.getComment}}</td>
-								</tr>		
-							{% endfor %}
-						</table>
-					{% endif %}
-				</div>
-			</div>
-			<div id="divers" class="panel panel-default">
-				<div class="panel-body">
-					
-					<h4>Historique des emprunts</h4>
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>N° d'exemplaire</th>
-								<th>Utilisateur</th>
-								<th>Date</th>
-								<th>Perte</th>
-							</tr>
-						</thead>
-						{% for emprunt in cd.getEmprunts.toArray %}
-							<tr>
-								<td>{{emprunt.getNumex}}</td>
-								<td>{% if emprunt.getUser.getUser !=0 %}{{emprunt.getUser.getLibelle}}{% endif %}</td>
-								<td>{% if emprunt.getChrono|date("Y") != -0001 %}{{emprunt.getChrono|date("d/m/Y")}}{%endif%}</td>
-								<td>{{emprunt.getDisparu}}</td>
-							</tr>
-						{% endfor %}
-					</table>
+	{% if test %}
+		{% for cd in test %}
+			{{cd.getTitre}}
+		{% endfor %}
+	{% endif %}
 
-					<h4>Airplays</h4>
-					#TODO
-
-				</div>
-			</div>
-			<div id="retLabel" class="panel panel-default">
-				<div class="panel-body">
-					
-					<h4>Retour Label : <span class="label label-{%if cd.getRetourlabel%}success{% else %}warning{% endif %}">{%if cd.getRetourlabel%}Effectué{% else %}En attente{% endif %}</span></h4>
-					{% if cd.getRetourmail %}<h5>Mail de retour</h5><span>{{cd.getRetourmail}}</span>{% endif %}
-					<div>#TODO</div>
-
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-primary">
-				<div class="panel-heading"><h3>Notifications</h3></div>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Airplay</th>
-							<th>Retour Label</th>
-							<th>Emprunté</th>
-						</tr>
-					</thead>
-					<tr>
-						<td class="{%if not cd.getAirplay%}success{% else %}danger{% endif %}">{%if not cd.getAirplay%}Présent{% else %}Jamais présent{% endif %}</td>
-						<td class="{%if not cd.getRetourlabel%}success{% else %}danger{% endif %}">{%if not cd.getRetourlabel%}Effectué{% else %}En attente{% endif %}</td>
-						<td class="{%if cd.getRetourattendu%}danger{% endif %}">{%if cd.getRetourattendu%}Oui{% else %}Libre{% endif %}</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript">
-
-		$(function() {
-			$("#tabs").tabs();
-		});
-		$(function() {
-			$("#menu_gauche").accordion();
-		});
-
-	</script>
+	{{dump(test)}}
 
 {% endblock %}

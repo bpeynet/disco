@@ -12,11 +12,42 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/app/example", name="homepage")
+     * @Route("/", name="homepage")
      */
     public function indexAction()
     {
-        return $this->render('default/index.html.twig');
+    	$retour = null;
+    	$langues = $this->getDoctrine()->getRepository('AppBundle:Langue')->findAll();
+    	$genres = $this->getDoctrine()->getRepository('AppBundle:Genre')->findAll();
+    	$rotations = $this->getDoctrine()->getRepository('AppBundle:Rotation')->findAll();
+    	$supports = $this->getDoctrine()->getRepository('AppBundle:Support')->findAll();
+    	$types = $this->getDoctrine()->getRepository('AppBundle:Type')->findAll();
+    	if(isset($_POST['search'])) {
+    		if($_POST['cd']) {
+    			$retour = $this->getDoctrine()->getRepository('AppBundle:Cd')->findByCd($_POST['cd']);
+    		} else {
+    			$query = "WHERE cd.artiste = a.artiste AND (cd.label = l.label OR cd.maison = l.label OR cd.distrib = l.label) ";
+    			$parameters = array();
+    			if($_POST['artiste']) {
+    				$query += " AND a.nom = :artiste ";
+    				$parameters['artiste'] = $_POST['artiste'];
+    			}
+	    		$retour = $this->getDoctrine()->getManager()->createQuery(
+					    "SELECT cd
+					    FROM AppBundle:Cd cd, AppBundle:Artiste a, AppBundle:Label l
+					    $query
+					    ORDER BY cd.cd ASC"
+					)->setParameters($parameters)->setMaxResults(50)->getResult();
+    		}
+    	}
+        return $this->render('default/index.html.twig',array(
+        	'test'=>$retour,
+        	'langues'=>$langues,
+        	'genres'=>$genres,
+        	'rotations'=>$rotations,
+        	'supports'=>$supports,
+        	'types'=>$types
+        ));
     }
 
     /**
