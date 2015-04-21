@@ -19,7 +19,9 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig');
     }
 
-
+    /**
+	 * @Route("/show/{id}", name="show")
+     */
 	public function showAction($id) {
 		$cd = $this->getDoctrine()
 			->getRepository('AppBundle:Cd')
@@ -41,6 +43,9 @@ class DefaultController extends Controller
 		);
 	}
 
+	/**
+	 * @Route("/form", name="form")
+     */
 	public function formAction(Request $request) {
 		$post = new Cd();
 		$form = $this->createForm(new CdType(),$post);
