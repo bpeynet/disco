@@ -22,7 +22,7 @@
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="artiste">Par Artiste</label>  
 			  <div class="col-md-4">
-			  <input id="artiste" name="artiste" placeholder="" class="form-control input-md" type="text" {% if post.artiste %}value="{{post.artiste}}"{% endif %} >
+			  <input id="artiste" name="artiste" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.artiste}}"{% endif %} >
 			    
 			  </div>
 			</div>
@@ -31,7 +31,7 @@
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="titre">Par Titre</label>  
 			  <div class="col-md-4">
-			  <input id="titre" name="titre" placeholder="" class="form-control input-md" type="text" {% if post.titre %}value="{{post.titre}}"{% endif %} >
+			  <input id="titre" name="titre" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.titre}}"{% endif %} >
 			    
 			  </div>
 			</div>
@@ -40,7 +40,7 @@
 			<div class="form-group">
 			  <label class="col-md-4 control-label" for="label">Par Label</label>  
 			  <div class="col-md-4">
-			  <input id="label" name="label" placeholder="" class="form-control input-md" type="text" {% if post.label %}value="{{post.label}}"{% endif %} >
+			  <input id="label" name="label" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.label}}"{% endif %} >
 			    
 			  </div>
 			</div>
@@ -126,7 +126,7 @@
 	</fieldset>
 	</form>
 
-
+{% if test %}
 <div class="row">
 	{% if test.cd %}
 	<div class="col-md-12">
@@ -138,10 +138,15 @@
 							<tr>
 								<th>#</th>
 								<th></th>
+								<th>Annee</th>
 								<th>Titre</th>
+								<th>Action</th>
 								<th>Artiste</th>
 								<th>Label</th>
-								<th>Annee</th>
+								<th>Langue</th>
+								<th>Genre</th>
+								<th>Type</th>
+								<th>Support</th>
 							</tr>
 						</thead>
 						{% for cd in test.cd %}
@@ -150,10 +155,15 @@
 								<td>
 									{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 								</td>
-								<td><a href="{{ path('showCd',{'id':cd.getCd}) }}">{{cd.getTitre}}</a></td>
+								<td>{% if cd.getAnnee %}{{cd.getAnnee}}{% endif %}</td>
+								<td>{{cd.getTitre}}</td>
+								<td><a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
 								<td>{{cd.getArtiste.getLibelle}}</td>
 								<td>{% if cd.getLabel.getLabel %}{{cd.getLabel.getLibelle}}{% endif %}</td>
-								<td>{% if cd.getAnnee %}{{cd.getAnnee}}{% endif %}</td>
+								<td>{% if cd.getLangue.getLangue %}{{cd.getLangue.getLibelle}}{% endif %}</td>
+								<td>{% if cd.getGenre.getGenre %}{{cd.getGenre.getLibelle}}{% endif %}</td>
+								<td>{% if cd.getType.getType %}{{cd.getType.getLibelle}}{% endif %}</td>
+								<td>{% if cd.getSupport.getSupport %}{{cd.getSupport.getLibelle}}{% endif %}</td>
 							</tr>
 						{% endfor %}
 					</table>
@@ -173,6 +183,8 @@
 						<tr>
 							<th>#</th>
 							<th>Nom</th>
+							<th>Action</th>
+							<th>Disques</th>
 							<th>Web</th>
 							<th>MySpace</th>
 						</tr>
@@ -181,6 +193,8 @@
 						<tr>
 							<td>{{artiste.getArtiste}}</td>
 							<td>{{artiste.getLibelle}}</td>
+							<td><a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+							<td>{{ artiste.getDisques|length }}</td>
 							<td>{% if artiste.getSiteweb %}<a href="{{artiste.getSiteweb}}" target="_blank">Visiter</a>{% endif %}</td>
 							<td>{% if artiste.getMyspace %}<a href="{{artiste.getMyspace}}" target="_blank">Visiter</a>{% endif %}</td>
 						</tr>
@@ -201,6 +215,7 @@
 							<tr>
 								<th>#</th>
 								<th>Nom</th>
+								<th>Action</th>
 								<th>@Mail</th>
 							</tr>
 						</thead>
@@ -208,6 +223,7 @@
 							<tr>
 								<td>{{label.getLabel}}</td>
 								<td>{{label.getLibelle}}</td>
+								<td><a href="{{ path('showLabel',{'id':label.getLabel}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
 								<td>{{label.getEmail}}</td>
 							</tr>
 						{% endfor %}
@@ -218,5 +234,6 @@
 	{% endif %}
 
 </div>
+{% endif %}
 
 {% endblock %}

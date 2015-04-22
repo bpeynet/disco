@@ -23,17 +23,13 @@
 				<table class="table table-striped">
 					<tr>
 						<th>Artiste</th>
-						<td>{{cd.getArtiste.getLibelle}}</td>
+						<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
 					</tr>
 					<tr>
 						<th>Titre</th>
 						<td> {{cd.getTitre}}</td>
 					</tr>
 					{% if cd.getLibelle %}
-					<tr>
-						<th>Libelle Complet</th>
-						<td>{{cd.getLibelle}}</td>
-					</tr>
 					{% endif %}
 					{% if cd.getDsortie|date("Y") != -0001 %}
 					<tr>
@@ -50,19 +46,19 @@
 					{% if cd.getLabel.getLabel != 0 %} 
 					<tr>
 						<th>Label</th>
-						<td>{{cd.getLabel.getLibelle}}</td>
+						<td><a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a></td>
 					</tr>
 					{% endif %}
 					{% if cd.getMaison.getLabel != 0 %} 
 					<tr>
 						<th>Maison</th>
-						<td>{{cd.getMaison.getLibelle}}</td>
+						<td><a href="{{ path('showLabel',{'id':cd.getMaison.getLabel}) }}">{{cd.getMaison.getLibelle}}</a></td>
 					</tr>
 					{% endif %}
 					{% if cd.getDistrib.getLabel != 0 %} 
 					<tr>
 						<th>Distributeur</th>
-						<td>{{cd.getDistrib.getLibelle}}</td>
+						<td><a href="{{ path('showLabel',{'id':cd.getDistrib.getLabel}) }}">{{cd.getDistrib.getLibelle}}</a></td>
 					</tr>
 					{% endif %}
 					{% if cd.getReflabel %}

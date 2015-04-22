@@ -70,7 +70,7 @@ class DefaultController extends Controller
 		$cd = $this->getDoctrine()
 			->getRepository('AppBundle:Cd')
 			->find($id);
-			
+
 		if(!$cd) {
 			throw $this->createNotFoundException(
             	'Aucun cd trouvé pour cet id : '.$id
@@ -87,21 +87,39 @@ class DefaultController extends Controller
 	 * @Route("/artiste/show/{id}", name="showArtiste")
      */
 	public function showArtisteAction($id) {
-		$cd = $this->getDoctrine()
-			->getRepository('AppBundle:Cd')
+		$artiste = $this->getDoctrine()
+			->getRepository('AppBundle:Artiste')
 			->find($id);
-
-		$artiste = $this->getDoctrine()->getRepository('AppBundle:FArtiste')->find($cd->getArtiste());
 
 		if(!$artiste) {
 			throw $this->createNotFoundException(
-            	'Aucun cd trouvé pour cet id : '.$id
+            	'Aucun artiste trouvé pour cet id : '.$id
         	);
 		}
 
 		return $this->render(
-		    'default/cd_view.html.twig',
+		    'default/artiste_view.html.twig',
 		    array('artiste' => $artiste)
+		);
+	}
+
+    /**
+	 * @Route("/label/show/{id}", name="showLabel")
+     */
+	public function showLabelAction($id) {
+		$label = $this->getDoctrine()
+			->getRepository('AppBundle:Label')
+			->find($id);
+
+		if(!$label) {
+			throw $this->createNotFoundException(
+            	'Aucun label trouvé pour cet id : '.$id
+        	);
+		}
+
+		return $this->render(
+		    'default/label_view.html.twig',
+		    array('label' => $label)
 		);
 	}
 
