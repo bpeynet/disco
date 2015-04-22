@@ -22,23 +22,35 @@ class DefaultController extends Controller
     	$rotations = $this->getDoctrine()->getRepository('AppBundle:Rotation')->findAll();
     	$supports = $this->getDoctrine()->getRepository('AppBundle:Support')->findAll();
     	$types = $this->getDoctrine()->getRepository('AppBundle:Type')->findAll();
-    	if(isset($_POST['search'])) {
-    		if($_POST['cd']) {
-    			$retour = $this->getDoctrine()->getRepository('AppBundle:Cd')->findByCd($_POST['cd']);
-    		} else {
-    			$query = "WHERE cd.artiste = a.artiste AND (cd.label = l.label OR cd.maison = l.label OR cd.distrib = l.label) ";
-    			$parameters = array();
-    			if($_POST['artiste']) {
-    				$query += " AND a.nom = :artiste ";
-    				$parameters['artiste'] = $_POST['artiste'];
-    			}
-	    		$retour = $this->getDoctrine()->getManager()->createQuery(
-					    "SELECT cd
-					    FROM AppBundle:Cd cd, AppBundle:Artiste a, AppBundle:Label l
-					    $query
-					    ORDER BY cd.cd ASC"
-					)->setParameters($parameters)->setMaxResults(50)->getResult();
-    		}
+    	if(isset($_POST['titre'])) {
+    		$retour['cd'] = $this->getDoctrine()->getManager()
+    			->getRepository("AppBundle:Cd")->createQueryBuilder('c')
+				->where('c.titre LIKE :titre')
+				->setParameter('titre', '%'.$_POST['titre'].'%')
+				->orderBy('c.titre', 'ASC')
+				->setMaxResults(50)
+				->getQuery()
+				->getResult();
+    	}
+    	if(isset($_POST['label'])) {
+    		$retour['label'] = $this->getDoctrine()->getManager()
+    			->getRepository("AppBundle:Label")->createQueryBuilder('l')
+				->where('l.libelle LIKE :libelle')
+				->setParameter('libelle', '%'.$_POST['label'].'%')
+				->orderBy('l.libelle', 'ASC')
+				->setMaxResults(50)
+				->getQuery()
+				->getResult();
+    	}
+    	if(isset($_POST['artiste'])) {
+    		$retour['artiste'] = $this->getDoctrine()->getManager()
+    			->getRepository("AppBundle:Artiste")->createQueryBuilder('a')
+				->where('a.libelle LIKE :libelle')
+				->setParameter('libelle', '%'.$_POST['artiste'].'%')
+				->orderBy('a.libelle', 'ASC')
+				->setMaxResults(50)
+				->getQuery()
+				->getResult();
     	}
         return $this->render('default/index.html.twig',array(
         	'test'=>$retour,
@@ -46,31 +58,50 @@ class DefaultController extends Controller
         	'genres'=>$genres,
         	'rotations'=>$rotations,
         	'supports'=>$supports,
-        	'types'=>$types
+        	'types'=>$types,
+        	'post'=>$_POST
         ));
     }
 
     /**
-	 * @Route("/show/{id}", name="show")
+	 * @Route("/cd/show/{id}", name="showCd")
      */
-	public function showAction($id) {
+	public function showCdAction($id) {
 		$cd = $this->getDoctrine()
 			->getRepository('AppBundle:Cd')
 			->find($id);
-
-		//$artiste = $this->getDoctrine()->getRepository('AppBundle:FArtiste')->find($cd->getArtiste());
-
+			
 		if(!$cd) {
 			throw $this->createNotFoundException(
             	'Aucun cd trouvé pour cet id : '.$id
         	);
 		}
 
-		dump($cd);
+		return $this->render(
+		    'default/cd_view.html.twig',
+		    array('cd' => $cd)
+		);
+	}
+
+    /**
+	 * @Route("/artiste/show/{id}", name="showArtiste")
+     */
+	public function showArtisteAction($id) {
+		$cd = $this->getDoctrine()
+			->getRepository('AppBundle:Cd')
+			->find($id);
+
+		$artiste = $this->getDoctrine()->getRepository('AppBundle:FArtiste')->find($cd->getArtiste());
+
+		if(!$artiste) {
+			throw $this->createNotFoundException(
+            	'Aucun cd trouvé pour cet id : '.$id
+        	);
+		}
 
 		return $this->render(
-		    'default/index.html.twig',
-		    array('cd' => $cd)
+		    'default/cd_view.html.twig',
+		    array('artiste' => $artiste)
 		);
 	}
 
