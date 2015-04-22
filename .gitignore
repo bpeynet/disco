@@ -19,3 +19,6 @@ Session.vim
 .netrwhist
 *~
 
+docs/sql/20150412disco.sql
+docs/sql/20150417disco.sql
+docs/sql/disco.sql
