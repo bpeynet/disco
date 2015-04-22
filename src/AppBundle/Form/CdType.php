@@ -20,6 +20,8 @@ class CdType extends AbstractType
                     'property' => 'artiste'
                 ))
             ->add('titre')
+            ->add('dsortie','date', array('required' => false))
+            ->add('annee','text', array('required' => false))
             ->add('label', 'entity', array(
                     'class' => 'AppBundle:Label',
                     'property' => 'label'
@@ -32,37 +34,69 @@ class CdType extends AbstractType
                     'class' => 'AppBundle:Label',
                     'property' => 'label'
                 ))
-            ->add('annee')
-            ->add('type', 'entity', array(
-                    'class' => 'AppBundle:Type',
-                    'property' => 'libelle'
-                ))
+            ->add('refLabel','text', array('required' => false))
+            ->add('dvd','checkbox', array('required' => false))
+            ->add('etiquette','checkbox', array('required' => false))
+            ->add('paulo','checkbox', array('required' => false))
             ->add('support', 'entity', array(
                     'class' => 'AppBundle:Support',
                     'property' => 'libelle'
                 ))
-            ->add('genre', 'entity', array(
-                    'class' => 'AppBundle:Genre',
+            ->add('type', 'entity', array(
+                    'class' => 'AppBundle:Type',
                     'property' => 'libelle'
                 ))
             ->add('langue', 'entity', array(
                     'class' => 'AppBundle:Langue',
                     'property' => 'libelle'
                 ))
+            ->add('genre', 'entity', array(
+                    'class' => 'AppBundle:Genre',
+                    'property' => 'libelle'
+                ))
+            ->add('styles', 'entity', array(
+                    'class' => 'AppBundle:Genre',
+                    'property' => 'libelle',
+                    'expanded'=>false,
+                    'multiple'=>true,
+                    'required'=>false
+                ))
+
+
+
+
+            ->add('nbPiste')
+            ->add('various','checkbox', array('required' => false))
+            /*->add('pistes','entity', array(
+                    'class' => 'AppBundle:Piste',
+                    'property' => 'titre'
+                ))*/
+            ->add('userProgra', 'entity', array(
+                    'class' => 'AppBundle:User',
+                    'property' => 'libelle'
+                ))
             ->add('rotation', 'entity', array(
                     'class' => 'AppBundle:Rotation',
                     'property' => 'libelle'
                 ))
-            ->add('userProgra', 'entity', array(
-                    'class' => 'AppBundle:User',
-                    'property' => 'user'
-                ))
-            ->add('dprogra')
-            ->add('comment')
-            ->add('jsaisie')
-            ->add('noteMoy')
-            ->add('retourMail')
-            ->add('nbPiste')
+            ->add('comment', 'textarea', array('required' => false))
+            ->add('noteMoy', 'text', array('read_only' => true))
+            /*->add('note','entity',  array(
+                    'class' => 'AppBundle:CdNote',
+                    'property' => 'note'
+                ))*/
+
+
+            //->add('commentaire','textarea', array('required' => false))
+
+
+
+            ->add('retourLabel', 'text', array('required' => false))
+
+
+
+
+
         ;
     }
     

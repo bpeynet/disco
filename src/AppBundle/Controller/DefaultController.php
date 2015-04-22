@@ -12,20 +12,64 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/app/example", name="homepage")
+     * @Route("/", name="homepage")
      */
     public function indexAction()
     {
-        return $this->render('default/index.html.twig');
+    	$retour = null;
+    	$langues = $this->getDoctrine()->getRepository('AppBundle:Langue')->findAll();
+    	$genres = $this->getDoctrine()->getRepository('AppBundle:Genre')->findAll();
+    	$rotations = $this->getDoctrine()->getRepository('AppBundle:Rotation')->findAll();
+    	$supports = $this->getDoctrine()->getRepository('AppBundle:Support')->findAll();
+    	$types = $this->getDoctrine()->getRepository('AppBundle:Type')->findAll();
+    	if(isset($_POST['titre'])) {
+    		$retour['cd'] = $this->getDoctrine()->getManager()
+    			->getRepository("AppBundle:Cd")->createQueryBuilder('c')
+				->where('c.titre LIKE :titre')
+				->setParameter('titre', '%'.$_POST['titre'].'%')
+				->orderBy('c.titre', 'ASC')
+				->setMaxResults(50)
+				->getQuery()
+				->getResult();
+    	}
+    	if(isset($_POST['label'])) {
+    		$retour['label'] = $this->getDoctrine()->getManager()
+    			->getRepository("AppBundle:Label")->createQueryBuilder('l')
+				->where('l.libelle LIKE :libelle')
+				->setParameter('libelle', '%'.$_POST['label'].'%')
+				->orderBy('l.libelle', 'ASC')
+				->setMaxResults(50)
+				->getQuery()
+				->getResult();
+    	}
+    	if(isset($_POST['artiste'])) {
+    		$retour['artiste'] = $this->getDoctrine()->getManager()
+    			->getRepository("AppBundle:Artiste")->createQueryBuilder('a')
+				->where('a.libelle LIKE :libelle')
+				->setParameter('libelle', '%'.$_POST['artiste'].'%')
+				->orderBy('a.libelle', 'ASC')
+				->setMaxResults(50)
+				->getQuery()
+				->getResult();
+    	}
+        return $this->render('default/index.html.twig',array(
+        	'test'=>$retour,
+        	'langues'=>$langues,
+        	'genres'=>$genres,
+        	'rotations'=>$rotations,
+        	'supports'=>$supports,
+        	'types'=>$types,
+        	'post'=>$_POST
+        ));
     }
 
-
-	public function showAction($id) {
+    /**
+	 * @Route("/cd/show/{id}", name="showCd")
+     */
+	public function showCdAction($id) {
 		$cd = $this->getDoctrine()
 			->getRepository('AppBundle:Cd')
 			->find($id);
-
-		//$artiste = $this->getDoctrine()->getRepository('AppBundle:FArtiste')->find($cd->getArtiste());
 
 		if(!$cd) {
 			throw $this->createNotFoundException(
@@ -33,14 +77,55 @@ class DefaultController extends Controller
         	);
 		}
 
-		dump($cd);
-
 		return $this->render(
-		    'default/index.html.twig',
+		    'default/cd_view.html.twig',
 		    array('cd' => $cd)
 		);
 	}
 
+    /**
+	 * @Route("/artiste/show/{id}", name="showArtiste")
+     */
+	public function showArtisteAction($id) {
+		$artiste = $this->getDoctrine()
+			->getRepository('AppBundle:Artiste')
+			->find($id);
+
+		if(!$artiste) {
+			throw $this->createNotFoundException(
+            	'Aucun artiste trouvé pour cet id : '.$id
+        	);
+		}
+
+		return $this->render(
+		    'default/artiste_view.html.twig',
+		    array('artiste' => $artiste)
+		);
+	}
+
+    /**
+	 * @Route("/label/show/{id}", name="showLabel")
+     */
+	public function showLabelAction($id) {
+		$label = $this->getDoctrine()
+			->getRepository('AppBundle:Label')
+			->find($id);
+
+		if(!$label) {
+			throw $this->createNotFoundException(
+            	'Aucun label trouvé pour cet id : '.$id
+        	);
+		}
+
+		return $this->render(
+		    'default/label_view.html.twig',
+		    array('label' => $label)
+		);
+	}
+
+	/**
+	 * @Route("/form", name="form")
+     */
 	public function formAction(Request $request) {
 		$post = new Cd();
 		$form = $this->createForm(new CdType(),$post);

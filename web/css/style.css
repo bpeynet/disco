@@ -1,0 +1,16 @@
+.panel-heading h3 {
+	margin: 0px;
+}
+
+.row {
+	margin: 0px;
+}
+
+#tabs > div {
+	border-radius: 0px 0px 5px 5px;
+	border-top: none;
+}
+
+#menu_gauche {
+	
+}

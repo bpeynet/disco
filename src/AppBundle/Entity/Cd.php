@@ -35,7 +35,7 @@ class Cd
      * @ORM\OneToMany(targetEntity="Piste", mappedBy="cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
-    protected $pistes;
+    protected $pistes = array();
 
     /**
      * @var CdComment
@@ -95,7 +95,8 @@ class Cd
     /**
      * @var integer
      *
-     * @ORM\Column(name="distrib", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Label")
+     * @ORM\JoinColumn(name="distrib", referencedColumnName="label")
      */
     private $distrib = '0';
 
@@ -194,7 +195,7 @@ class Cd
      *
      * @ORM\Column(name="dvd", type="boolean", nullable=false)
      */
-    private $dvd = '0';
+    private $dvd = false;
 
     /**
      * @var float
@@ -236,7 +237,7 @@ class Cd
      *
      * @ORM\Column(name="various", type="boolean", nullable=false)
      */
-    private $various = '0';
+    private $various = false;
 
     /**
      * @var integer
@@ -250,14 +251,14 @@ class Cd
      *
      * @ORM\Column(name="paulo", type="boolean", nullable=false)
      */
-    private $paulo = '0';
+    private $paulo = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="etiquette", type="boolean", nullable=false)
      */
-    private $etiquette = '0';
+    private $etiquette = false;
 
     /**
      * @var string
@@ -468,12 +469,7 @@ class Cd
 
     /**
      * Get label
-     *
-<<<<<<< HEAD:src/AppBundle/Entity/FCd.php
-     * @return integer
-=======
      * @return Label
->>>>>>> gilles/master:src/AppBundle/Entity/Cd.php
      */
     public function getLabel()
     {
@@ -496,11 +492,7 @@ class Cd
     /**
      * Get maison
      *
-<<<<<<< HEAD:src/AppBundle/Entity/FCd.php
-     * @return integer
-=======
      * @return Label
->>>>>>> gilles/master:src/AppBundle/Entity/Cd.php
      */
     public function getMaison()
     {
@@ -592,11 +584,7 @@ class Cd
     /**
      * Get type
      *
-<<<<<<< HEAD:src/AppBundle/Entity/FCd.php
-     * @return integer
-=======
      * @return Type
->>>>>>> gilles/master:src/AppBundle/Entity/Cd.php
      */
     public function getType()
     {
@@ -1210,4 +1198,9 @@ class Cd
     {
         return $this->cd;
     }
+
+public function __construct() {
+    $this->dsortie = new \DateTime();
+}
+
 }

@@ -25,7 +25,7 @@ class Label
      * @ORM\OneToMany(targetEntity="Cd", mappedBy="label")
      * @ORM\JoinColumn(name="label", referencedColumnName="label")
      */
-    private $estLabelDe;
+    private $disques;
 
     /**
      * @var string
@@ -138,26 +138,26 @@ class Label
 
 
     /**
-     * Set estLabelDe
+     * Set disques
      *
-     * @param ArrayCollection $estLabelDe
+     * @param ArrayCollection $disques
      * @return Label
      */
-    public function setEstLabelDe($estLabelDe)
+    public function setDisques($disques)
     {
-        $this->estLabelDe = $estLabelDe;
+        $this->disques = $disques;
 
         return $this;
     }
 
     /**
-     * Get estLabelDe
+     * Get disques
      *
      * @return ArrayCollection 
      */
-    public function getEstLabelDe()
+    public function getDisques()
     {
-        return $this->estLabelDe;
+        return $this->disques;
     }
 
     /**
