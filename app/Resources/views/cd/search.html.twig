@@ -129,7 +129,7 @@
 
 {% if recherche %}	
 <div class="row">
-	{% if recherche.cd %}
+	{% if recherche %}
 	<div class="col-md-12">
 		<div class="panel panel-success">
 			<div class="panel-heading">CD trouvés</div>
@@ -150,7 +150,7 @@
 								<th>Support</th>
 							</tr>
 						</thead>
-						{% for cd in recherche.cd %}
+						{% for cd in recherche %}
 							<tr>
 								<td>{{cd.getCd}}</td>
 								<td>

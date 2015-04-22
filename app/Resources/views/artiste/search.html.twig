@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<form class="form-horizontal" method="post" >
+	<fieldset>
+
+	<!-- Form Name -->
+	<legend>Recherche d'Artiste'</legend>
+
+	<div class="row col-lg-12">
+		<div class="col-xs-6">
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="cd">Par Numéro</label>  
+			  <div class="col-md-4">
+			  <input id="cd" name="num" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.num}}"{% endif %} >
+			    
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="nom">Par Nom</label>  
+			  <div class="col-md-4">
+			  <input id="nom" name="nom" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.nom}}"{% endif %} >
+			    
+			  </div>
+			</div>
+		</div>
+	</div>
+
+	<button name="search" type="submit" class="btn btn-block btn-info">Chercher <span class="glyphicon glyphicon-eye-open"></span></button>
+	</fieldset>
+	</form>
+
+{% if recherche %}	
+<div class="row">
+	{% if recherche %}
+	<div class="col-md-12">
+		<div class="panel panel-info">
+			<div class="panel-heading">Artistes trouvés</div>
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Nom</th>
+							<th>Action</th>
+							<th>Disques</th>
+							<th>Web</th>
+							<th>MySpace</th>
+						</tr>
+					</thead>
+					{% for artiste in recherche %}
+						<tr>
+							<td>{{artiste.getArtiste}}</td>
+							<td>{{artiste.getLibelle}}</td>
+							<td><a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+							<td>{{ artiste.getDisques|length }}</td>
+							<td>{% if artiste.getSiteweb %}<a href="{{artiste.getSiteweb}}" target="_blank">Visiter</a>{% endif %}</td>
+							<td>{% if artiste.getMyspace %}<a href="{{artiste.getMyspace}}" target="_blank">Visiter</a>{% endif %}</td>
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+</div>
+
+
+{% endif %}
+
+{% endblock %}

@@ -12,7 +12,13 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
 
- 
+	/**
+	 * @Route("/", name="index")
+	 */
+ 	public function indexAction() {
+ 		return $this->render(
+		    'default/index.html.twig');
+ 	}
 
 	    // 	if(has($request->request->get('label'))) {
 	    // 		$retour['label'] = $this->getDoctrine()->getManager()

@@ -16,12 +16,17 @@ class CdController extends Controller
      */
     public function indexAction(Request $request)
     {
+
+    	$doctrine = $this->getDoctrine();
+	    $em = $doctrine->getManager();
+    	$limit = $this->container->getParameter('listingLimit');
+
     	$retour = null;
-    	$langues = $this->getDoctrine()->getRepository('AppBundle:Langue')->findAll();
-    	$genres = $this->getDoctrine()->getRepository('AppBundle:Genre')->findAll();
-    	$rotations = $this->getDoctrine()->getRepository('AppBundle:Rotation')->findAll();
-    	$supports = $this->getDoctrine()->getRepository('AppBundle:Support')->findAll();
-    	$types = $this->getDoctrine()->getRepository('AppBundle:Type')->findAll();
+    	$langues = $doctrine->getRepository('AppBundle:Langue')->findAll();
+    	$genres = $doctrine->getRepository('AppBundle:Genre')->findAll();
+    	$rotations = $doctrine->getRepository('AppBundle:Rotation')->findAll();
+    	$supports = $doctrine->getRepository('AppBundle:Support')->findAll();
+    	$types = $doctrine->getRepository('AppBundle:Type')->findAll();
     	if($request->isMethod("POST")) {
     		$num = $request->request->getInt('num',-1);
     		$artiste = $request->request->get("artiste");
@@ -38,55 +43,53 @@ class CdController extends Controller
 	    		return $this->redirect($this->generateUrl('showCd',array('id'=>$num)));
 	    	}
 
-    		$retour['cd'] = $this->getDoctrine()->getManager()
-    			->getRepository('AppBundle:Cd')->createQueryBuilder('c')
+    		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
     			->where('c.titre LIKE :titre')
     			->setParameter('titre','%'.$titre.'%');
 			if(!empty($artiste)) {
-				$retour['cd'] = $retour['cd']->innerJoin('c.artiste','a')
+				$retour = $retour->innerJoin('c.artiste','a')
 				->andWhere('a.libelle LIKE :artiste')
 				->setParameter('artiste','%'.$artiste.'%');	
 			}
 			if(!empty($label)) {
-				$retour['cd'] = $retour['cd']->innerJoin('c.label','l')
+				$retour = $retour->innerJoin('c.label','l')
 				->andWhere('l.libelle LIKE :label')
 				->setParameter('label','%'.$label.'%');
 			}
 			if($annee != 0) {
-				$retour['cd'] = $retour['cd']->andWhere('c.annee = :annee')
+				$retour = $retour->andWhere('c.annee = :annee')
 				->setParameter('annee',$annee);
 			}
 			if(!empty($langue)) {
-				$retour['cd'] = $retour['cd']->andWhere('c.langue = :langue')
+				$retour = $retour->andWhere('c.langue = :langue')
 				->setParameter('langue', $langue);
 			}
 			if(!empty($genre)) {
-				$retour['cd'] = $retour['cd']->andWhere('c.genre = :genre')
+				$retour = $retour->andWhere('c.genre = :genre')
 				->setParameter('genre', $genre);
 			}
 			if(!empty($rotation)) {
-				$retour['cd'] = $retour['cd']->andWhere('c.rotation = :rotation')
+				$retour = $retour->andWhere('c.rotation = :rotation')
 				->setParameter('rotation', $rotation);
 			}
 			if(!empty($support)) {
-				$retour['cd'] = $retour['cd']->andWhere('c.support = :support')
+				$retour = $retour->andWhere('c.support = :support')
 				->setParameter('support', $support);
 			}
 			if(!empty($type)) {
-				$retour['cd'] = $retour['cd']->andWhere('c.type = :type')
+				$retour = $retour->andWhere('c.type = :type')
 				->setParameter('type', $type);
 			}
 
-			$retour['cd'] = $retour['cd']->orderBy('c.titre', 'ASC')
-				->setMaxResults(50)
+			$retour = $retour->orderBy('c.titre', 'ASC')
+				->setMaxResults($limit)
 				->getQuery()
 				->getResult();
 
     	} else {
-    		$retour['cd'] = $this->getDoctrine()->getManager()
-    			->getRepository('AppBundle:Cd')->createQueryBuilder('c')
+    		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
     			->orderBy('c.cd','DESC')
-    			->setMaxResults(50)
+    			->setMaxResults($limit)
     			->getQuery()
     			->getResult();
     	}

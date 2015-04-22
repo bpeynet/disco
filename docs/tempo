@@ -1,62 +1,6 @@
 <div class="row">
-	{% if recherche.artiste %}
-	<div class="col-md-7">
-		<div class="panel panel-info">
-			<div class="panel-heading">Artistes trouvés</div>
-			<div class="table-responsive">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>Nom</th>
-							<th>Action</th>
-							<th>Disques</th>
-							<th>Web</th>
-							<th>MySpace</th>
-						</tr>
-					</thead>
-					{% for artiste in recherche.artiste %}
-						<tr>
-							<td>{{artiste.getArtiste}}</td>
-							<td>{{artiste.getLibelle}}</td>
-							<td><a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
-							<td>{{ artiste.getDisques|length }}</td>
-							<td>{% if artiste.getSiteweb %}<a href="{{artiste.getSiteweb}}" target="_blank">Visiter</a>{% endif %}</td>
-							<td>{% if artiste.getMyspace %}<a href="{{artiste.getMyspace}}" target="_blank">Visiter</a>{% endif %}</td>
-						</tr>
-					{% endfor %}
-				</table>
-			</div>
-		</div>
-	</div>
-	{% endif %}
+	
 
-	{% if recherche.label %}
-		<div class="col-md-5">
-			<div class="panel panel-default">
-				<div class="panel-heading">Labels trouvés</div>
-					<div class="table-responsive">
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Nom</th>
-								<th>Action</th>
-								<th>@Mail</th>
-							</tr>
-						</thead>
-						{% for label in recherche.label %}
-							<tr>
-								<td>{{label.getLabel}}</td>
-								<td>{{label.getLibelle}}</td>
-								<td><a href="{{ path('showLabel',{'id':label.getLabel}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
-								<td>{{label.getEmail}}</td>
-							</tr>
-						{% endfor %}
-					</table>
-				</div>
-			</div>
-		</div>
-	{% endif %}
+	
 
 </div>
