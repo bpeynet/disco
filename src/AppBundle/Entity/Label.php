@@ -3,11 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Label
  *
  * @ORM\Table(name="f_label", indexes={@ORM\Index(name="libelle", columns={"libelle"})})
+ * @UniqueEntity(fields="libelle", message=" Ce label existe déjà...")
  * @ORM\Entity
  */
 class Label
@@ -29,70 +32,109 @@ class Label
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="Le nom du label ne peut pas être vide")
+     * @Assert\Length(
+     *      min="1", 
+     *      max = "45",
+     *      minMessage=" Le label doit disposer d'un nom assez long : {{ limit }} caractère minimum.",
+     *      maxMessage=" Le nom du label est trop long : {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="libelle", type="string", length=45, nullable=false)
      */
     private $libelle = '';
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="L'email du label ne peut pas être vide")
+     * @Assert\Length(
+     *      min="4", 
+     *      max = "45",
+     *      minMessage=" {{ limit }} caractères minimum.",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="email", type="string", length=45, nullable=false)
      */
     private $email = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "45",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="telephone", type="string", length=45, nullable=false)
      */
     private $telephone = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "45",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="adresse", type="string", length=45, nullable=false)
      */
     private $adresse = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "45",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="adresse2", type="string", length=45, nullable=false)
      */
     private $adresse2 = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "45",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="cp", type="string", length=45, nullable=false)
      */
     private $cp = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "45",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="ville", type="string", length=45, nullable=false)
      */
     private $ville = '';
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="L'email de retour du label ne peut pas être vide")
+     * @Assert\Length(
+     *      min="4", 
+     *      max = "250",
+     *      minMessage=" {{ limit }} caractères minimum.",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="mail_progra", type="string", length=250, nullable=false)
      */
     private $mailProgra = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "150",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="contact1", type="string", length=150, nullable=false)
      */
     private $contact1 = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "150",
+     *      maxMessage=" {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="siteweb", type="string", length=150, nullable=false)
      */
     private $siteweb = '';

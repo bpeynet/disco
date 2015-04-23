@@ -101,14 +101,18 @@
 						<th>Enregistré dans Rivendel</th>
 					</tr>
 					{% endif %}
+					{% if cd.getSupport.getSupport %}
 					<tr>
 						<th>Support</th>
 						<td>{{cd.getSupport.getLibelle}}</td>
 					</tr>
+					{% endif %}
+					{% if cd.getType.getType %}
 					<tr>
 						<th>Type</th>
 						<td>{{cd.getType.getLibelle}}</td>
 					</tr>
+					{% endif %}
 					{% if cd.getLangue.getLangue != 0 %}
 					<tr>
 						<th>Langue</th>
@@ -194,7 +198,7 @@
 							{% if cd.getRotation.getRotation <= 8 %}
 								<tr>
 									<th>Rotation</th>
-									<td>{% if cd.getRotation.getRotation <= 8 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
+									<td>{% if cd.getRotation.getRotation <= 8 and cd.getRotation.getRotation > 0 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
 								</tr>
 							{% endif %}
 							{% if cd.getNotemoy %}

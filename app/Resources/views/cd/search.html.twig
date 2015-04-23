@@ -52,7 +52,7 @@
 				<div class="form-group">
 				  <label class="col-md-5 control-label" for="annee">Par Annee</label>  
 				  <div class="col-md-7">
-				  <input id="annee" name="annee" placeholder="" class="form-control input-md" type="text">
+				  <input id="annee" name="annee" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.annee}}"{% endif %} >
 				    
 				  </div>
 				</div>
@@ -65,7 +65,7 @@
 					    <select id="langue" name="langue" class="form-control">
 						    <option name=""></option>
 						    {% for langue in langues %}
-						    	<option name="langue" value="{{langue.getLangue}}">{{langue.getLibelle}}</option>
+						    	<option name="langue" value="{{langue.getLangue}}" {% if post.langue == langue.getLangue %}selected{% endif %}>{{langue.getLibelle}}</option>
 						    {% endfor %}
 					    </select>
 					  </div>
@@ -78,7 +78,7 @@
 					    <select id="genre" name="genre" class="form-control">
 						    <option name=""></option>
 					    	{% for genre in genres %}
-						    	<option name="genre" value="{{genre.getGenre}}">{{genre.getLibelle}}</option>
+						    	<option name="genre" value="{{genre.getGenre}}" {% if post.genre == genre.getGenre %}selected{% endif %}>{{genre.getLibelle}}</option>
 						    {% endfor %}
 					    </select>
 					  </div>
@@ -91,7 +91,7 @@
 					    <select id="rotation" name="rotation" class="form-control">
 						    <option name=""></option>
 					    	{% for rotation in rotations %}
-						    	<option name="rotation" value="{{rotation.getRotation}}">{{rotation.getLibelle}}</option>
+						    	<option name="rotation" value="{{rotation.getRotation}}" {% if post.rotation == rotation.getRotation %}selected{% endif %}>{{rotation.getLibelle}}</option>
 						    {% endfor %}
 					    </select>
 					  </div>
@@ -104,7 +104,7 @@
 					    <select id="support" name="support" class="form-control">
 						    <option name=""></option>
 					    	{% for support in supports %}
-						    	<option name="support" value="{{support.getSupport}}">{{support.getLibelle}}</option>
+						    	<option name="support" value="{{support.getSupport}}" {% if post.support == support.getSupport %}selected{% endif %}>{{support.getLibelle}}</option>
 						    {% endfor %}
 					    </select>
 					  </div>
@@ -117,7 +117,7 @@
 					    <select id="type" name="type" class="form-control">
 						    <option name=""></option>
 					    	{% for type in types %}
-						    	<option name="type" value="{{type.getType}}">{{type.getLibelle}}</option>
+						    	<option name="type" value="{{type.getType}}" {% if post.type == type.getType %}selected{% endif %}>{{type.getLibelle}}</option>
 						    {% endfor %}
 					    </select>
 					  </div>

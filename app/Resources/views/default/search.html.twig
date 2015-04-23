@@ -36,15 +36,15 @@
                                 {% if class(result)=='Cd' %}
                                     warning">CD</td>
                                     <td>{{result.getTitre}}</td>
-                                    <td>bl</td>
+                                    <td><a href="{{ path('showCd',{'id':result.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                                 {% elseif class(result)=='Artiste' %}
                                     success">Artiste</td>
                                     <td>{{result.getLibelle}}</td>
-                                    <td>bl</td>
+                                    <td><a href="{{ path('showArtiste',{'id':result.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                                 {% elseif class(result)=='Label' %}
                                     danger">Label</td>
                                     <td>{{result.getLibelle}}</td>
-                                    <td>bl</td>
+                                    <td><a href="{{ path('showLabel',{'id':result.getLabel}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                                 {% endif %}
                         </tr>
 

@@ -108,9 +108,9 @@ class ArtisteController extends Controller
             $num = $em->createQuery(
                     'SELECT max(a.artiste)
                     FROM AppBundle:Artiste a')
-                ->getResult();
+                ->getResult()[0][1];
 
-            return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num[0][1])));
+            return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 
         } else {
             return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
