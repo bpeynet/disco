@@ -65,7 +65,6 @@ class Artiste
     /**
      * Set Disques
      * @param ArrayCollection $disques
-     * return @Artiste
      */
     public function setDisques($disques) {
         $this->disques = $disques;

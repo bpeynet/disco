@@ -4,8 +4,8 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use AppBundle\Entity\Cd;
-use AppBundle\Form\CdType;
+use AppBundle\Entity\Artiste;
+use AppBundle\Form\ArtisteType;
 use Symfony\Component\HttpFoundation\Request;
 
 
@@ -79,7 +79,18 @@ class ArtisteController extends Controller
      */
     public function createAction()
     {
-        return $this->render('artiste/create.html.twig');
+        $post = new Artiste();
+        $form = $this->createForm(new ArtisteType(),$post);
+        $form->add('submit', 'submit', array(
+                'label' => 'Créer',
+                'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
+            ));
+
+        $nom = null;
+            $nom = $form->get('nom')->getData();
+    
+
+        return $this->render('artiste/create.html.twig',array('form'=>$form->createView(),'nom'=>$nom));
     }
 
 
