@@ -1,22 +1,60 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<form method="get">
-        <input type="text" name="q" value="{{q}}">
-        <input type="submit" value="Rechercher">
-    </form>
+<div class="row">
+    <div class="col-md-12">
+        <form method="get" class="form-inline">
+            <div class="form-group">
+                <div class="col-md-4">
+                    <input type="text" name="q" value="{{q}}" class="form-control input-md">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                </div>
+            </div>
+        </form>
 
-    {% for result in results %}
-        <p>
-            {% if class(result)=="Cd" %}
-                CD {{result.getTitre}}
-            {% elseif class(result)=="Artiste" %}
-                Artiste {{result.getLibelle}}
-            {% elseif class(result)=="Label" %}
-                Label {{result.getLibelle}}
-            {% endif %}
-        </p>
+        {% if results %}
+        <hr>
 
-    {% endfor %}
+        <div class="panel panel-info">
+            <div class="panel-heading">Résultat de la recherche</div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Titre</th>
+                            <th>Action</th>
+                        </tr>   
+                    </thead>
+                    {% for result in results %}
+                        <tr>
+                            <td class="
+                                {% if class(result)=='Cd' %}
+                                    warning">CD</td>
+                                    <td>{{result.getTitre}}</td>
+                                    <td>bl</td>
+                                {% elseif class(result)=='Artiste' %}
+                                    success">Artiste</td>
+                                    <td>{{result.getLibelle}}</td>
+                                    <td>bl</td>
+                                {% elseif class(result)=='Label' %}
+                                    danger">Label</td>
+                                    <td>{{result.getLibelle}}</td>
+                                    <td>bl</td>
+                                {% endif %}
+                        </tr>
+
+                    {%  endfor %}
+                </table>
+            </div>
+        </div>
+
+        {% endif %}
+    </div>
+</div>  
 
 {% endblock %}

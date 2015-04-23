@@ -2,130 +2,142 @@
 
 {% block body %}
 
-	<form class="form-horizontal" method="post" >
-	<fieldset>
+<div class="row">
+	<div class="col-sm-8">
+		<form class="form-horizontal" method="post" >
+		<fieldset>
 
-	<!-- Form Name -->
-	<legend>Recherche de CD</legend>
+		<!-- Form Name -->
+		<legend>Recherche de CD</legend>
 
-	<div class="row col-lg-12">
-		<div class="col-xs-6">
-			<!-- Text input-->
-			<div class="form-group">
-			  <label class="col-md-4 control-label" for="cd">Par Numéro</label>  
-			  <div class="col-md-4">
-			  <input id="cd" name="num" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.num}}"{% endif %} >
-			    
-			  </div>
-			</div>
-
-			<!-- Text input-->
-			<div class="form-group">
-			  <label class="col-md-4 control-label" for="titre">Par Titre</label>  
-			  <div class="col-md-4">
-			  <input id="titre" name="titre" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.titre}}"{% endif %} >
-			    
-			  </div>
-			</div>
-
-			<!-- Text input-->
-			<div class="form-group">
-			  <label class="col-md-4 control-label" for="artiste">Par Artiste</label>  
-			  <div class="col-md-4">
-			  <input id="artiste" name="artiste" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.artiste}}"{% endif %} >
-			    
-			  </div>
-			</div>
-
-			<!-- Text input-->
-			<div class="form-group">
-			  <label class="col-md-4 control-label" for="label">Par Label</label>  
-			  <div class="col-md-4">
-			  <input id="label" name="label" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.label}}"{% endif %} >
-			    
-			  </div>
-			</div>
-
-			<!-- Text input-->
-			<div class="form-group">
-			  <label class="col-md-4 control-label" for="annee">Par Annee</label>  
-			  <div class="col-md-4">
-			  <input id="annee" name="annee" placeholder="" class="form-control input-md" type="text">
-			    
-			  </div>
-			</div>
-		</div>
-		<div class="col-xs-6">
-			<!-- Select Basic -->
+		<div class="row col-lg-12">
+			<div class="col-md-6">
+				<!-- Text input-->
 				<div class="form-group">
-				  <label class="col-md-4 control-label" for="langue">Par Langue</label>
-				  <div class="col-md-4">
-				    <select id="langue" name="langue" class="form-control">
-					    <option name=""></option>
-					    {% for langue in langues %}
-					    	<option name="langue" value="{{langue.getLangue}}">{{langue.getLibelle}}</option>
-					    {% endfor %}
-				    </select>
+				  <label class="col-md-5 control-label" for="cd">Par Numéro</label>  
+				  <div class="col-md-7">
+				  <input id="cd" name="num" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.num}}"{% endif %} >
+				    
 				  </div>
 				</div>
 
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-5 control-label" for="titre">Par Titre</label>  
+				  <div class="col-md-7">
+				  <input id="titre" name="titre" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.titre}}"{% endif %} >
+				    
+				  </div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-5 control-label" for="artiste">Par Artiste</label>  
+				  <div class="col-md-7">
+				  <input id="artiste" name="artiste" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.artiste}}"{% endif %} >
+				    
+				  </div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-5 control-label" for="label">Par Label</label>  
+				  <div class="col-md-7">
+				  <input id="label" name="label" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.label}}"{% endif %} >
+				    
+				  </div>
+				</div>
+
+				<!-- Text input-->
+				<div class="form-group">
+				  <label class="col-md-5 control-label" for="annee">Par Annee</label>  
+				  <div class="col-md-7">
+				  <input id="annee" name="annee" placeholder="" class="form-control input-md" type="text">
+				    
+				  </div>
+				</div>
+			</div>
+			<div class="col-md-6">
 				<!-- Select Basic -->
-				<div class="form-group">
-				  <label class="col-md-4 control-label" for="genre">Par Genre</label>
-				  <div class="col-md-4">
-				    <select id="genre" name="genre" class="form-control">
-					    <option name=""></option>
-				    	{% for genre in genres %}
-					    	<option name="genre" value="{{genre.getGenre}}">{{genre.getLibelle}}</option>
-					    {% endfor %}
-				    </select>
-				  </div>
-				</div>
+					<div class="form-group">
+					  <label class="col-md-5 control-label" for="langue">Par Langue</label>
+					  <div class="col-md-7">
+					    <select id="langue" name="langue" class="form-control">
+						    <option name=""></option>
+						    {% for langue in langues %}
+						    	<option name="langue" value="{{langue.getLangue}}">{{langue.getLibelle}}</option>
+						    {% endfor %}
+					    </select>
+					  </div>
+					</div>
 
-				<!-- Select Basic -->
-				<div class="form-group">
-				  <label class="col-md-4 control-label" for="rotation">Par Rotation</label>
-				  <div class="col-md-4">
-				    <select id="rotation" name="rotation" class="form-control">
-					    <option name=""></option>
-				    	{% for rotation in rotations %}
-					    	<option name="rotation" value="{{rotation.getRotation}}">{{rotation.getLibelle}}</option>
-					    {% endfor %}
-				    </select>
-				  </div>
-				</div>
+					<!-- Select Basic -->
+					<div class="form-group">
+					  <label class="col-md-5 control-label" for="genre">Par Genre</label>
+					  <div class="col-md-7">
+					    <select id="genre" name="genre" class="form-control">
+						    <option name=""></option>
+					    	{% for genre in genres %}
+						    	<option name="genre" value="{{genre.getGenre}}">{{genre.getLibelle}}</option>
+						    {% endfor %}
+					    </select>
+					  </div>
+					</div>
 
-				<!-- Select Basic -->
-				<div class="form-group">
-				  <label class="col-md-4 control-label" for="support">Par Support</label>
-				  <div class="col-md-4">
-				    <select id="support" name="support" class="form-control">
-					    <option name=""></option>
-				    	{% for support in supports %}
-					    	<option name="support" value="{{support.getSupport}}">{{support.getLibelle}}</option>
-					    {% endfor %}
-				    </select>
-				  </div>
-				</div>
+					<!-- Select Basic -->
+					<div class="form-group">
+					  <label class="col-md-5 control-label" for="rotation">Par Rotation</label>
+					  <div class="col-md-7">
+					    <select id="rotation" name="rotation" class="form-control">
+						    <option name=""></option>
+					    	{% for rotation in rotations %}
+						    	<option name="rotation" value="{{rotation.getRotation}}">{{rotation.getLibelle}}</option>
+						    {% endfor %}
+					    </select>
+					  </div>
+					</div>
 
-				<!-- Select Basic -->
-				<div class="form-group">
-				  <label class="col-md-4 control-label" for="type">Par Type</label>
-				  <div class="col-md-4">
-				    <select id="type" name="type" class="form-control">
-					    <option name=""></option>
-				    	{% for type in types %}
-					    	<option name="type" value="{{type.getType}}">{{type.getLibelle}}</option>
-					    {% endfor %}
-				    </select>
-				  </div>
-				</div>
+					<!-- Select Basic -->
+					<div class="form-group">
+					  <label class="col-md-5 control-label" for="support">Par Support</label>
+					  <div class="col-md-7">
+					    <select id="support" name="support" class="form-control">
+						    <option name=""></option>
+					    	{% for support in supports %}
+						    	<option name="support" value="{{support.getSupport}}">{{support.getLibelle}}</option>
+						    {% endfor %}
+					    </select>
+					  </div>
+					</div>
+
+					<!-- Select Basic -->
+					<div class="form-group">
+					  <label class="col-md-5 control-label" for="type">Par Type</label>
+					  <div class="col-md-7">
+					    <select id="type" name="type" class="form-control">
+						    <option name=""></option>
+					    	{% for type in types %}
+						    	<option name="type" value="{{type.getType}}">{{type.getLibelle}}</option>
+						    {% endfor %}
+					    </select>
+					  </div>
+					</div>
+			</div>
 		</div>
 	</div>
 
-	<button name="search" type="submit" class="btn btn-block btn-info">Chercher <span class="glyphicon glyphicon-eye-open"></span></button>
-	</fieldset>
-	</form>
+	<div class="col-sm-4">
+			<button name="search" type="submit" class="btn btn-block btn-info btn-lg">
+				Chercher <span class="glyphicon glyphicon-eye-open"></span>
+			</button>
+		</fieldset>
+		</form>
+
+		<a href="#" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un CD</a>
+	</div>
+</div>
+
+	
 
 {% if recherche %}	
 <div class="row">

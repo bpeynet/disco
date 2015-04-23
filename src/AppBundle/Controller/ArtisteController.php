@@ -73,5 +73,15 @@ class ArtisteController extends Controller
 		    array('cd' => $cd)
 		);
 	}
+
+    /**
+     * @Route("/artiste/create", name="createArtiste")
+     */
+    public function createAction()
+    {
+        return $this->render('artiste/create.html.twig');
+    }
+
+
 }
 
