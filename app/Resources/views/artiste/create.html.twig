@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-	{% if nom %}{{nom}}{% endif %}
 
-	{{dump(nom)}}
-	{% form_theme form 'bootstrap_3_layout.html.twig' %}
-	{{form_start(form)}}
-		{{form_errors(form)}}
-		{{form_row(form.nom)}}
-		{{form_row(form.prenom)}}
-		{{form_row(form.siteweb)}}
-		{{form_row(form.myspace)}}
-	{{form_end(form)}}
+{% block body %}
+
+	<fieldset>
+		<legend>Création d'Artiste</legend>
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		{{form_start(form)}}
+			{{form_errors(form)}}
+			{{form_row(form.libelle)}}
+			{{form_row(form.siteweb)}}
+			{{form_row(form.myspace)}}
+		{{form_end(form)}}
+	</fieldset>
 
 {% endblock %}

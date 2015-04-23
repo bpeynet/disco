@@ -3,12 +3,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Artiste
  *
  * @ORM\Table(name="f_artiste", uniqueConstraints={@ORM\UniqueConstraint(name="artiste", columns={"artiste"})}, indexes={@ORM\Index(name="libelle", columns={"libelle"}), @ORM\Index(name="nom", columns={"nom"})})
  * @ORM\Entity
+ * @UniqueEntity(fields="libelle", message=" Cet artiste existe déjà...")
  */
 class Artiste
 {
@@ -43,21 +46,33 @@ class Artiste
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="Le nom de l'artiste ne peut pas être vide")
+     * @Assert\Length(
+     *      min="1", 
+     *      max = "255",
+     *      minMessage=" L'artiste doit disposer d'un nom assez long : {{ limit }} caractère minimum.",
+     *      maxMessage=" Le nom de l'artiste est trop long : {{ limit }} caractères maximum."
+     * )
      * @ORM\Column(name="libelle", type="string", length=300, nullable=false)
      */
     private $libelle = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "150",
+     *      maxMessage=" L'adresse du site web ne doit pas être trop longue : {{ limit }} caractères maximum. Si cela dépasse, utilisez un service de réduction d'URL !"
+     * )
      * @ORM\Column(name="siteweb", type="string", length=150, nullable=false)
      */
     private $siteweb = '';
 
     /**
      * @var string
-     *
+     * @Assert\Length(
+     *      max = "150",
+     *      maxMessage=" L'adresse du site d'écoute ne doit pas être trop longue : {{ limit }} caractères maximum. Si cela dépasse, utilisez un service de réduction d'URL !"
+     * )
      * @ORM\Column(name="myspace", type="string", length=150, nullable=false)
      */
     private $myspace = '';

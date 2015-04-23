@@ -15,8 +15,7 @@ class ArtisteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prenom')
-            ->add('nom')
+            ->add('libelle')
             ->add('siteweb','text', array('required' => false))
             ->add('myspace','text', array('required' => false))
         ;

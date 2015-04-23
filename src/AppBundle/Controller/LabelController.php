@@ -57,11 +57,11 @@ class LabelController extends Controller
 	 * @Route("/label/show/{id}", name="showLabel")
      */
 	public function showAction($id) {
-		$Label = $this->getDoctrine()
+		$label = $this->getDoctrine()
 			->getRepository('AppBundle:Label')
 			->find($id);
 
-		if(!$Label) {
+		if(!$label) {
 			throw $this->createNotFoundException(
             	'Aucun Label trouvé pour cet id : '.$id
         	);
@@ -69,7 +69,7 @@ class LabelController extends Controller
 
 		return $this->render(
 		    'label/show.html.twig',
-		    array('Label' => $Label)
+		    array('label' => $label)
 		);
 	}
 }

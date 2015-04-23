@@ -58,39 +58,65 @@ class ArtisteController extends Controller
 	 * @Route("/artiste/show/{id}", name="showArtiste")
      */
 	public function showAction($id) {
-		$cd = $this->getDoctrine()
-			->getRepository('AppBundle:Cd')
+		$artiste = $this->getDoctrine()
+			->getRepository('AppBundle:Artiste')
 			->find($id);
 
-		if(!$cd) {
+		if(!$artiste) {
 			throw $this->createNotFoundException(
-            	'Aucun cd trouvé pour cet id : '.$id
+            	'Aucun artiste trouvé pour cet id : '.$id
         	);
 		}
 
 		return $this->render(
-		    'cd/show.html.twig',
-		    array('cd' => $cd)
+		    'artiste/show.html.twig',
+		    array('artiste' => $artiste)
 		);
 	}
 
     /**
      * @Route("/artiste/create", name="createArtiste")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $post = new Artiste();
         $form = $this->createForm(new ArtisteType(),$post);
         $form->add('submit', 'submit', array(
-                'label' => 'Créer',
+                'label' => 'Créer l\'Artiste',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
 
-        $nom = null;
-            $nom = $form->get('nom')->getData();
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+            $libelle = strtoupper($form->get('libelle')->getData());
+            $siteweb = $form->get('siteweb')->getData();
+            $myspace = $form->get('myspace')->getData();
+            if(!$siteweb) { $siteweb = ""; }
+            if(!$myspace) { $myspace = ""; }
+
+            $artiste = new Artiste();
+            $artiste->setLibelle($libelle);
+            $artiste->setSiteweb($siteweb);
+            $artiste->setMyspace($myspace);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($artiste);
+            $em->flush();
+
+            $num = $em->createQuery(
+                    'SELECT max(a.artiste)
+                    FROM AppBundle:Artiste a')
+                ->getResult();
+
+            return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num[0][1])));
+
+        } else {
+            return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
+        }
     
 
-        return $this->render('artiste/create.html.twig',array('form'=>$form->createView(),'nom'=>$nom));
     }
 
 
