@@ -28,7 +28,7 @@ class Label
      * @ORM\OneToMany(targetEntity="Cd", mappedBy="label")
      * @ORM\JoinColumn(name="label", referencedColumnName="label")
      */
-    private $disques;
+    private $disques = null;
 
     /**
      * @var string
@@ -149,8 +149,11 @@ class Label
      *
      * @ORM\Column(name="info", type="text", nullable=false)
      */
-    private $info;
+    private $info = '';
 
+    public function __construct() {
+        $this->disques = new ArrayCollection();
+    }
 
 
     /**
@@ -161,7 +164,7 @@ class Label
      */
     public function setLibelle($libelle)
     {
-        $this->libelle = $libelle;
+        $this->libelle = strtoupper($libelle);
 
         return $this;
     }
@@ -208,6 +211,7 @@ class Label
      */
     public function setEmail($email)
     {
+        if(!$email) { $email = ""; }
         $this->email = $email;
 
         return $this;
@@ -231,6 +235,8 @@ class Label
      */
     public function setTelephone($telephone)
     {
+
+        if(!$telephone) { $telephone = ""; }
         $this->telephone = $telephone;
 
         return $this;
@@ -254,6 +260,8 @@ class Label
      */
     public function setAdresse($adresse)
     {
+
+        if(!$adresse) { $adresse = ""; }
         $this->adresse = $adresse;
 
         return $this;
@@ -277,6 +285,8 @@ class Label
      */
     public function setAdresse2($adresse2)
     {
+
+        if(!$adresse2) { $adresse2 = ""; }
         $this->adresse2 = $adresse2;
 
         return $this;
@@ -300,6 +310,8 @@ class Label
      */
     public function setCp($cp)
     {
+
+        if(!$cp) { $cp = ""; }
         $this->cp = $cp;
 
         return $this;
@@ -323,6 +335,8 @@ class Label
      */
     public function setVille($ville)
     {
+
+        if(!$ville) { $ville = ""; }
         $this->ville = $ville;
 
         return $this;
@@ -346,6 +360,7 @@ class Label
      */
     public function setMailProgra($mailProgra)
     {
+        if(!$mailProgra) { $mailProgra = ""; }
         $this->mailProgra = $mailProgra;
 
         return $this;
@@ -369,6 +384,7 @@ class Label
      */
     public function setContact1($contact1)
     {
+        if(!$contact1) { $contact1 = ""; }
         $this->contact1 = $contact1;
 
         return $this;
@@ -392,6 +408,7 @@ class Label
      */
     public function setSiteweb($siteweb)
     {
+        if(!$siteweb) { $siteweb = ""; }
         $this->siteweb = $siteweb;
 
         return $this;
@@ -438,6 +455,7 @@ class Label
      */
     public function setInfo($info)
     {
+        if(!$info) { $info = ""; }
         $this->info = $info;
 
         return $this;

@@ -16,7 +16,7 @@ class LabelType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('email','text', array('required' => false))
+            ->add('email','email', array('required' => false))
             ->add('telephone','text', array('required' => false))
             ->add('adresse','text', array('required' => false))
             ->add('adresse2','text', array('required' => false))
