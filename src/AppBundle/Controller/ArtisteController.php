@@ -124,15 +124,15 @@ class ArtisteController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if($request->isMethod('POST')){
+            if ($form->isValid()) {
+                $data = $form->getData();
 
-            $data = $form->getData();
+                $em = $this->getDoctrine()->getManager();
 
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($data);
-            $em->flush();
-
+                $em->persist($data);
+                $em->flush();
+            }
         }
 
         return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
@@ -152,27 +152,27 @@ class ArtisteController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if($request->isMethod('POST')) {
+            if ($form->isValid()) {
 
-            $date = $form->getData();
+                $date = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getManager();
 
-            $em->persist($data);
-            $em->flush();
+                $em->persist($data);
+                $em->flush();
 
-            $num = $em->createQuery(
-                    'SELECT max(a.artiste)
-                    FROM AppBundle:Artiste a')
-                ->getResult()[0][1];
+                $num = $em->createQuery(
+                        'SELECT max(a.artiste)
+                        FROM AppBundle:Artiste a')
+                    ->getResult()[0][1];
 
-            return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
+                return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 
-        } else {
-            return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
+            } else {
+                return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
+            }
         }
-
-
     }
 
 
