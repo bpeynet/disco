@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -48,7 +49,7 @@ class Artiste
      * @var string
      * @Assert\NotBlank(message="Le nom de l'artiste ne peut pas être vide")
      * @Assert\Length(
-     *      min="1", 
+     *      min="1",
      *      max = "255",
      *      minMessage=" L'artiste doit disposer d'un nom assez long : {{ limit }} caractère minimum.",
      *      maxMessage=" Le nom de l'artiste est trop long : {{ limit }} caractères maximum."
