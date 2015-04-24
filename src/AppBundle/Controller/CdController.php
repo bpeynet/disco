@@ -49,7 +49,7 @@ class CdController extends Controller
 			if(!empty($artiste)) {
 				$retour = $retour->innerJoin('c.artiste','a')
 				->andWhere('a.libelle LIKE :artiste')
-				->setParameter('artiste','%'.$artiste.'%');	
+				->setParameter('artiste','%'.$artiste.'%');
 			}
 			if(!empty($label)) {
 				$retour = $retour->innerJoin('c.label','l')
@@ -85,6 +85,10 @@ class CdController extends Controller
 				->setMaxResults($limit)
 				->getQuery()
 				->getResult();
+
+            if (empty($retour)) {
+                $this->addFlash('error', 'Aucun disque trouvé !');
+            }
 
     	} else {
     		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
