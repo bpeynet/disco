@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+	<fieldset>
+		<legend><h3>Edition d'Artiste <small>#{{artiste.getArtiste}} {{artiste.getLibelle}}</small></h3></legend>
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		{{form_start(form)}}
+			{{form_errors(form)}}
+			{{form_row(form.libelle)}}
+			{{form_row(form.siteweb)}}
+			{{form_row(form.myspace)}}
+		{{form_end(form)}}
+	</fieldset>
+
+{% endblock %}

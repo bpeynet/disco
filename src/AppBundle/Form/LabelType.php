@@ -16,13 +16,13 @@ class LabelType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('email')
+            ->add('email','text', array('required' => false))
             ->add('telephone','text', array('required' => false))
             ->add('adresse','text', array('required' => false))
             ->add('adresse2','text', array('required' => false))
             ->add('cp','text', array('required' => false))
             ->add('ville','text', array('required' => false))
-            ->add('mailProgra')
+            ->add('mailProgra','text', array('required' => false))
             ->add('contact1','text', array('required' => false))
             ->add('siteweb','text', array('required' => false))
             ->add('info','textarea', array('required' => false))

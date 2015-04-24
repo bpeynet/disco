@@ -8,7 +8,7 @@
 		<fieldset>
 
 		<!-- Form Name -->
-		<legend>Recherche de CD</legend>
+		<legend>Recherche de Label</legend>
 
 		<div class="row col-lg-12">
 				<!-- Text input-->
@@ -60,7 +60,11 @@
 							<tr>
 								<td>{{label.getLabel}}</td>
 								<td>{{label.getLibelle}}</td>
-								<td><a href="{{ path('showLabel',{'id':label.getLabel}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+								<td>
+									<a href="{{ path('showLabel',{'id':label.getLabel}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
+									<a href="{{ path('editLabel',{'id':label.getLabel}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
+									<a href="#" onclick="confirmDelLabel('{{label.getLibelle}}',{{label.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+								</td>
 								<td>{{label.getEmail}}</td>
 							</tr>
 						{% endfor %}

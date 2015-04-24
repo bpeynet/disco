@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+	<fieldset>
+		<legend><h3>Edition du label <small>#{{label.getLabel}} {{label.getLibelle}}</small></h3></legend>
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		{{form_start(form)}}
+			{{form_errors(form)}}
+			<div class="row">
+				<div class="col-md-6">
+					{{form_row(form.libelle)}}
+					{{form_row(form.email)}}
+					{{form_row(form.mailProgra)}}
+					{{form_row(form.contact1)}}
+					{{form_row(form.info)}}
+				</div>
+				<div class="col-md-6">
+					{{form_row(form.siteweb)}}
+					{{form_row(form.telephone)}}
+					{{form_row(form.adresse)}}
+					{{form_row(form.adresse2)}}
+					{{form_row(form.cp)}}
+					{{form_row(form.ville)}}
+				</div>
+			</div>
+		{{form_end(form)}}
+	</fieldset>
+
+{% endblock %}

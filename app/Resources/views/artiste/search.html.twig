@@ -62,7 +62,11 @@
 						<tr>
 							<td>{{artiste.getArtiste}}</td>
 							<td>{{artiste.getLibelle}}</td>
-							<td><a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+							<td>
+								<a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+								<a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-edit"></span></a>
+								<a onclick="confirmDelArtiste('{{artiste.getLibelle}}',{{artiste.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+							</td>
 							<td>{{ artiste.getDisques|length }}</td>
 							<td>{% if artiste.getSiteweb %}<a href="{{artiste.getSiteweb}}" target="_blank">Visiter</a>{% endif %}</td>
 							<td>{% if artiste.getMyspace %}<a href="{{artiste.getMyspace}}" target="_blank">Visiter</a>{% endif %}</td>

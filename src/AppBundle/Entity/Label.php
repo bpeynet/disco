@@ -45,7 +45,6 @@ class Label
 
     /**
      * @var string
-     * @Assert\NotBlank(message="L'email du label ne peut pas être vide")
      * @Assert\Length(
      *      min="4", 
      *      max = "45",
@@ -108,7 +107,6 @@ class Label
 
     /**
      * @var string
-     * @Assert\NotBlank(message="L'email de retour du label ne peut pas être vide")
      * @Assert\Length(
      *      min="4", 
      *      max = "250",
