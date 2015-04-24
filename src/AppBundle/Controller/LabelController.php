@@ -90,10 +90,17 @@ class LabelController extends Controller
 		}
 
         $em = $this->getDoctrine()->getManager();
-        $em->remove($label);
-        $em->flush();
+        if($label->getDisques()->isEmpty()) {
+            $em->remove($label);
+            $em->flush();
 
-		return $this->redirect($this->generateUrl('label'));
+            $this->addFlash('success','Le Label a bien été supprimé.');
+            return $this->redirect($this->generateUrl('label'));
+        } else {
+            $this->addFlash('error','Un Label lié à des disques ne peut pas être supprimé !');
+            return $this->redirect($this->generateUrl('showLabel',array('id'=>$label->getLabel())));
+        }
+
 	}
 
 
@@ -111,8 +118,13 @@ class LabelController extends Controller
             );
         }
 
-        $post = $label;
-        $form = $this->createForm(new LabelType(),$post);
+        //$post = new Label($label);
+        if ($request->isMethod('POST')) {
+            $form = $this->createForm(new LabelType());
+        } else {
+            $form = $this->createForm(new LabelType(),$label);
+        }
+        
         $form->add('submit', 'submit', array(
                 'label' => 'Finaliser l\'édition',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
@@ -121,42 +133,18 @@ class LabelController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            $libelle = strtoupper($form->get('libelle')->getData());
-            $email = $form->get('email')->getData();
-            $telephone = $form->get('telephone')->getData();
-            $adresse = $form->get('adresse')->getData();
-            $adresse2 = $form->get('adresse2')->getData();
-            $cp = $form->get('cp')->getData();
-            $ville = $form->get('ville')->getData();
-            $mailProgra = $form->get('mailProgra')->getData();
-            $contact1 = $form->get('contact1')->getData();
-            $siteweb = $form->get('siteweb')->getData();
-            $info = $form->get('info')->getData();
-            if(!$telephone) { $telephone = ""; }
-            if(!$adresse) { $adresse = ""; }
-            if(!$adresse2) { $adresse2 = ""; }
-            if(!$cp) { $cp = ""; }
-            if(!$ville) { $ville = ""; }
-            if(!$contact1) { $contact1 = ""; }
-            if(!$siteweb) { $siteweb = ""; }
-            if(!$info) { $info = ""; }
-            
-            $label->setLibelle($libelle);
-            $label->setEmail($email);
-            $label->setTelephone($telephone);
-            $label->setAdresse($adresse);
-            $label->setAdresse2($adresse2);
-            $label->setCp($cp);
-            $label->setVille($ville);
-            $label->setMailprogra($mailProgra);
-            $label->setContact1($contact1);
-            $label->setSiteweb($siteweb);
-            $label->setInfo($info);
+
+            $data = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
 
-            $em->persist($label);
+            $em->persist($data);
             $em->flush();
+
+            $this->addFlash('success','Edition terminée !');
+
+        } else {
+            $this->addFlash('error','Problème(s) lors de l\'édition.');
         }
 
 
@@ -178,44 +166,12 @@ class LabelController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            $libelle = strtoupper($form->get('libelle')->getData());
-            $email = $form->get('email')->getData();
-            $telephone = $form->get('telephone')->getData();
-            $adresse = $form->get('adresse')->getData();
-            $adresse2 = $form->get('adresse2')->getData();
-            $cp = $form->get('cp')->getData();
-            $ville = $form->get('ville')->getData();
-            $mailProgra = $form->get('mailProgra')->getData();
-            $contact1 = $form->get('contact1')->getData();
-            $siteweb = $form->get('siteweb')->getData();
-            $info = $form->get('info')->getData();
-            if(!$email) { $email = ""; }
-            if(!$telephone) { $telephone = ""; }
-            if(!$adresse) { $adresse = ""; }
-            if(!$adresse2) { $adresse2 = ""; }
-            if(!$cp) { $cp = ""; }
-            if(!$ville) { $ville = ""; }
-            if(!$mailProgra) { $mailProgra = ""; }
-            if(!$contact1) { $contact1 = ""; }
-            if(!$siteweb) { $siteweb = ""; }
-            if(!$info) { $info = ""; }
 
-            $label = new Label();
-            $label->setLibelle($libelle);
-            $label->setEmail($email);
-            $label->setTelephone($telephone);
-            $label->setAdresse($adresse);
-            $label->setAdresse2($adresse2);
-            $label->setCp($cp);
-            $label->setVille($ville);
-            $label->setMailprogra($mailProgra);
-            $label->setContact1($contact1);
-            $label->setSiteweb($siteweb);
-            $label->setInfo($info);
+            $data = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
 
-            $em->persist($label);
+            $em->persist($data);
             $em->flush();
 
             $num = $em->createQuery(

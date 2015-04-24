@@ -22,7 +22,7 @@ class Artiste
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $artiste;
+    private $artiste = '0';
 
     /**
      * @ORM\OneToMany(targetEntity="Cd", mappedBy="artiste")
@@ -147,7 +147,7 @@ class Artiste
      */
     public function setLibelle($libelle)
     {
-        $this->libelle = $libelle;
+        $this->libelle = strtoupper($libelle);
 
         return $this;
     }
@@ -170,6 +170,7 @@ class Artiste
      */
     public function setSiteweb($siteweb)
     {
+        if(!$siteweb) { $siteweb = ""; }
         $this->siteweb = $siteweb;
 
         return $this;
@@ -193,6 +194,7 @@ class Artiste
      */
     public function setMyspace($myspace)
     {
+        if(!$myspace) { $myspace = ""; }
         $this->myspace = $myspace;
 
         return $this;

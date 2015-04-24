@@ -87,10 +87,12 @@ class ArtisteController extends Controller
                 'Aucun artiste trouvé pour cet id : '.$id
             );
         }
-        
+
         $em = $this->getDoctrine()->getManager();
-        $em->remove($artiste);
-        $em->flush();
+        if(empty($artiste->getDisques())) {
+            $em->remove($artiste);
+            $em->flush(); 
+        }
 
         return $this->redirect($this->generateUrl('artiste'));
     }
@@ -109,8 +111,12 @@ class ArtisteController extends Controller
             );
         }
 
-        $post = $artiste;
-        $form = $this->createForm(new ArtisteType(),$post);
+        if($this->isMethod('POST')) {
+            $form = $this->createForm(new ArtisteType());
+        } else {
+            $form = $this->createForm(new ArtisteType(),$artiste);
+        }
+
         $form->add('submit', 'submit', array(
                 'label' => 'Editer l\'Artiste',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
@@ -119,19 +125,12 @@ class ArtisteController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            $libelle = strtoupper($form->get('libelle')->getData());
-            $siteweb = $form->get('siteweb')->getData();
-            $myspace = $form->get('myspace')->getData();
-            if(!$siteweb) { $siteweb = ""; }
-            if(!$myspace) { $myspace = ""; }
 
-            $artiste->setLibelle($libelle);
-            $artiste->setSiteweb($siteweb);
-            $artiste->setMyspace($myspace);
+            $data = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
 
-            $em->persist($artiste);
+            $em->persist($data);
             $em->flush();
 
         }
@@ -154,20 +153,12 @@ class ArtisteController extends Controller
         $form->handleRequest($request);
 
         if($form->isValid()) {
-            $libelle = strtoupper($form->get('libelle')->getData());
-            $siteweb = $form->get('siteweb')->getData();
-            $myspace = $form->get('myspace')->getData();
-            if(!$siteweb) { $siteweb = ""; }
-            if(!$myspace) { $myspace = ""; }
 
-            $artiste = new Artiste();
-            $artiste->setLibelle($libelle);
-            $artiste->setSiteweb($siteweb);
-            $artiste->setMyspace($myspace);
+            $date = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
 
-            $em->persist($artiste);
+            $em->persist($data);
             $em->flush();
 
             $num = $em->createQuery(
