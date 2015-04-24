@@ -31,7 +31,7 @@ class ArtisteController extends Controller
     		if($num >= 1) {
 	    		return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 	    	}
-    		
+
     		$retour = $em->getRepository('AppBundle:Artiste')->createQueryBuilder('a')
     			->where('a.libelle LIKE :libelle')
     			->setParameter('libelle','%'.$libelle.'%')
@@ -91,7 +91,7 @@ class ArtisteController extends Controller
         $em = $this->getDoctrine()->getManager();
         if(empty($artiste->getDisques())) {
             $em->remove($artiste);
-            $em->flush(); 
+            $em->flush();
         }
 
         return $this->redirect($this->generateUrl('artiste'));
@@ -111,7 +111,7 @@ class ArtisteController extends Controller
             );
         }
 
-        if($this->isMethod('POST')) {
+        if($request->isMethod('POST')) {
             $form = $this->createForm(new ArtisteType());
         } else {
             $form = $this->createForm(new ArtisteType(),$artiste);
@@ -171,7 +171,7 @@ class ArtisteController extends Controller
         } else {
             return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
         }
-    
+
 
     }
 
