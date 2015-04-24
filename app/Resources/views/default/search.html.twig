@@ -1,12 +1,18 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+<script>
+    $('#searchInput').focus();
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="row">
     <div class="col-md-12">
         <form method="get" class="form-inline">
             <div class="form-group">
                 <div class="col-md-4">
-                    <input type="text" name="q" value="{{q}}" class="form-control input-md">
+                    <input type="text" name="q" value="{{q}}" class="form-control input-md" id="searchInput">
                 </div>
             </div>
             <div class="form-group">
@@ -28,28 +34,45 @@
                             <th>Type</th>
                             <th>Titre</th>
                             <th>Action</th>
-                        </tr>   
+                        </tr>
                     </thead>
                     {% for result in results %}
                         <tr>
-                            <td class="
-                                {% if class(result)=='Cd' %}
-                                    warning">CD</td>
-                                    <td>{{result.getTitre}}</td>
-                                    <td><a href="{{ path('showCd',{'id':result.getCd}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a></td>
-                                {% elseif class(result)=='Artiste' %}
-                                    success">Artiste</td>
-                                    <td>{{result.getLibelle}}</td>
-                                    <td><a href="{{ path('showArtiste',{'id':result.getArtiste}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
+                            {% if class(result)=='Cd' %}
+                                <td>CD</td>
+                                <td>
+                                    <a href="{{ path('showCd',{'id':result.getCd}) }}">
+                                        {{result.getTitre}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('showCd',{'id':result.getCd}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
+                                </td>
+                            {% elseif class(result)=='Artiste' %}
+                                <td>Artiste</td>
+                                <td>
+                                    <a href="{{ path('showArtiste',{'id':result.getArtiste}) }}">
+                                        {{result.getLibelle}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('showArtiste',{'id':result.getArtiste}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
                                     <a href="{{ path('editArtiste',{'id':result.getArtiste}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-                                    <a href="#" onclick="confirmDelArtiste('{{result.getLibelle}}',{{result.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a></td>
-                                {% elseif class(result)=='Label' %}
-                                    danger">Label</td>
-                                    <td>{{result.getLibelle}}</td>
-                                    <td><a href="{{ path('showLabel',{'id':result.getLabel}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a href="#" onclick="confirmDelArtiste('{{result.getLibelle}}',{{result.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            {% elseif class(result)=='Label' %}
+                                <td>Label</td>
+                                <td>
+                                    <a href="{{ path('showLabel',{'id':result.getLabel}) }}">
+                                        {{result.getLibelle}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('showLabel',{'id':result.getLabel}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
                                     <a href="{{ path('editLabel',{'id':result.getLabel}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-                                    <a href="#" onclick="confirmDelLabel('{{result.getLibelle}}',{{result.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a></td>
-                                {% endif %}
+                                    <a href="#" onclick="confirmDelLabel('{{result.getLibelle}}',{{result.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            {% endif %}
                         </tr>
 
                     {%  endfor %}
@@ -59,6 +82,6 @@
 
         {% endif %}
     </div>
-</div>  
+</div>
 
 {% endblock %}
