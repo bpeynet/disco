@@ -48,10 +48,6 @@ class ArtisteController extends Controller
     			->getResult();
     	}
 
-        if (!$retour) {
-            $this->addFlash('error','Auncun résultat pour cette recherche.');
-        }
-
         return $this->render('artiste/search.html.twig',array(
 	        	'recherche'=>$retour,
 	        	'post'=>$request->request->all()
@@ -95,10 +91,7 @@ class ArtisteController extends Controller
         $em = $this->getDoctrine()->getManager();
         if(empty($artiste->getDisques())) {
             $em->remove($artiste);
-            $em->flush();
-            $this->addFlash('success','Suppression effectuée !');
-        } else {
-            $this->addFlash('error','Un Artiste lié à des disques ne peut pas être supprimé !');
+            $em->flush(); 
         }
 
         return $this->redirect($this->generateUrl('artiste'));
@@ -140,10 +133,6 @@ class ArtisteController extends Controller
             $em->persist($data);
             $em->flush();
 
-            $this->addFlash('error','L\'Artiste a bien été édité !');
-
-        } else {
-            $this->addFlash('error','Les champs on été mal renseignés.');
         }
 
         return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
@@ -177,16 +166,9 @@ class ArtisteController extends Controller
                     FROM AppBundle:Artiste a')
                 ->getResult()[0][1];
 
-            $this->addFlash('success','L\'Artiste a bien été créé !');
-
             return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 
         } else {
-
-            if ($request->isMethod('POST')) {
-                $this->addFlash('error','Les champs on été mal renseignés.');
-            }
-
             return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
         }
     
