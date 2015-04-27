@@ -52,9 +52,9 @@
   	function log( message ) {
       $( "#artiste" ).text( message );
     }
- 
+ 	
     $( "#artiste" ).autocomplete({
-      source: "src/AppBundle/Controller/autocomplete_search.php?type=Artiste",
+      source: "/search/artiste",
       minLength: 1,
       delay: 0,
       select: function( event, ui ) {

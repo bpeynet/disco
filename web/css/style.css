@@ -14,3 +14,7 @@
 #menu_gauche {
 	
 }
+
+.ui-autocomplete-loading {
+	border: 5px solid green;
+}
