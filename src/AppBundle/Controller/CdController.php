@@ -168,5 +168,13 @@ class CdController extends Controller
 
     }
 
+    /**
+     * @Route("search/artiste", name="searchArtiste")
+     */
+    public function searchAAction()
+    {
+        return $this->render('search_a.php');
+    }
+
 }
 
