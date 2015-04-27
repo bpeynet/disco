@@ -6,8 +6,61 @@
 		<legend>Création de Cd</legend>
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
 		{{form_start(form)}}
-			{{form_errors(form)}}
+			<div class="row">
+				{{form_errors(form)}}
+
+				<div class="col-md-5">
+					{{form_row(form.artiste, { 'id': 'artiste' })}}
+					{{form_row(form.titre)}}
+					<div class="row">
+						<div class="col-xs-9" style="padding:0px">
+							{{form_row(form.dsortie)}}
+						</div>
+						<div class="col-xs-3" style="padding:0px">
+							{{form_row(form.annee)}}
+						</div>
+					</div>
+					{{form_row(form.label)}}
+					{{form_row(form.maison)}}
+					{{form_row(form.distrib)}}
+					{{form_row(form.refLabel)}}
+				</div>
+				<div class="col-md-7">
+					<div class="row">
+						<div class="col-md-6">	
+							{{form_row(form.dvd)}}
+							{{form_row(form.etiquette)}}
+							{{form_row(form.paulo)}}
+							{{form_row(form.langue)}}
+							{{form_row(form.support)}}
+							{{form_row(form.type)}}
+						</div>
+						<div class="col-md-6">	
+							{{form_row(form.genre)}}
+							{{form_row(form.styles)}}
+						</div>
+					</div>
+				</div>
 		{{form_end(form)}}
 	</fieldset>
 
+{% endblock %}
+
+{% block javascripts %}
+<script>
+  $(function() {
+  	function log( message ) {
+      $( "#artiste" ).text( message );
+    }
+ 
+    $( "#artiste" ).autocomplete({
+      source: "src/AppBundle/Controller/autocomplete_search.php?type=Artiste",
+      minLength: 1,
+      delay: 0,
+      select: function( event, ui ) {
+        log(this.value);
+      }
+    });
+  });
+  </script>
 {% endblock %}

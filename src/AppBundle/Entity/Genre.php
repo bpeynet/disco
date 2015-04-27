@@ -45,7 +45,7 @@ class Genre
      * @var integer
      * ORM\Column(name="primaire", type="integer", nullable=false)
      */
-    private $primaire = '0';
+    protected $primaire = '0';
 
 
 

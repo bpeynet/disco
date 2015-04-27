@@ -98,7 +98,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Label")
      * @ORM\JoinColumn(name="distrib", referencedColumnName="label")
      */
-    private $distrib = '0';
+    private $distrib;
 
     /**
      * @var \DateTime

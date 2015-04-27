@@ -16,29 +16,13 @@ class CdType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('artiste', 'entity', array(
-                    'class' => 'AppBundle:Artiste',
-                    'property' => 'artiste',
-                    'attr'=>array('style'=>'display:none;')
-                ))
+            ->add('artiste', 'text')
             ->add('titre')
             ->add('dsortie','date', array('required' => false))
             ->add('annee','text', array('required' => false))
-            ->add('label', 'entity', array(
-                    'class' => 'AppBundle:Label',
-                    'property' => 'label',
-                    'attr'=>array('style'=>'display:none;')
-                ))
-            ->add('maison', 'entity', array(
-                    'class' => 'AppBundle:Label',
-                    'property' => 'label',
-                    'attr'=>array('style'=>'display:none;')
-                ))
-            ->add('distrib', 'entity', array(
-                    'class' => 'AppBundle:Label',
-                    'property' => 'label',
-                    'attr'=>array('style'=>'display:none;')
-                ))
+            ->add('label', 'text')
+            ->add('maison', 'text')
+            ->add('distrib', 'text')
             ->add('refLabel','text', array('required' => false))
             ->add('dvd','checkbox', array('required' => false))
             ->add('etiquette','checkbox', array('required' => false))
@@ -57,11 +41,11 @@ class CdType extends AbstractType
                 ))
             ->add('genre', 'entity', array(
                     'class' => 'AppBundle:Genre',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('g')
-                            ->where('g.primaire = 1')
-                            ->orderBy('g.genre', 'ASC');
-                    },
+                    // 'query_builder' => function(EntityRepository $er) {
+                    //     return $er->createQueryBuilder('u')
+                    //     ->where('u.primaire = 1')
+                    //     ->orderBy('u.libelle', 'ASC');
+                    // },
                     'property' => 'libelle'
                 ))
             ->add('styles', 'entity', array(
