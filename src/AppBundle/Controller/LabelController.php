@@ -49,6 +49,10 @@ class LabelController extends Controller
     			->getResult();
     	}
 
+        if (!$retour) {
+            $this->addFlash('error','Aucun résultat pour cette recherche.');
+        }
+
         return $this->render('label/search.html.twig',array(
 	        	'recherche'=>$retour,
 	        	'post'=>$request->request->all()
@@ -163,28 +167,35 @@ class LabelController extends Controller
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
 
-        $form->handleRequest($request);
+        if($request->isMethod('POST')) {
+        
+            $form->handleRequest($request);
 
-        if($form->isValid()) {
+            if($form->isValid()) {
 
-            $data = $form->getData();
+                $data = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getManager();
 
-            $em->persist($data);
-            $em->flush();
+                $em->persist($data);
+                $em->flush();
 
-            $num = $em->createQuery(
-                    'SELECT max(l.label)
-                    FROM AppBundle:Label l')
-                ->getResult()[0][1];
+                $num = $em->createQuery(
+                        'SELECT max(l.label)
+                        FROM AppBundle:Label l')
+                    ->getResult()[0][1];
 
-            return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
+                return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
 
+                $this->addFlash('success','Le label a été créé !');
+
+            } else {
+                $this->addFlash('error','Certains champs sont mal remplis.'); 
+                return $this->render('label/create.html.twig',array('form'=>$form->createView()));
+            }
         } else {
             return $this->render('label/create.html.twig',array('form'=>$form->createView()));
-        }
-    
+        }    
 
     }
 
