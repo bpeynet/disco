@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<fieldset>
+		<legend>Création de Cd</legend>
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		{{form_start(form)}}
+			{{form_errors(form)}}
+		{{form_end(form)}}
+	</fieldset>
+
+{% endblock %}

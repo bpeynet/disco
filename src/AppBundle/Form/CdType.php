@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class CdType extends AbstractType
 {
@@ -17,22 +18,26 @@ class CdType extends AbstractType
         $builder
             ->add('artiste', 'entity', array(
                     'class' => 'AppBundle:Artiste',
-                    'property' => 'artiste'
+                    'property' => 'artiste',
+                    'attr'=>array('style'=>'display:none;')
                 ))
             ->add('titre')
             ->add('dsortie','date', array('required' => false))
             ->add('annee','text', array('required' => false))
             ->add('label', 'entity', array(
                     'class' => 'AppBundle:Label',
-                    'property' => 'label'
+                    'property' => 'label',
+                    'attr'=>array('style'=>'display:none;')
                 ))
             ->add('maison', 'entity', array(
                     'class' => 'AppBundle:Label',
-                    'property' => 'label'
+                    'property' => 'label',
+                    'attr'=>array('style'=>'display:none;')
                 ))
             ->add('distrib', 'entity', array(
                     'class' => 'AppBundle:Label',
-                    'property' => 'label'
+                    'property' => 'label',
+                    'attr'=>array('style'=>'display:none;')
                 ))
             ->add('refLabel','text', array('required' => false))
             ->add('dvd','checkbox', array('required' => false))
@@ -52,6 +57,11 @@ class CdType extends AbstractType
                 ))
             ->add('genre', 'entity', array(
                     'class' => 'AppBundle:Genre',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('g')
+                            ->where('g.primaire = 1')
+                            ->orderBy('g.genre', 'ASC');
+                    },
                     'property' => 'libelle'
                 ))
             ->add('styles', 'entity', array(

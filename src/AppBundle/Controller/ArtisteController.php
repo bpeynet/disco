@@ -166,7 +166,7 @@ class ArtisteController extends Controller
 
         if($form->isValid()) {
 
-            $date = $form->getData();
+            $data = $form->getData();
 
             $em = $this->getDoctrine()->getManager();
 

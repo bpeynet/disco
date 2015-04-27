@@ -622,8 +622,6 @@ class Cd
      */
     public function setGenre($genre)
     {
-        $this->genre = $genre;
-
         return $this;
     }
 

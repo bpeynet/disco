@@ -42,6 +42,14 @@ class Genre
     private $actif = '0';
 
     /**
+     * @var integer
+     * ORM\Column(name="primaire", type="integer", nullable=false)
+     */
+    private $primaire = '0';
+
+
+
+    /**
      * Set disques
      *
      * @param ArrayCollection $disques
@@ -118,5 +126,28 @@ class Genre
     public function getGenre()
     {
         return $this->genre;
+    }
+
+    /**
+     * Set primaire
+     *
+     * @param integer $primaire
+     * @return integer
+     */
+    public function setPrimaire($primaire)
+    {
+        $this->primaire = $primaire;
+
+        return $this;
+    }
+
+    /**
+     * Get primaire
+     *
+     * @return integer
+     */
+    public function getPrimaire()
+    {
+        return $this->primaire;
     }
 }
