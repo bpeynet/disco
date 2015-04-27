@@ -49,6 +49,10 @@ class LabelController extends Controller
     			->getResult();
     	}
 
+        if (!$retour) {
+            $this->addFlash('error','Aucun résultat pour cette recherche.');
+        }
+
         return $this->render('label/search.html.twig',array(
 	        	'recherche'=>$retour,
 	        	'post'=>$request->request->all()
@@ -165,6 +169,9 @@ class LabelController extends Controller
 
         $form->handleRequest($request);
 
+        
+        $form->handleRequest($request);
+
         if($form->isValid()) {
 
             $data = $form->getData();
@@ -181,7 +188,12 @@ class LabelController extends Controller
 
             return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
 
+            $this->addFlash('success','Le label a été créé !');
+
         } else {
+            if($request->isMethod('POST')) {
+                $this->addFlash('error','Certains champs sont mal remplis.');
+            }
             return $this->render('label/create.html.twig',array('form'=>$form->createView()));
         }
     
