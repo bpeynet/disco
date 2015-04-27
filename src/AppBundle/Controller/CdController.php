@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Cd;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class CdController extends Controller
@@ -173,7 +174,30 @@ class CdController extends Controller
      */
     public function searchAAction()
     {
-        return $this->render('search_a.php');
+        $term = htmlspecialchars($_GET['term']);
+
+        $em = $this->getDoctrine()->getManager();
+        $res = $em->getRepository('AppBundle:Artiste')->createQueryBuilder('a')
+            ->where('a.libelle LIKE :libelle')
+            ->setParameter('libelle','%'.$term.'%')
+            ->orderBy('a.libelle','ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        $retour = array();
+
+        foreach ($res as $key => $value) {
+            $row = array();
+            $row['num'] = $value->getArtiste();
+            $row['label'] = $value->getLibelle();
+            $row['value'] = $value->getLibelle();
+            array_push($retour, $row);
+        }
+
+        echo json_encode($retour);
+
+        return $this->render('cd/vide.html.twig',array('retour'=>$retour));
     }
 
 }

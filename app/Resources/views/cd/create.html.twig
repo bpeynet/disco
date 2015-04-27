@@ -2,6 +2,7 @@
 
 {% block body %}
 
+	<div id="artiste_2">lol</div>
 	<fieldset>
 		<legend>Création de Cd</legend>
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
@@ -44,21 +45,23 @@
 		{{form_end(form)}}
 	</fieldset>
 
+
 {% endblock %}
 
 {% block javascripts %}
 <script>
   $(function() {
   	function log( message ) {
-      $( "#artiste" ).text( message );
+  		$("#artiste").text(message.libelle);
+      $( "#artiste_2" ).text( message.num );
     }
  	
     $( "#artiste" ).autocomplete({
       source: "/search/artiste",
-      minLength: 1,
-      delay: 0,
+      minLength: 2,
+      delay: 300,
       select: function( event, ui ) {
-        log(this.value);
+        log(ui.item);
       }
     });
   });
