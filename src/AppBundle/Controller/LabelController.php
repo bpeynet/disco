@@ -122,13 +122,8 @@ class LabelController extends Controller
             );
         }
 
-        //$post = new Label($label);
-        if ($request->isMethod('POST')) {
-            $form = $this->createForm(new LabelType());
-        } else {
-            $form = $this->createForm(new LabelType(),$label);
-        }
-        
+        $form = $this->createForm(new LabelType(),$label);
+
         $form->add('submit', 'submit', array(
                 'label' => 'Finaliser l\'édition',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
@@ -148,7 +143,9 @@ class LabelController extends Controller
             $this->addFlash('success','Edition terminée !');
 
         } else {
-            $this->addFlash('error','Problème(s) lors de l\'édition.');
+            if ($request->isMethod('POST')) {
+                $this->addFlash('error','Problème(s) lors de l\'édition.');
+            }
         }
 
 

@@ -2,7 +2,6 @@
 
 {% block body %}
 
-	<div id="artiste_2">lol</div>
 	<fieldset>
 		<legend>Création de Cd</legend>
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
@@ -11,6 +10,7 @@
 				{{form_errors(form)}}
 
 				<div class="col-md-5">
+					<input id="artiste_hidden" style="display:none" value=""></input>
 					{{form_row(form.artiste, { 'id': 'artiste' })}}
 					{{form_row(form.titre)}}
 					<div class="row">
@@ -21,9 +21,12 @@
 							{{form_row(form.annee)}}
 						</div>
 					</div>
-					{{form_row(form.label)}}
-					{{form_row(form.maison)}}
-					{{form_row(form.distrib)}}
+					<input id="label_hidden" style="display:none" value=""></input>
+					{{form_row(form.label, { 'id': 'label' })}}
+					<input id="maison_hidden" style="display:none" value=""></input>
+					{{form_row(form.maison, { 'id': 'maison' })}}
+					<input id="distrib_hidden" style="display:none" value=""></input>
+					{{form_row(form.distrib, { 'id': 'distrib' })}}
 					{{form_row(form.refLabel)}}
 				</div>
 				<div class="col-md-7">
@@ -51,19 +54,102 @@
 {% block javascripts %}
 <script>
   $(function() {
-  	function log( message ) {
-  		$("#artiste").text(message.libelle);
-      $( "#artiste_2" ).text( message.num );
+  	function log( input, message ) {
+  		$("#"+input).text(message.libelle);
+      $( "#"+input+"_hidden" ).val( message.num );
     }
  	
     $( "#artiste" ).autocomplete({
-      source: "/search/artiste",
+      source: "/search/Artiste",
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
-        log(ui.item);
+        log('artiste',ui.item);
       }
     });
+
+    $( "#label" ).autocomplete({
+      source: "/search/Label",
+      minLength: 2,
+      delay: 300,
+      select: function( event, ui ) {
+        log('label',ui.item);
+      }
+    });
+
+    $( "#maison" ).autocomplete({
+      source: "/search/Label",
+      minLength: 2,
+      delay: 300,
+      select: function( event, ui ) {
+        log('maison',ui.item);
+      }
+    });
+
+    $( "#distrib" ).autocomplete({
+      source: "/search/Label",
+      minLength: 2,
+      delay: 300,
+      select: function( event, ui ) {
+        log('distrib',ui.item);
+      }
+    });
+
+    /**
+		La fonction suivante vérifie que l'artiste existe ou non
+    */
+    $("#artiste").blur(function() {
+    	var tab_exact = {};
+
+		$.ajax({
+		  url: '/get/Artiste',
+		  type: 'GET',
+		  data: 'term='+$("#artiste").val()
+		}).done(function(msg){
+			tab_exact = JSON.parse(msg);
+			if ( Object.keys(tab_exact).length == 1) { 
+				$("#artiste_hidden").val(tab_exact[0].num);
+			} else {
+	  			if(confirm("Cet Artiste semble ne pas exister... Le créer ?")) {
+	  				var route = "{{path('createArtiste',{'libelle': "value" })}}";
+	  				window.open(route.replace("value", $('#artiste').val()),"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
+		  		} else {
+		  			$("#artiste_hidden").val("");
+		  		};
+			};
+
+		});
+  	});
+
+  	function labelsVerif (htmlItem,hiddenItem) {
+  		if(htmlItem.val() != "") {
+	    	var tab_exact = {};
+
+			$.ajax({
+			  url: '/get/Label',
+			  type: 'GET',
+			  data: 'term='+htmlItem.val()
+			}).done(function(msg){
+				tab_exact = JSON.parse(msg);
+				if ( Object.keys(tab_exact).length == 1) { 
+					hiddenItem.val(tab_exact[0].num);
+				} else {
+		  			if(confirm("Le Label "+ htmlItem.val() +" semble ne pas exister... Le créer ?")) {
+		  				var route = "{{path('createLabel',{'libelle': "value" })}}";
+		  				window.open(route.replace("value", htmlItem.val()),"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
+			  		} else {
+			  			hiddenItem.val("");
+			  		};
+				};
+			});
+  		}
+  	}
+
+  	$("#label").blur(function() { labelsVerif($("#label"),$("#label_hidden")) });
+  	$("#maison").blur(function() {labelsVerif($("#maison"),$("#maison_hidden"))});
+  	$("#distrib").blur(function() {labelsVerif($("#distrib"),$("#distrib_hidden"))});
+
+
   });
   </script>
 {% endblock %}

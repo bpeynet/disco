@@ -115,7 +115,7 @@ class Cd
      *
      * @ORM\Column(name="annee", type="string", length=4, nullable=false)
      */
-    private $annee = '';
+    private $annee;
 
     /**
      * @var Type
@@ -123,7 +123,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Type")
      * @ORM\JoinColumn(name="type", referencedColumnName="type")
      */
-    private $type = '0';
+    private $type;
 
     /**
      * @var Support
@@ -191,7 +191,7 @@ class Cd
      *
      * @ORM\Column(name="jsaisie", type="integer", nullable=false)
      */
-    private $jsaisie = '0';
+    private $jsaisie = '';
 
     /**
      * @var boolean
@@ -226,7 +226,7 @@ class Cd
      *
      * @ORM\Column(name="retour_label", type="boolean", nullable=false)
      */
-    private $retourLabel = '0';
+    private $retourLabel = '';
 
     /**
      * @var string

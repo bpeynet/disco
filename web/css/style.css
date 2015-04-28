@@ -18,3 +18,9 @@
 .ui-autocomplete-loading {
 	border: 5px solid green;
 }
+
+ul.ui-autocomplete {
+	max-height: 400px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}

@@ -119,11 +119,7 @@ class ArtisteController extends Controller
             );
         }
 
-        if($this->isMethod('POST')) {
-            $form = $this->createForm(new ArtisteType());
-        } else {
-            $form = $this->createForm(new ArtisteType(),$artiste);
-        }
+        $form = $this->createForm(new ArtisteType(),$artiste);
 
         $form->add('submit', 'submit', array(
                 'label' => 'Editer l\'Artiste',
@@ -140,22 +136,24 @@ class ArtisteController extends Controller
 
             $em->persist($data);
             $em->flush();
-            $this->addFlash('error','L\'Artiste a bien été édité !');
+            $this->addFlash('success','L\'Artiste a bien été édité !');
 
         } else {
-            $this->addFlash('error','Les champs on été mal renseignés.');
-
+            if($request->isMethod('POST')) {
+                $this->addFlash('error','Les champs on été mal renseignés.');
+            }
         }
 
         return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
     }
 
     /**
-     * @Route("/artiste/create", name="createArtiste")
+     * @Route("/artiste/create/{libelle}", name="createArtiste")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $libelle = "")
     {
         $post = new Artiste();
+        $post->setLibelle($libelle);
         $form = $this->createForm(new ArtisteType(),$post);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer l\'Artiste',
