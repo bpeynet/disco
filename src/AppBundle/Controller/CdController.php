@@ -170,18 +170,17 @@ class CdController extends Controller
     }
 
     /**
-     * @Route("search/artiste", name="searchArtiste")
+     * @Route("search/{entity}", name="searchAutoComplete")
      */
-    public function searchAAction()
+    public function searchACAction($entity)
     {
         $term = htmlspecialchars($_GET['term']);
 
         $em = $this->getDoctrine()->getManager();
-        $res = $em->getRepository('AppBundle:Artiste')->createQueryBuilder('a')
-            ->where('a.libelle LIKE :libelle')
+        $res = $em->getRepository('AppBundle:'.$entity)->createQueryBuilder('e')
+            ->where('e.libelle LIKE :libelle')
             ->setParameter('libelle','%'.$term.'%')
-            ->orderBy('a.libelle','ASC')
-            ->setMaxResults(10)
+            ->orderBy('e.libelle','ASC')
             ->getQuery()
             ->getResult();
 
@@ -189,9 +188,55 @@ class CdController extends Controller
 
         foreach ($res as $key => $value) {
             $row = array();
-            $row['num'] = $value->getArtiste();
-            $row['label'] = $value->getLibelle();
-            $row['value'] = $value->getLibelle();
+            if($entity == 'Artiste') {
+                $num = $value->getArtiste();
+            } elseif ($entity == 'Label') {
+                $num = $value->getLabel();
+            } else {
+                $num = 0;
+            }
+            $row['num'] = $num;
+            $libelle = $value->getLibelle();
+            $row['label'] = $libelle;
+            $row['value'] = $libelle;
+            array_push($retour, $row);
+        }
+
+        echo json_encode($retour);
+
+        return $this->render('cd/vide.html.twig',array('retour'=>$retour));
+    }
+
+    /**
+     * @Route("get/{entity}", name="getObj")
+     */
+    public function getObjAction($entity)
+    {
+        $term = htmlspecialchars($_GET['term']);
+
+        $em = $this->getDoctrine()->getManager();
+        $res = $em->getRepository('AppBundle:'.$entity)->createQueryBuilder('e')
+            ->where('e.libelle = :libelle')
+            ->setParameter('libelle',$term)
+            ->orderBy('e.libelle','ASC')
+            ->getQuery()
+            ->getResult();
+
+        $retour = array();
+
+        foreach ($res as $key => $value) {
+            $row = array();
+            if($entity == 'Artiste') {
+                $num = $value->getArtiste();
+            } elseif ($entity == 'Label') {
+                $num = $value->getLabel();
+            } else {
+                $num = 0;
+            }
+            $row['num'] = $num;
+            $libelle = $value->getLibelle();
+            $row['label'] = $libelle;
+            $row['value'] = $libelle;
             array_push($retour, $row);
         }
 

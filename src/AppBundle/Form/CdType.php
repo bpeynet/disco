@@ -18,7 +18,7 @@ class CdType extends AbstractType
         $builder
             ->add('artiste', 'text')
             ->add('titre')
-            ->add('dsortie','birthday', array('required' => false, 'data' => new \DateTime("0000-00-00"),'required' => false))
+            ->add('dsortie','birthday', array('required' => false, 'data' => null,'required' => false))
             ->add('annee','text', array('required' => false))
             ->add('label', 'text', array('required' => false))
             ->add('maison', 'text', array('required' => false))
@@ -58,6 +58,8 @@ class CdType extends AbstractType
                     'class' => 'AppBundle:Genre',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('g')
+                        ->where('g.primaire = :primaire')
+                        ->parameter('primaire',1)
                         ->orderBy('g.libelle', 'ASC');
                     },
                     'property' => 'libelle',
