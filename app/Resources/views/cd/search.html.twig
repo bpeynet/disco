@@ -133,7 +133,7 @@
 		</fieldset>
 		</form>
 
-		<a href="#" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un CD</a>
+		<a href="{{path('createCd')}}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un CD</a>
 	</div>
 </div>
 
@@ -189,4 +189,10 @@
 
 {% endif %}
 
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $('#cd').focus();
+</script>
 {% endblock %}

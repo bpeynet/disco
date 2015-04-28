@@ -12,9 +12,9 @@
 		<div class="row col-lg-12">
 			<!-- Text input-->
 			<div class="form-group">
-			  <label class="col-md-4 control-label" for="cd">Par Numéro</label>  
+			  <label class="col-md-4 control-label" for="artiste">Par Numéro</label>  
 			  <div class="col-md-8">
-			  <input id="cd" name="num" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.num}}"{% endif %} >
+			  <input id="artiste" name="num" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.num}}"{% endif %} >
 			    
 			  </div>
 			</div>
@@ -82,4 +82,9 @@
 
 {% endif %}
 
+{% endblock %}
+{% block javascripts %}
+<script>
+    $('#artiste').focus();
+</script>
 {% endblock %}

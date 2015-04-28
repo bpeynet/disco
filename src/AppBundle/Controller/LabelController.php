@@ -49,6 +49,10 @@ class LabelController extends Controller
     			->getResult();
     	}
 
+        if (!$retour) {
+            $this->addFlash('error','Aucun résultat pour cette recherche.');
+        }
+
         return $this->render('label/search.html.twig',array(
 	        	'recherche'=>$retour,
 	        	'post'=>$request->request->all()
@@ -118,7 +122,6 @@ class LabelController extends Controller
             );
         }
 
-        //$post = new Label($label);
         if ($request->isMethod('POST')) {
             $form = $this->createForm(new LabelType());
         } else {
@@ -166,8 +169,8 @@ class LabelController extends Controller
         $form->handleRequest($request);
 
         if($request->isMethod('POST')) {
+            $form->handleRequest($request);
             if ($form->isValid()) {
-
                 $data = $form->getData();
 
                 $em = $this->getDoctrine()->getManager();
@@ -180,14 +183,16 @@ class LabelController extends Controller
                         FROM AppBundle:Label l')
                     ->getResult()[0][1];
 
-                return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
+                $this->addFlash('success','Le label a été créé !');
 
+                return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
             } else {
+                $this->addFlash('error','Certains champs sont mal remplis.');
                 return $this->render('label/create.html.twig',array('form'=>$form->createView()));
             }
         }
 
+        return $this->render('label/create.html.twig',array('form'=>$form->createView()));
     }
-
 }
 

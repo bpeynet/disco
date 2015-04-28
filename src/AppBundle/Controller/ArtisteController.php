@@ -48,6 +48,11 @@ class ArtisteController extends Controller
     			->getResult();
     	}
 
+        if (!$retour) {
+            $this->addFlash('error','Auncun résultat pour cette recherche.');
+        }
+
+
         return $this->render('artiste/search.html.twig',array(
 	        	'recherche'=>$retour,
 	        	'post'=>$request->request->all()
@@ -92,6 +97,9 @@ class ArtisteController extends Controller
         if(empty($artiste->getDisques())) {
             $em->remove($artiste);
             $em->flush();
+            $this->addFlash('success','Suppression effectuée !');
+        } else {
+            $this->addFlash('error','Un Artiste lié à des disques ne peut pas être supprimé !');
         }
 
         return $this->redirect($this->generateUrl('artiste'));
@@ -132,6 +140,10 @@ class ArtisteController extends Controller
 
                 $em->persist($data);
                 $em->flush();
+                $this->addFlash('success','L\'Artiste a bien été édité !');
+
+            } else {
+                $this->addFlash('error','Les champs on été mal renseignés.');
             }
         }
 
@@ -139,11 +151,12 @@ class ArtisteController extends Controller
     }
 
     /**
-     * @Route("/artiste/create", name="createArtiste")
+     * @Route("/artiste/create/{libelle}", name="createArtiste")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $libelle = "")
     {
         $post = new Artiste();
+        $post->setLibelle($libelle);
         $form = $this->createForm(new ArtisteType(),$post);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer l\'Artiste',
@@ -154,9 +167,7 @@ class ArtisteController extends Controller
 
         if($request->isMethod('POST')) {
             if ($form->isValid()) {
-
-                $date = $form->getData();
-
+                $data = $form->getData();
                 $em = $this->getDoctrine()->getManager();
 
                 $em->persist($data);
@@ -167,14 +178,15 @@ class ArtisteController extends Controller
                         FROM AppBundle:Artiste a')
                     ->getResult()[0][1];
 
+                $this->addFlash('success','L\'Artiste a bien été créé !');
+
                 return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 
             } else {
-                return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
+                $this->addFlash('error','Les champs on été mal renseignés.');
             }
         }
+        return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
     }
-
-
 }
 

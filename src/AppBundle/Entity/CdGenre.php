@@ -37,7 +37,7 @@ class CdGenre
      */
     private $genre;
 
-
+    
     /**
      * Set cd
      *
@@ -83,4 +83,5 @@ class CdGenre
     {
         return $this->genre;
     }
+
 }
