@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Artiste;
 use AppBundle\Form\ArtisteType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class ArtisteController extends Controller
@@ -190,6 +191,32 @@ class ArtisteController extends Controller
 
     }
 
+
+    /**
+     *  @Route("/artiste/autocomplete/{like}", name="autocompleteArtiste")
+     */
+    public function autocompleteAction($like, Request $request)
+    {
+        $limit = $this->container->getParameter('listingLimit');
+
+        $em = $this->getDoctrine()->getManager();
+        $res = $em->getRepository('AppBundle:Artiste')->createQueryBuilder('a')
+            ->select('a.artiste AS num, a.libelle AS label, a.libelle AS value');
+        if($like) {
+            $res = $res->where('a.libelle LIKE :libelle');
+        } else {
+            $res = $res->where('a.libelle = :libelle');
+        }
+            $res= $res->setParameter('libelle','%'.$request->query->get('term').'%')
+            ->orderBy('a.libelle','ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        $response = new JsonResponse();
+        $response->setData($res);
+        return $response;
+    }
 
 }
 

@@ -60,7 +60,7 @@
     }
  	
     $( "#artiste" ).autocomplete({
-      source: "/search/Artiste",
+      source: "{{path('autocompleteArtiste',{'like':1})}}",
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -99,26 +99,25 @@
 		La fonction suivante vérifie que l'artiste existe ou non
     */
     $("#artiste").blur(function() {
-    	var tab_exact = {};
+    	if($("#artiste").val() != "") {
+			$.ajax({
+			  url: "{{path('autocompleteArtiste',{'like':0})}}",
+			  type: 'GET',
+			  data: 'term='+$("#artiste").val()
+			}).done(function(tab_exact){
+				if ( tab_exact.length == 1) { 
+					$("#artiste_hidden").val(tab_exact[0].num);
+				} else {
+		  			if(confirm("Cet Artiste semble ne pas exister... Le créer ?")) {
+		  				var route = "{{path('createArtiste',{'libelle': "value" })}}";
+		  				window.open(route.replace("value", $('#artiste').val()),"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
+			  		} else {
+			  			$("#artiste_hidden").val("");
+			  		};
+				};
 
-		$.ajax({
-		  url: '/get/Artiste',
-		  type: 'GET',
-		  data: 'term='+$("#artiste").val()
-		}).done(function(msg){
-			tab_exact = JSON.parse(msg);
-			if ( Object.keys(tab_exact).length == 1) { 
-				$("#artiste_hidden").val(tab_exact[0].num);
-			} else {
-	  			if(confirm("Cet Artiste semble ne pas exister... Le créer ?")) {
-	  				var route = "{{path('createArtiste',{'libelle': "value" })}}";
-	  				window.open(route.replace("value", $('#artiste').val()),"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
-		  		} else {
-		  			$("#artiste_hidden").val("");
-		  		};
-			};
-
-		});
+			});
+    	}
   	});
 
   	function labelsVerif (htmlItem,hiddenItem) {

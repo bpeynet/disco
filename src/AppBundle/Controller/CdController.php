@@ -202,9 +202,10 @@ class CdController extends Controller
             array_push($retour, $row);
         }
 
-        echo json_encode($retour);
+        $response = new JsonResponse();
+        $response->setData($retour);
 
-        return $this->render('cd/vide.html.twig',array('retour'=>$retour));
+        return $response;
     }
 
     /**
@@ -240,9 +241,10 @@ class CdController extends Controller
             array_push($retour, $row);
         }
 
-        echo json_encode($retour);
+        $response = new JsonResponse();
+        $response->setData($retour);
 
-        return $this->render('cd/vide.html.twig',array('retour'=>$retour));
+        return $response;
     }
 
 }
