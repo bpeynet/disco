@@ -119,26 +119,16 @@ class ArtisteController extends Controller
             );
         }
 
-        if($request->isMethod('POST')) {
-            $form = $this->createForm(new ArtisteType());
-        } else {
-            $form = $this->createForm(new ArtisteType(),$artiste);
-        }
-
+        $form = $this->createForm(new ArtisteType(),$artiste);
         $form->add('submit', 'submit', array(
                 'label' => 'Editer l\'Artiste',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
-
         $form->handleRequest($request);
 
         if($request->isMethod('POST')){
             if ($form->isValid()) {
-                $data = $form->getData();
-
                 $em = $this->getDoctrine()->getManager();
-
-                $em->persist($data);
                 $em->flush();
                 $this->addFlash('success','L\'Artiste a bien été édité !');
 

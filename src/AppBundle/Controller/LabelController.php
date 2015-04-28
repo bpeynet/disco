@@ -122,26 +122,16 @@ class LabelController extends Controller
             );
         }
 
-        if ($request->isMethod('POST')) {
-            $form = $this->createForm(new LabelType());
-        } else {
-            $form = $this->createForm(new LabelType(),$label);
-        }
-
+        $form = $this->createForm(new LabelType(),$label);
         $form->add('submit', 'submit', array(
                 'label' => 'Finaliser l\'édition',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
-
         $form->handleRequest($request);
 
         if($request->isMethod('POST')) {
             if ($form->isValid()) {
-                $data = $form->getData();
-
                 $em = $this->getDoctrine()->getManager();
-
-                $em->persist($data);
                 $em->flush();
 
                 $this->addFlash('success','Edition terminée !');
