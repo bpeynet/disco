@@ -6,7 +6,7 @@ Ce fichier gère la mise a jour des anciennes valeurs de la BDD Disco vers les n
 
 /* on ajoute un tag principal pour savoir si c'est un genre ou un type */
 ALTER TABLE `f_genre` ADD `primaire` BOOLEAN NOT NULL ;
-UPDATE f_genre SET primaire WHERE genre IN (152,153,154,4,155,156,157,23,2,3,1,158);
+UPDATE f_genre SET primaire=TRUE WHERE genre IN (152,153,154,4,155,156,157,23,2,3,1,158);
 
 
 /*Ces genre n'existent pas, on les ajoute donc*/
