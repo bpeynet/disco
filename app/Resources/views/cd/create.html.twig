@@ -69,7 +69,7 @@
     });
 
     $( "#label" ).autocomplete({
-      source: "/search/Label",
+      source: "{{path('autocompleteLabel',{'like':1})}}",
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -78,7 +78,7 @@
     });
 
     $( "#maison" ).autocomplete({
-      source: "/search/Label",
+      source: "{{path('autocompleteLabel',{'like':1})}}",
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -87,7 +87,7 @@
     });
 
     $( "#distrib" ).autocomplete({
-      source: "/search/Label",
+      source: "{{path('autocompleteLabel',{'like':1})}}",
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -122,15 +122,12 @@
 
   	function labelsVerif (htmlItem,hiddenItem) {
   		if(htmlItem.val() != "") {
-	    	var tab_exact = {};
-
 			$.ajax({
-			  url: '/get/Label',
+			  url: "{{path('autocompleteLabel',{'like':0})}}",
 			  type: 'GET',
 			  data: 'term='+htmlItem.val()
-			}).done(function(msg){
-				tab_exact = JSON.parse(msg);
-				if ( Object.keys(tab_exact).length == 1) { 
+			}).done(function(tab_exact){
+				if ( tab_exact.length == 1) { 
 					hiddenItem.val(tab_exact[0].num);
 				} else {
 		  			if(confirm("Le Label "+ htmlItem.val() +" semble ne pas exister... Le créer ?")) {

@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Label;
 use AppBundle\Form\LabelType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class LabelController extends Controller
@@ -195,6 +196,32 @@ class LabelController extends Controller
         }
     
 
+    }
+
+    /**
+     *  @Route("/label/autocomplete/{like}", name="autocompleteLabel")
+     */
+    public function autocompleteAction($like, Request $request)
+    {
+        $limit = $this->container->getParameter('listingLimit');
+
+        $em = $this->getDoctrine()->getManager();
+        $res = $em->getRepository('AppBundle:Label')->createQueryBuilder('l')
+            ->select('l.label AS num, l.libelle AS label, l.libelle AS value');
+        if($like) {
+            $res = $res->where('l.libelle LIKE :libelle');
+        } else {
+            $res = $res->where('l.libelle = :libelle');
+        }
+            $res= $res->setParameter('libelle','%'.$request->query->get('term').'%')
+            ->orderBy('l.libelle','ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        $response = new JsonResponse();
+        $response->setData($res);
+        return $response;
     }
 
 }
