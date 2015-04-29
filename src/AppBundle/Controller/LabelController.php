@@ -209,11 +209,13 @@ class LabelController extends Controller
         $res = $em->getRepository('AppBundle:Label')->createQueryBuilder('l')
             ->select('l.label AS num, l.libelle AS label, l.libelle AS value');
         if($like) {
-            $res = $res->where('l.libelle LIKE :libelle');
+            $res = $res->where('l.libelle LIKE :libelle')
+                ->setParameter('libelle','%'.$request->query->get('term').'%');
         } else {
-            $res = $res->where('l.libelle = :libelle');
+            $res = $res->where('l.libelle = :libelle')
+                ->setParameter('libelle',$request->query->get('term'));
         }
-            $res= $res->setParameter('libelle','%'.$request->query->get('term').'%')
+            $res= $res
             ->orderBy('l.libelle','ASC')
             ->setMaxResults($limit)
             ->getQuery()

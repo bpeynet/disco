@@ -203,11 +203,13 @@ class ArtisteController extends Controller
         $res = $em->getRepository('AppBundle:Artiste')->createQueryBuilder('a')
             ->select('a.artiste AS num, a.libelle AS label, a.libelle AS value');
         if($like) {
-            $res = $res->where('a.libelle LIKE :libelle');
+            $res = $res->where('a.libelle LIKE :libelle')
+                ->setParameter('libelle','%'.$request->query->get('term').'%');
         } else {
-            $res = $res->where('a.libelle = :libelle');
+            $res = $res->where('a.libelle = :libelle')
+                ->setParameter('libelle',$request->query->get('term'));
         }
-            $res= $res->setParameter('libelle','%'.$request->query->get('term').'%')
+        $res = $res 
             ->orderBy('a.libelle','ASC')
             ->setMaxResults($limit)
             ->getQuery()
