@@ -137,13 +137,14 @@ class ArtisteController extends Controller
             $em->flush();
             $this->addFlash('success','L\'Artiste a bien été édité !');
 
-        } else {
-            if($request->isMethod('POST')) {
-                $this->addFlash('error','Les champs on été mal renseignés.');
+            } else {
+                if($request->isMethod('POST')) {
+                    $this->addFlash('error','Les champs on été mal renseignés.');
+                }
             }
-        }
 
-        return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
+            return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
+        }
     }
 
     /**

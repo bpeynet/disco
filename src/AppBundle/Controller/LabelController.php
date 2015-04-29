@@ -143,13 +143,14 @@ class LabelController extends Controller
 
                 $this->addFlash('success','Edition terminée !');
 
-        } else {
-            if ($request->isMethod('POST')) {
-                $this->addFlash('error','Problème(s) lors de l\'édition.');
+            } else {
+                if ($request->isMethod('POST')) {
+                    $this->addFlash('error','Problème(s) lors de l\'édition.');
+                }
             }
-        }
 
-        return $this->render('label/edit.html.twig',array('form'=>$form->createView(),'label'=>$label));
+            return $this->render('label/edit.html.twig',array('form'=>$form->createView(),'label'=>$label));
+        }
     }
 
     /**
