@@ -145,13 +145,25 @@ class CdController extends Controller
 
         $form->handleRequest($request);
 
+
         if($form->isValid()) {
-
-            $data = $form->getData();
-
             $em = $this->getDoctrine()->getManager();
 
-            $em->persist($data);
+            
+            $cd = $form->getData();
+
+            $cd->setLabel(null);
+            $cd->setMaison(null);
+            $cd->setDistrib(null);
+
+            $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($request->request->get('appbundle_cd')['artiste']);
+            $genre = $em->getRepository('AppBundle:Genre')->find(intval($request->request->get('appbundle_cd')['genre']));
+            $cd->setArtiste($artiste);
+            $cd->setGenre($genre);
+
+            var_dump($cd);
+
+            $em->persist($cd);
             $em->flush();
 
             $num = $em->createQuery(

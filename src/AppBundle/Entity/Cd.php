@@ -28,6 +28,7 @@ class Cd
      * @var Artiste
      *
      * @ORM\ManyToOne(targetEntity="Artiste")
+     * @Assert\NotBlank(message="Le nom de l'artiste ne peut pas être vide")
      * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
      */
     protected $artiste;
@@ -46,7 +47,7 @@ class Cd
      * @ORM\OneToMany(targetEntity="CdComment", mappedBy="cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
-    protected $comments;
+    protected $comments = array();
 
     /**
      * @var CdComment
@@ -54,7 +55,7 @@ class Cd
      * @ORM\OneToMany(targetEntity="CdNote", mappedBy="cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
-    protected $notes;
+    protected $notes = array();
 
     /**
      * @var CdEmprunt
@@ -62,7 +63,7 @@ class Cd
      * @ORM\OneToMany(targetEntity="CdEmprunt", mappedBy="cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
-    protected $emprunts;
+    protected $emprunts = array();
 
     /**
      * @var CdGenre
@@ -70,7 +71,7 @@ class Cd
      * @ORM\OneToMany(targetEntity="CdGenre", mappedBy="cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
-    protected $styles;
+    protected $styles = array();
 
     /**
      * @var string
@@ -83,9 +84,15 @@ class Cd
      * @var Label
      *
      * @ORM\ManyToOne(targetEntity="Label")
+     * @Assert\Length(
+     *      min="1",
+     *      max = "255",
+     *      minMessage=" Le titre est trop court : limit }} caractère minimum.",
+     *      maxMessage=" Le nom de le titre est trop long : {{ limit }} caractères maximum."
+     * )
      * @ORM\JoinColumn(name="label", referencedColumnName="label")
      */
-    private $label;
+    private $label = null;
 
     /**
      * @var Label
@@ -93,7 +100,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Label")
      * @ORM\JoinColumn(name="maison", referencedColumnName="label")
      */
-    private $maison;
+    private $maison = null;
 
     /**
      * @var integer
@@ -101,11 +108,12 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Label")
      * @ORM\JoinColumn(name="distrib", referencedColumnName="label")
      */
-    private $distrib;
+    private $distrib = null;
 
     /**
      * @var \DateTime
      *
+     * @Assert\Type(type="\DateTime", message="La valeur {{ value }} n'est pas un type date valide.")
      * @ORM\Column(name="dsortie", type="datetime", nullable=false)
      */
     private $dsortie = '0000-00-00 00:00:00';
@@ -115,7 +123,7 @@ class Cd
      *
      * @ORM\Column(name="annee", type="string", length=4, nullable=false)
      */
-    private $annee;
+    private $annee = '';
 
     /**
      * @var Type
@@ -123,7 +131,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Type")
      * @ORM\JoinColumn(name="type", referencedColumnName="type")
      */
-    private $type;
+    private $type = 0;
 
     /**
      * @var Support
@@ -131,7 +139,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Support")
      * @ORM\JoinColumn(name="support", referencedColumnName="support")
      */
-    private $support;
+    private $support = 0;
 
     /**
      * @var Genre
@@ -139,7 +147,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Genre")
      * @ORM\JoinColumn(name="genre", referencedColumnName="genre")
      */
-    private $genre;
+    private $genre = 0;
 
     /**
      * @var Langue
@@ -170,14 +178,14 @@ class Cd
      *
      * @ORM\Column(name="dprogra", type="integer", nullable=false)
      */
-    private $dprogra;
+    private $dprogra = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="comment", type="text", nullable=false)
      */
-    private $comment;
+    private $comment = '';
 
     /**
      * @var \DateTime
@@ -191,7 +199,7 @@ class Cd
      *
      * @ORM\Column(name="jsaisie", type="integer", nullable=false)
      */
-    private $jsaisie = '';
+    private $jsaisie = 0;
 
     /**
      * @var boolean
@@ -212,7 +220,7 @@ class Cd
      *
      * @ORM\Column(name="airplay", type="boolean", nullable=false)
      */
-    private $airplay = '0';
+    private $airplay = false;
 
     /**
      * @var string
@@ -226,14 +234,14 @@ class Cd
      *
      * @ORM\Column(name="retour_label", type="boolean", nullable=false)
      */
-    private $retourLabel = '';
+    private $retourLabel = false;
 
     /**
      * @var string
      *
      * @ORM\Column(name="retour_comment", type="text", nullable=false)
      */
-    private $retourComment;
+    private $retourComment='';
 
     /**
      * @var boolean
@@ -625,6 +633,7 @@ class Cd
      */
     public function setGenre($genre)
     {
+        $this->genre = $genre;
         return $this;
     }
 
@@ -738,6 +747,7 @@ class Cd
      */
     public function setComment($comment)
     {
+        if(empty($comment)) {$comment='';} 
         $this->comment = $comment;
 
         return $this;
@@ -899,6 +909,7 @@ class Cd
      */
     public function setRetourLabel($retourLabel)
     {
+        if(empty($retourLabel)) {$retourLabel='';}
         $this->retourLabel = $retourLabel;
 
         return $this;
@@ -922,6 +933,7 @@ class Cd
      */
     public function setRetourComment($retourComment)
     {
+        if(empty($retourComment)) {$retourComment='';}
         $this->retourComment = $retourComment;
 
         return $this;
@@ -1106,6 +1118,7 @@ class Cd
      */
     public function setRefLabel($refLabel)
     {
+        if(empty($refLabel)) {$refLabel='';}
         $this->refLabel = $refLabel;
 
         return $this;
@@ -1200,8 +1213,9 @@ class Cd
         return $this->cd;
     }
 
-public function __construct() {
-    $this->dsortie = new \DateTime();
-}
+    public function __construct() {
+        $this->dsortie = new \DateTime();
+        $this->dsaisie = new \DateTime();
+    }
 
 }

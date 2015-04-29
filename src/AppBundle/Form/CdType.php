@@ -18,8 +18,12 @@ class CdType extends AbstractType
         $builder
             ->add('artiste', 'text')
             ->add('titre')
-            ->add('dsortie','birthday', array('required' => false, 'data' => null,'required' => false))
-            ->add('annee','text', array('required' => false))
+            ->add('dsortie','date', array(
+                    'widget' => 'single_text',
+                    'input' => 'datetime',
+                    'format' => 'dd/MM/yyyy',
+                    'required' => false))
+            ->add('annee','text', array('required' => true, 'data' => date('Y')))
             ->add('label', 'text', array('required' => false))
             ->add('maison', 'text', array('required' => false))
             ->add('distrib', 'text', array('required' => false))
