@@ -95,7 +95,7 @@ class ArtisteController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
-        if(empty($artiste->getDisques())) {
+        if($artiste->getDisques()->isEmpty()) {
             $em->remove($artiste);
             $em->flush();
             $this->addFlash('success','Suppression effectuée !');
