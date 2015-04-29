@@ -1,15 +1,18 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
-		<span class="pull-right">
-			<a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}" class="label label-info">
+	<h1>
+        Fiche Artiste
+        <small>
+            {{artiste.getLibelle}} (#{{artiste.getArtiste}})
+            <a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}" class="label label-info">
 				<span class="glyphicon glyphicon-edit"></span> Editer
 			</a>
 			<a onclick="confirmDelArtiste('{{artiste.getLibelle}}',{{artiste.getArtiste}})" class="label label-danger">
 				<span class="glyphicon glyphicon-remove"></span> Supprimer
 			</a>
-		</span>
-	<h1>Fiche Artiste <small>{{artiste.getLibelle}} (#{{artiste.getArtiste}})</small></h1>
+        </small>
+    </h1>
 
 	<table class="table table-striped">
 		<tr>

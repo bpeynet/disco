@@ -35,7 +35,7 @@ class Label
      * @var string
      * @Assert\NotBlank(message="Le nom du label ne peut pas être vide")
      * @Assert\Length(
-     *      min="1", 
+     *      min="1",
      *      max = "45",
      *      minMessage=" Le label doit disposer d'un nom assez long : {{ limit }} caractère minimum.",
      *      maxMessage=" Le nom du label est trop long : {{ limit }} caractères maximum."
@@ -47,7 +47,7 @@ class Label
     /**
      * @var string
      * @Assert\Length(
-     *      min="4", 
+     *      min="4",
      *      max = "45",
      *      minMessage=" {{ limit }} caractères minimum.",
      *      maxMessage=" {{ limit }} caractères maximum."
@@ -109,7 +109,7 @@ class Label
     /**
      * @var string
      * @Assert\Length(
-     *      min="4", 
+     *      min="4",
      *      max = "250",
      *      minMessage=" {{ limit }} caractères minimum.",
      *      maxMessage=" {{ limit }} caractères maximum."
@@ -173,7 +173,7 @@ class Label
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -197,7 +197,7 @@ class Label
     /**
      * Get disques
      *
-     * @return ArrayCollection 
+     * @return ArrayCollection
      */
     public function getDisques()
     {
@@ -221,7 +221,7 @@ class Label
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -246,7 +246,7 @@ class Label
     /**
      * Get telephone
      *
-     * @return string 
+     * @return string
      */
     public function getTelephone()
     {
@@ -271,7 +271,7 @@ class Label
     /**
      * Get adresse
      *
-     * @return string 
+     * @return string
      */
     public function getAdresse()
     {
@@ -296,7 +296,7 @@ class Label
     /**
      * Get adresse2
      *
-     * @return string 
+     * @return string
      */
     public function getAdresse2()
     {
@@ -321,7 +321,7 @@ class Label
     /**
      * Get cp
      *
-     * @return string 
+     * @return string
      */
     public function getCp()
     {
@@ -346,7 +346,7 @@ class Label
     /**
      * Get ville
      *
-     * @return string 
+     * @return string
      */
     public function getVille()
     {
@@ -370,7 +370,7 @@ class Label
     /**
      * Get mailProgra
      *
-     * @return string 
+     * @return string
      */
     public function getMailProgra()
     {
@@ -394,7 +394,7 @@ class Label
     /**
      * Get contact1
      *
-     * @return string 
+     * @return string
      */
     public function getContact1()
     {
@@ -418,7 +418,7 @@ class Label
     /**
      * Get siteweb
      *
-     * @return string 
+     * @return string
      */
     public function getSiteweb()
     {
@@ -441,7 +441,7 @@ class Label
     /**
      * Get suppr
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSuppr()
     {
@@ -465,7 +465,7 @@ class Label
     /**
      * Get info
      *
-     * @return string 
+     * @return string
      */
     public function getInfo()
     {
@@ -475,7 +475,7 @@ class Label
     /**
      * Get label
      *
-     * @return integer 
+     * @return integer
      */
     public function getLabel()
     {

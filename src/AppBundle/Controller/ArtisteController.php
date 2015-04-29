@@ -32,7 +32,7 @@ class ArtisteController extends Controller
     		if($num >= 1) {
 	    		return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 	    	}
-    		
+
     		$retour = $em->getRepository('AppBundle:Artiste')->createQueryBuilder('a')
     			->where('a.libelle LIKE :libelle')
     			->setParameter('libelle','%'.$libelle.'%')
@@ -129,11 +129,9 @@ class ArtisteController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
-
-            $data = $form->getData();
-
-            $em = $this->getDoctrine()->getManager();
+        if($request->isMethod('POST')){
+            if ($form->isValid()) {
+                $data = $form->getData();
 
             $em->persist($data);
             $em->flush();
@@ -163,32 +161,32 @@ class ArtisteController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if($request->isMethod('POST')) {
+            if ($form->isValid()) {
 
-            $data = $form->getData();
+                $data = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getManager();
 
-            $em->persist($data);
-            $em->flush();
+                $em->persist($data);
+                $em->flush();
 
-            $num = $em->createQuery(
-                    'SELECT max(a.artiste)
-                    FROM AppBundle:Artiste a')
-                ->getResult()[0][1];
+                $num = $em->createQuery(
+                        'SELECT max(a.artiste)
+                        FROM AppBundle:Artiste a')
+                    ->getResult()[0][1];
 
-            $this->addFlash('success','L\'Artiste a bien été créé !');
+                $this->addFlash('success','L\'Artiste a bien été créé !');
 
-            return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
+                return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 
-        } else {
-            if ($request->isMethod('POST')) {
-                $this->addFlash('error','Les champs on été mal renseignés.');
-            }
-            return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
-        }
-    
-
+            } else {
+                if ($request->isMethod('POST')) {
+                    $this->addFlash('error','Les champs on été mal renseignés.');
+                }
+                return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
+           }
+       }
     }
 
 

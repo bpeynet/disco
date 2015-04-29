@@ -23,12 +23,12 @@ class LabelController extends Controller
     	$limit = $this->container->getParameter('listingLimit');
 
     	$retour = null;
-    	
+
     	if($request->isMethod("POST")) {
 
     		$num = $request->request->getInt('num',-1);
     		$libelle = $request->request->get('nom');
-    		
+
 	    	if($num >= 1) {
 
 	    		return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
@@ -132,23 +132,22 @@ class LabelController extends Controller
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if($request->isMethod('POST')) {
+            if ($form->isValid()) {
+                $data = $form->getData();
 
-            $data = $form->getData();
+                $em = $this->getDoctrine()->getManager();
 
-            $em = $this->getDoctrine()->getManager();
+                $em->persist($data);
+                $em->flush();
 
-            $em->persist($data);
-            $em->flush();
-
-            $this->addFlash('success','Edition terminée !');
+                $this->addFlash('success','Edition terminée !');
 
         } else {
             if ($request->isMethod('POST')) {
                 $this->addFlash('error','Problème(s) lors de l\'édition.');
             }
         }
-
 
         return $this->render('label/edit.html.twig',array('form'=>$form->createView(),'label'=>$label));
     }
@@ -167,10 +166,7 @@ class LabelController extends Controller
 
         $form->handleRequest($request);
 
-        
-        $form->handleRequest($request);
-
-        if($form->isValid()) {
+        if ($form->isValid()) {
 
             $data = $form->getData();
 
@@ -194,7 +190,6 @@ class LabelController extends Controller
             }
             return $this->render('label/create.html.twig',array('form'=>$form->createView()));
         }
-    
 
     }
 
