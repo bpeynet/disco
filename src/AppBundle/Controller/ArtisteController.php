@@ -120,7 +120,11 @@ class ArtisteController extends Controller
             );
         }
 
-        $form = $this->createForm(new ArtisteType(),$artiste);
+        if($request->isMethod('POST')) {
+            $form = $this->createForm(new ArtisteType(),$artiste);
+        } else {
+            $form = $this->createForm(new ArtisteType());
+        }
 
         $form->add('submit', 'submit', array(
                 'label' => 'Editer l\'Artiste',
@@ -129,22 +133,21 @@ class ArtisteController extends Controller
 
         $form->handleRequest($request);
 
-        if($request->isMethod('POST')){
-            if ($form->isValid()) {
-                $data = $form->getData();
-
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($data);
             $em->flush();
             $this->addFlash('success','L\'Artiste a bien été édité !');
 
-            } else {
-                if($request->isMethod('POST')) {
-                    $this->addFlash('error','Les champs on été mal renseignés.');
-                }
+        } else {
+            if($request->isMethod('POST')) {
+                $this->addFlash('error','Les champs on été mal renseignés.');
             }
-
-            return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
         }
+
+        return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
+        
     }
 
     /**
@@ -161,32 +164,29 @@ class ArtisteController extends Controller
             ));
 
         $form->handleRequest($request);
+        if ($form->isValid()) {
 
-        if($request->isMethod('POST')) {
-            if ($form->isValid()) {
+            $data = $form->getData();
 
-                $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
 
-                $em = $this->getDoctrine()->getManager();
+            $em->persist($data);
+            $em->flush();
 
-                $em->persist($data);
-                $em->flush();
+            $num = $em->createQuery(
+                    'SELECT max(a.artiste)
+                    FROM AppBundle:Artiste a')
+                ->getResult()[0][1];
 
-                $num = $em->createQuery(
-                        'SELECT max(a.artiste)
-                        FROM AppBundle:Artiste a')
-                    ->getResult()[0][1];
+            $this->addFlash('success','L\'Artiste a bien été créé !');
 
-                $this->addFlash('success','L\'Artiste a bien été créé !');
+            return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
 
-                return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
-
-            } else {
-                if ($request->isMethod('POST')) {
-                    $this->addFlash('error','Les champs on été mal renseignés.');
-                }
-                return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
-           }
+        } else {
+            if ($request->isMethod('POST')) {
+                $this->addFlash('error','Les champs on été mal renseignés.');
+            }
+            return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
        }
     }
 

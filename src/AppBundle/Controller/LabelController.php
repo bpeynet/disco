@@ -131,26 +131,24 @@ class LabelController extends Controller
             ));
 
         $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            $data = $form->getData();
 
-        if($request->isMethod('POST')) {
-            if ($form->isValid()) {
-                $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
 
-                $em = $this->getDoctrine()->getManager();
+            $em->persist($data);
+            $em->flush();
 
-                $em->persist($data);
-                $em->flush();
+            $this->addFlash('success','Edition terminée !');
 
-                $this->addFlash('success','Edition terminée !');
-
-            } else {
-                if ($request->isMethod('POST')) {
-                    $this->addFlash('error','Problème(s) lors de l\'édition.');
-                }
+        } else {
+            if ($request->isMethod('POST')) {
+                $this->addFlash('error','Problème(s) lors de l\'édition.');
             }
-
-            return $this->render('label/edit.html.twig',array('form'=>$form->createView(),'label'=>$label));
         }
+
+        return $this->render('label/edit.html.twig',array('form'=>$form->createView(),'label'=>$label));
     }
 
     /**
