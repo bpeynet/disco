@@ -82,7 +82,12 @@ class CdType extends AbstractType
 
 
 
-            ->add('nbPiste')
+            ->add('nbPiste','integer', array(
+                    'attr' => array(
+                            'min' => 0,
+                            'max' => 50
+                        )
+                ))
             ->add('various','checkbox', array('required' => false))
 
             ->add('userProgra', 'entity', array(
