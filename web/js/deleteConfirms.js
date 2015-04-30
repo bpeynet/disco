@@ -9,3 +9,9 @@ function confirmDelArtiste(artiste,id) {
 	 	window.location.replace('/artiste/delete/'+id);
 	}  
 } 
+
+function confirmDelCd(cd,id) {  
+	if (confirm("Supprimer le Cd "+cd+" ?" )) {
+	 	window.location.replace('/cd/delete/'+id);
+	}  
+} 

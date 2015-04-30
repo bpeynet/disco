@@ -66,12 +66,13 @@ class Cd
     protected $emprunts = array();
 
     /**
-     * @var CdGenre
-     *
-     * @ORM\OneToMany(targetEntity="CdGenre", mappedBy="cd")
-     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     * @ORM\ManyToMany(targetEntity="Genre")
+     * @ORM\JoinTable(name="f_cd_genre",
+     *      joinColumns={@ORM\JoinColumn(name="cd", referencedColumnName="cd")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="genre", referencedColumnName="genre")}
+     *      )
      */
-    protected $styles = array();
+    protected $styles;
 
     /**
      * @var string

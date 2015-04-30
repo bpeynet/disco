@@ -24,7 +24,7 @@ class CdGenre
     /**
      * @var Cd
      *
-     * @ORM\ManyToOne(targetEntity="Cd")
+     * @ORM\ManyToOne(targetEntity="Cd",cascade={"persist"})
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     private $cd = '0';
@@ -32,7 +32,7 @@ class CdGenre
     /**
      * @var Genre
      *
-     * @ORM\ManyToOne(targetEntity="Genre")
+     * @ORM\ManyToOne(targetEntity="Genre",cascade={"persist"})
      * @ORM\JoinColumn(name="genre", referencedColumnName="genre")
      */
     private $genre;

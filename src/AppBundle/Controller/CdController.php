@@ -46,17 +46,24 @@ class CdController extends Controller
 	    	}
 
     		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
-    			->where('c.titre LIKE :titre')
-    			->setParameter('titre','%'.$titre.'%');
+    			->where('c.titre LIKE :titre_l')
+    			->setParameter('titre_l','%'.$titre.'%')
+                ->orWhere('c.titre = :titre')
+                ->setParameter('titre',$titre);
 			if(!empty($artiste)) {
 				$retour = $retour->innerJoin('c.artiste','a')
-				->andWhere('a.libelle LIKE :artiste')
-				->setParameter('artiste','%'.$artiste.'%');
+				->andWhere('a.libelle LIKE :artiste_l')
+				->setParameter('artiste_l','%'.$artiste.'%')
+                ->orWhere('a.libelle = :artiste')
+                ->setParameter('artiste',$artiste);
 			}
 			if(!empty($label)) {
 				$retour = $retour->innerJoin('c.label','l')
-				->andWhere('l.libelle LIKE :label')
-				->setParameter('label','%'.$label.'%');
+				->andWhere('l.libelle LIKE :label_l')
+				->setParameter('label_l','%'.$label.'%')
+                ->orWhere('l.libelle = :label')
+                ->setParameter('label',$label);
+
 			}
 			if($annee != 0) {
 				$retour = $retour->andWhere('c.annee = :annee')
@@ -94,6 +101,7 @@ class CdController extends Controller
 
     	} else {
     		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
+                ->where('c.suppr != 1')
     			->orderBy('c.cd','DESC')
     			->setMaxResults($limit)
     			->getQuery()
@@ -112,9 +120,29 @@ class CdController extends Controller
     }
 
     /**
-	 * @Route("/cd/show/{id}", name="showCd")
+     * @Route("/cd/show/{id}", name="showCd")
      */
-	public function showAction($id) {
+    public function showAction($id) {
+        $cd = $this->getDoctrine()
+            ->getRepository('AppBundle:Cd')
+            ->find($id);
+
+        if(!$cd) {
+            throw $this->createNotFoundException(
+                'Aucun cd trouvé pour cet id : '.$id
+            );
+        }
+
+        return $this->render(
+            'cd/show.html.twig',
+            array('cd' => $cd)
+        );
+    }
+
+    /**
+	 * @Route("/cd/delete/{id}", name="deleteCd")
+     */
+	public function deleteAction($id) {
 		$cd = $this->getDoctrine()
 			->getRepository('AppBundle:Cd')
 			->find($id);
@@ -125,10 +153,13 @@ class CdController extends Controller
         	);
 		}
 
-		return $this->render(
-		    'cd/show.html.twig',
-		    array('cd' => $cd)
-		);
+		$em = $this->getDoctrine()->getManager();
+        $cd->setSuppr(1);
+        $em->persist($cd);
+        $em->flush();
+
+        $this->addFlash('success','Le Cd ne s\'affichera plus. Si cela est une erreur, contactez l\'admin !');
+        return $this->redirect($this->generateUrl('cd'));
 	}
 
 
@@ -148,6 +179,7 @@ class CdController extends Controller
 
         if($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
 
             
             $cd = $form->getData();
@@ -214,87 +246,36 @@ class CdController extends Controller
             }
             return $this->render('cd/create.html.twig',array('form'=>$form->createView()));
         }
-    
-
     }
 
     /**
-     * @Route("search/{entity}", name="searchAutoComplete")
+     *  @Route("/cd/autocomplete/{like}", name="autocompleteTitre")
      */
-    public function searchACAction($entity)
+    public function autocompleteAction($like, Request $request)
     {
-        $term = htmlspecialchars($_GET['term']);
+        $limit = $this->container->getParameter('listingLimit');
 
         $em = $this->getDoctrine()->getManager();
-        $res = $em->getRepository('AppBundle:'.$entity)->createQueryBuilder('e')
-            ->where('e.libelle LIKE :libelle')
-            ->setParameter('libelle','%'.$term.'%')
-            ->orderBy('e.libelle','ASC')
+        $res = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
+            ->select('c.cd AS num, c.titre AS label, c.titre AS value');
+        if($like) {
+            $res = $res->where('c.titre LIKE :titre')
+                ->setParameter('titre','%'.$request->query->get('term').'%');
+        } else {
+            $res = $res->where('c.titre = :titre')
+                ->setParameter('titre',$request->query->get('term'));
+        }
+            $res= $res
+            ->orderBy('c.titre','ASC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
 
-        $retour = array();
-
-        foreach ($res as $key => $value) {
-            $row = array();
-            if($entity == 'Artiste') {
-                $num = $value->getArtiste();
-            } elseif ($entity == 'Label') {
-                $num = $value->getLabel();
-            } else {
-                $num = 0;
-            }
-            $row['num'] = $num;
-            $libelle = $value->getLibelle();
-            $row['label'] = $libelle;
-            $row['value'] = $libelle;
-            array_push($retour, $row);
-        }
-
         $response = new JsonResponse();
-        $response->setData($retour);
-
+        $response->setData($res);
         return $response;
     }
 
-    /**
-     * @Route("get/{entity}", name="getObj")
-     */
-    public function getObjAction($entity)
-    {
-        $term = htmlspecialchars($_GET['term']);
-
-        $em = $this->getDoctrine()->getManager();
-        $res = $em->getRepository('AppBundle:'.$entity)->createQueryBuilder('e')
-            ->where('e.libelle = :libelle')
-            ->setParameter('libelle',$term)
-            ->orderBy('e.libelle','ASC')
-            ->getQuery()
-            ->getResult();
-
-        $retour = array();
-
-        foreach ($res as $key => $value) {
-            $row = array();
-            if($entity == 'Artiste') {
-                $num = $value->getArtiste();
-            } elseif ($entity == 'Label') {
-                $num = $value->getLabel();
-            } else {
-                $num = 0;
-            }
-            $row['num'] = $num;
-            $libelle = $value->getLibelle();
-            $row['label'] = $libelle;
-            $row['value'] = $libelle;
-            array_push($retour, $row);
-        }
-
-        $response = new JsonResponse();
-        $response->setData($retour);
-
-        return $response;
-    }
 
 }
 

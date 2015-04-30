@@ -11,7 +11,7 @@
 	{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 
 	{% if cd.getRetourlabel %}<div class="label label-warning">Retour label en attente</div>{% endif %}
-	{% if not cd.getAirplay %}<div class="label label-success">Présent dans un airplay</div>{% endif %}
+	{% if cd.getAirplay %}<div class="label label-success">Présent dans un airplay</div>{% endif %}
 	{% if cd.getEmprunts %}<div class="label label-success">CD libre</div>{% endif %}
 
 	<div class="row">
@@ -136,7 +136,7 @@
 						<td>
 							<ul class="list-group">
 								{% for style in cd.getStyles.toArray %}
-									<li class="list-group-item">{{style.getGenre.getLibelle}}</li>
+									<li class="list-group-item">{{style.getLibelle}}</li>
 								{% endfor %}
 							</ul>
 						</td>

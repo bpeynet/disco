@@ -170,7 +170,10 @@
 								</td>
 								<td>{% if cd.getAnnee %}{{cd.getAnnee}}{% endif %}</td>
 								<td>{{cd.getTitre}}</td>
-								<td><a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+								<td>
+									<a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+									<a href="#" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+								</td>
 								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
 								<td>{% if cd.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>
 								<td>{% if cd.getLangue and cd.getLangue.getLangue != 0 %}{{cd.getLangue.getLibelle}}{% endif %}</td>
@@ -194,5 +197,38 @@
 {% block javascripts %}
 <script>
     $('#cd').focus();
+
+	$(function() {
+	  	function log( input, message ) {
+	  		$("#"+input).text(message.libelle);
+	    }
+	 	var artisteCompleteParameters = {
+	      source: "{{path('autocompleteArtiste',{'like':1})}}",
+	      minLength: 2,
+	      delay: 300,
+	      select: function( event, ui ) {
+	        $(this).text(ui.item.libelle);
+	      }
+	    };
+	    $( "#artiste" ).autocomplete(artisteCompleteParameters);
+
+	    $( "#label" ).autocomplete({
+	      source: "{{path('autocompleteLabel',{'like':1})}}",
+	      minLength: 2,
+	      delay: 300,
+	      select: function( event, ui ) {
+	        log('label',ui.item);
+	    	}
+	    });
+
+	    $( "#titre" ).autocomplete({
+	      source: "{{path('autocompleteTitre',{'like':1})}}",
+	      minLength: 2,
+	      delay: 300,
+	      select: function( event, ui ) {
+	        	log('titre',ui.item);
+	    	}
+	    });
+	});
 </script>
 {% endblock %}

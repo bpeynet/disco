@@ -22,12 +22,6 @@ class Genre
     private $genre;
 
     /**
-     * @ORM\OneToMany(targetEntity="Cd", mappedBy="genre")
-     * @ORM\JoinColumn(name="genre", referencedColumnName="genre")
-     */
-    private $disques;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=45, nullable=false)

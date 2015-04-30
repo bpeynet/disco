@@ -11,6 +11,10 @@
 	border-top: none;
 }
 
+#appbundle_cd_styles {
+	height: 300px;
+}
+
 #menu_gauche {
 	
 }
@@ -23,4 +27,68 @@ ul.ui-autocomplete {
 	max-height: 400px;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+ul.ui-widget-content {
+    border: 1px solid #DDD;
+    background: url("images/ui-bg_highlight-soft_100_eeeeee_1x100.png") repeat-x scroll 50% top #EEE;
+    color: #333;
+}
+ul.ui-widget {
+    font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+}
+ul.ui-menu {
+    list-style: outside none none;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    outline: medium none;
+}
+
+ul.ui-autocomplete li:hover {
+	background: orange;
+}
+
+.ui-autocomplete {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    cursor: default;
+}
+.ui-front {
+    z-index: 100;
+}
+ol, ul {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.ui-menu .ui-menu-item {
+    position: relative;
+    margin: 0px;
+    padding: 3px 1em 3px 0.4em;
+    cursor: pointer;
+    min-height: 0px;
+}
+* {
+    box-sizing: border-box;
+}
+.ui-menu {
+    list-style: outside none none;
+}
+.ui-autocomplete {
+    cursor: default;
+}
+
+.ui-state-hover a:hover,
+	color: #c77405;
+	text-decoration: none;
+}
+
+.ui-state-focus,
+	border: 1px solid #fbcb09;
+	background: #fdf5ce;
+	font-weight: bold;
+	color: #c77405;
 }
