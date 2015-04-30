@@ -57,7 +57,13 @@
 					<div class="row">
 						<div class="table-responsive">
 							<table class="table table-striped" id="pistes">
-
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
 							</table>
 						</div>
 					</div>
@@ -174,7 +180,7 @@
   		var nbPiste = $("#nbPiste").val();
   		var table = $("#pistes");
   		for (var i = 1; i <= nbPiste; i++) {
-  			table.insertRow([i]);
+  			table.append('<tr>Coucou :D</tr>')
   		};
   	});
 

@@ -172,11 +172,11 @@
 								<td>{{cd.getTitre}}</td>
 								<td><a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a></td>
 								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
-								<td>{% if cd.getLabel.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>
-								<td>{% if cd.getLangue.getLangue %}{{cd.getLangue.getLibelle}}{% endif %}</td>
+								<td>{% if cd.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>
+								<td>{% if cd.getLangue and cd.getLangue.getLangue != 0 %}{{cd.getLangue.getLibelle}}{% endif %}</td>
 								<td>{% if cd.getGenre.getGenre %}{{cd.getGenre.getLibelle}}{% endif %}</td>
-								<td>{% if cd.getType.getType %}{{cd.getType.getLibelle}}{% endif %}</td>
-								<td>{% if cd.getSupport.getSupport %}{{cd.getSupport.getLibelle}}{% endif %}</td>
+								<td>{% if cd.getType and cd.getType.getType != 0  %}{{cd.getType.getLibelle}}{% endif %}</td>
+								<td>{% if cd.getSupport and cd.getSupport.getSupport != 0  %}{{cd.getSupport.getLibelle}}{% endif %}</td>
 							</tr>
 						{% endfor %}
 					</table>

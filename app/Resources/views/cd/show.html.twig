@@ -43,19 +43,19 @@
 						<td> {{cd.getAnnee}}</td>
 					</tr>
 					{% endif %}
-					{% if cd.getLabel.getLabel != 0 %} 
+					{% if cd.getLabel and cd.getLabel.getLabel != 0 %} 
 					<tr>
 						<th>Label</th>
 						<td><a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a></td>
 					</tr>
 					{% endif %}
-					{% if cd.getMaison.getLabel != 0 %} 
+					{% if cd.getMaison and cd.getMaison.getLabel != 0 %} 
 					<tr>
 						<th>Maison</th>
 						<td><a href="{{ path('showLabel',{'id':cd.getMaison.getLabel}) }}">{{cd.getMaison.getLibelle}}</a></td>
 					</tr>
 					{% endif %}
-					{% if cd.getDistrib.getLabel != 0 %} 
+					{% if cd.getDistrib and cd.getDistrib.getLabel != 0 %} 
 					<tr>
 						<th>Distributeur</th>
 						<td><a href="{{ path('showLabel',{'id':cd.getDistrib.getLabel}) }}">{{cd.getDistrib.getLibelle}}</a></td>
@@ -101,19 +101,19 @@
 						<th>Enregistré dans Rivendel</th>
 					</tr>
 					{% endif %}
-					{% if cd.getSupport.getSupport %}
+					{% if cd.getSupport and cd.getSupport.getSupport %}
 					<tr>
 						<th>Support</th>
 						<td>{{cd.getSupport.getLibelle}}</td>
 					</tr>
 					{% endif %}
-					{% if cd.getType.getType %}
+					{% if cd.getType and cd.getType != 0 %}
 					<tr>
 						<th>Type</th>
 						<td>{{cd.getType.getLibelle}}</td>
 					</tr>
 					{% endif %}
-					{% if cd.getLangue.getLangue != 0 %}
+					{% if cd.getLangue and cd.getLangue.getLangue != 0 %}
 					<tr>
 						<th>Langue</th>
 						<td>{{cd.getLangue.getLibelle}}</td>
@@ -189,13 +189,13 @@
 					</div>
 					<div class="col-md-4">
 						<table class="table table-striped">
-							{% if cd.getUserprogra.getUser %}
+							{% if cd.getUserprogra and cd.getUserprogra.getUser %}
 								<tr>
 									<th>Programmateur</th>
 									<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
 								</tr>
 							{% endif %}
-							{% if cd.getRotation.getRotation <= 8 %}
+							{% if cd.getRotation and cd.getRotation.getRotation <= 8 %}
 								<tr>
 									<th>Rotation</th>
 									<td>{% if cd.getRotation.getRotation <= 8 and cd.getRotation.getRotation > 0 %} {{cd.getRotation.getLibelle}} {% endif %}</td>

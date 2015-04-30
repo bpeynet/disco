@@ -114,9 +114,9 @@ class Cd
      * @var \DateTime
      *
      * @Assert\Type(type="\DateTime", message="La valeur {{ value }} n'est pas un type date valide.")
-     * @ORM\Column(name="dsortie", type="datetime", nullable=false)
+     * @ORM\Column(name="dsortie", type="date", nullable=false)
      */
-    private $dsortie = '0000-00-00 00:00:00';
+    private $dsortie = '0000-00-00';
 
     /**
      * @var string
@@ -190,16 +190,9 @@ class Cd
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dsaisie", type="datetime", nullable=false)
+     * @ORM\Column(name="dsaisie", type="date", nullable=false)
      */
-    private $dsaisie = '0000-00-00 00:00:00';
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="jsaisie", type="integer", nullable=false)
-     */
-    private $jsaisie = 0;
+    private $dsaisie = '0000-00-00';
 
     /**
      * @var boolean
@@ -784,29 +777,6 @@ class Cd
     public function getDsaisie()
     {
         return $this->dsaisie;
-    }
-
-    /**
-     * Set jsaisie
-     *
-     * @param integer $jsaisie
-     * @return Cd
-     */
-    public function setJsaisie($jsaisie)
-    {
-        $this->jsaisie = $jsaisie;
-
-        return $this;
-    }
-
-    /**
-     * Get jsaisie
-     *
-     * @return integer
-     */
-    public function getJsaisie()
-    {
-        return $this->jsaisie;
     }
 
     /**
