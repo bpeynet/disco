@@ -84,10 +84,7 @@ class CdType extends AbstractType
 
             ->add('nbPiste')
             ->add('various','checkbox', array('required' => false))
-            /*->add('pistes','entity', array(
-                    'class' => 'AppBundle:Piste',
-                    'property' => 'titre'
-                ))*/
+
             ->add('userProgra', 'entity', array(
                     'class' => 'AppBundle:User',
                     'property' => 'libelle',

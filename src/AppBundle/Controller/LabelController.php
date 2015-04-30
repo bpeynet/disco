@@ -129,25 +129,23 @@ class LabelController extends Controller
                 'label' => 'Finaliser l\'édition',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
-
         $form->handleRequest($request);
         
-        if ($form->isValid()) {
-            $data = $form->getData();
+        if($request->isMethod('POST')) {
+            if ($form->isValid()) {
+                $data = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
+                
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
 
-            $em->persist($data);
-            $em->flush();
+                $this->addFlash('success','Edition terminée !');
 
-            $this->addFlash('success','Edition terminée !');
-
-        } else {
-            if ($request->isMethod('POST')) {
+            } else {
                 $this->addFlash('error','Problème(s) lors de l\'édition.');
             }
-        }
 
+        }
         return $this->render('label/edit.html.twig',array('form'=>$form->createView(),'label'=>$label));
     }
 
@@ -165,31 +163,31 @@ class LabelController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $data = $form->getData();
 
-            $data = $form->getData();
+                $em = $this->getDoctrine()->getManager();
 
-            $em = $this->getDoctrine()->getManager();
+                $em->persist($data);
+                $em->flush();
 
-            $em->persist($data);
-            $em->flush();
+                $num = $em->createQuery(
+                        'SELECT max(l.label)
+                        FROM AppBundle:Label l')
+                    ->getResult()[0][1];
 
-            $num = $em->createQuery(
-                    'SELECT max(l.label)
-                    FROM AppBundle:Label l')
-                ->getResult()[0][1];
+                $this->addFlash('success','Le label a été créé !');
 
-            return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
-
-            $this->addFlash('success','Le label a été créé !');
-
-        } else {
-            if($request->isMethod('POST')) {
+                return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
+            } else {
                 $this->addFlash('error','Certains champs sont mal remplis.');
-            }
-            return $this->render('label/create.html.twig',array('form'=>$form->createView()));
+                return $this->render('label/create.html.twig',array('form'=>$form->createView()));
+            }        
         }
 
+        return $this->render('label/create.html.twig',array('form'=>$form->createView()));
     }
 
     /**
