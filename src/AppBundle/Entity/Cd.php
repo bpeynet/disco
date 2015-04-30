@@ -340,9 +340,17 @@ class Cd
      *
      * @param ArrayCollection $pistes
      */
-    public function setpistes($pistes)
+    public function setPistes($pistes)
     {
         $this->pistes = $pistes;
+    }
+
+    /**
+     * Add pistes
+     * @param $piste
+     */
+    public function addPistes($piste) {
+        
     }
 
     /**
@@ -350,7 +358,7 @@ class Cd
      *
      * @return ArrayCollection
      */
-    public function getpistes()
+    public function getPistes()
     {
         return $this->pistes;
     }

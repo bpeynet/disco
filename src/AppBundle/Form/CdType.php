@@ -102,18 +102,6 @@ class CdType extends AbstractType
                     'required' => false
                 ))
             ->add('comment', 'textarea', array('required' => false))
-            ->add('noteMoy', 'text', array('read_only' => true))
-            /*->add('note','entity',  array(
-                    'class' => 'AppBundle:CdNote',
-                    'property' => 'note'
-                ))*/
-
-
-            //->add('commentaire','textarea', array('required' => false))
-
-
-
-            ->add('retourLabel', 'text', array('required' => false))
 
 
 

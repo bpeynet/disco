@@ -107,7 +107,7 @@
 						<td>{{cd.getSupport.getLibelle}}</td>
 					</tr>
 					{% endif %}
-					{% if cd.getType and cd.getType != 0 %}
+					{% if cd.getType and cd.getType.getType != 0 %}
 					<tr>
 						<th>Type</th>
 						<td>{{cd.getType.getLibelle}}</td>
@@ -173,12 +173,12 @@
 						{% if cd.getPistes.toArray != null %}
 						<h4>Pistes en détail</h4>
 						<table class="table table-striped">
-							<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Langue</th><th>Anim</th><th>Paulo</th><th>Star</th></tr></thead>
+							<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Fr</th><th>Anim</th><th>Paulo</th><th>Star</th></tr></thead>
 							{% for piste in cd.getPistes.toArray %}
 								<tr>
 									<td>{{piste.getTitre}}</td>
 									<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
-									<td>{% if piste.getLangue.getLangue != 0 %}{{piste.getLangue.getLangue}}{% elseif cd.getLangue.getLangue != 0 %}{{cd.getLangue.getLibelle}}{% endif %}</td>
+									<td {% if piste.getLangue %}class="success"{% endif %}></td>
 									<td class="{% if piste.getAnim %}success{% endif %}"></td>
 									<td class="{% if piste.getPaulo %}success{% endif %}"></td>
 									<td class="{% if piste.getStar %}success{% endif %}"></td>

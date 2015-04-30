@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Cd;
+use AppBundle\Entity\Piste;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -145,7 +146,6 @@ class CdController extends Controller
 
         $form->handleRequest($request);
 
-
         if($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
@@ -156,20 +156,53 @@ class CdController extends Controller
             $cd->setMaison(null);
             $cd->setDistrib(null);
 
-            $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($request->request->get('appbundle_cd')['artiste']);
-            $genre = $em->getRepository('AppBundle:Genre')->find(intval($request->request->get('appbundle_cd')['genre']));
+            $req = $request->request->get('appbundle_cd');
+
+            $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
+            $genre = $em->getRepository('AppBundle:Genre')->find(intval($req['genre']));
             $cd->setArtiste($artiste);
             $cd->setGenre($genre);
-
-            var_dump($cd);
 
             $em->persist($cd);
             $em->flush();
 
+            for($i = 1; $i <= $req['nbPiste']; $i++) {
+                $piste = new Piste();
+                $piste->setPiste($i);
+                $piste->setCd($cd);
+                $piste->setTitre($request->request->get('titre_'.$i));
+                if(empty($request->request->get('artiste_'.$i))) {
+                    $p_artiste = $cd->getArtiste();
+                } else {
+                    $p_artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($request->request->get('artiste_'.$i));
+                    if(empty($p_artiste)) { $p_artiste = $cd->getArtiste(); }
+                }
+
+                $piste->setArtiste($p_artiste);
+                if($request->request->get('fr_'.$i)) {
+                    $piste->setLangue(true);
+                } else { $piste->setLangue(false); }
+                if($request->request->get('anim_'.$i)) {
+                    $piste->setAnim(true);
+                } else { $piste->setAnim(false); }
+                if($request->request->get('paulo_'.$i)) {
+                    $piste->setPaulo(true);
+                } else { $piste->setPaulo(false); }
+                if($request->request->get('star_'.$i)) {
+                    $piste->setStar(true);
+                } else { $piste->setStar(false); }
+
+                $em->persist($piste);
+                $em->flush();
+
+            }
             $num = $em->createQuery(
                     'SELECT max(c.cd)
                     FROM AppBundle:Cd c')
                 ->getResult()[0][1];
+
+
+
 
             $this->addFlash('success','Le CD a bien été créé !');
 

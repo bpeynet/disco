@@ -58,33 +58,33 @@ class Piste
     private $artiste = '0';
 
     /**
-     * @var Langue
+     * @var boolean
      *
-     * @ORM\ManyToOne(targetEntity="Langue")
-     * @ORM\JoinColumn(name="langue", referencedColumnName="langue")
+     * @ORM\ManyToOne(targetEntity="boolean")
+     * @ORM\Column(name="langue", type="boolean", nullable=false)
      */
-    private $langue = '0';
+    private $langue = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="anim", type="boolean", nullable=false)
      */
-    private $anim = '0';
+    private $anim = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="paulo", type="boolean", nullable=false)
      */
-    private $paulo = '0';
+    private $paulo = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="star", type="boolean", nullable=false)
      */
-    private $star = '0';
+    private $star = false;
 
 
 
@@ -206,7 +206,7 @@ class Piste
     /**
      * Set langue
      *
-     * @param integer $langue
+     * @param boolean $langue
      * @return Piste
      */
     public function setLangue($langue)
@@ -219,7 +219,7 @@ class Piste
     /**
      * Get langue
      *
-     * @return integer 
+     * @return boolean 
      */
     public function getLangue()
     {
