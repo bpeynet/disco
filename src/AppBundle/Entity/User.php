@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="f_user")
  * @ORM\Entity
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var integer
@@ -65,13 +66,6 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="groupe", type="string", length=45, nullable=false)
-     */
-    private $groupe = '0';
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="emission", type="string", length=200, nullable=false)
      */
     private $emission = '';
@@ -110,6 +104,13 @@ class User
      * @ORM\Column(name="alerte_progra", type="boolean", nullable=false)
      */
     private $alerteProgra = '0';
+
+    /**
+     *  @var Role[]
+     *
+     * @ORM\Column(name="role", type="string", nullable=false)
+     */
+    private $roles = array();
 
     /**
      * Set disquesManipules
@@ -250,29 +251,6 @@ class User
     }
 
     /**
-     * Set groupe
-     *
-     * @param string $groupe
-     * @return User
-     */
-    public function setGroupe($groupe)
-    {
-        $this->groupe = $groupe;
-
-        return $this;
-    }
-
-    /**
-     * Get groupe
-     *
-     * @return string 
-     */
-    public function getGroupe()
-    {
-        return $this->groupe;
-    }
-
-    /**
      * Set emission
      *
      * @param string $emission
@@ -347,7 +325,7 @@ class User
      * @param string $pwd
      * @return User
      */
-    public function setPwd($pwd)
+    public function setPassword($pwd)
     {
         $this->pwd = $pwd;
 
@@ -359,7 +337,7 @@ class User
      *
      * @return string 
      */
-    public function getPwd()
+    public function getPassword()
     {
         return $this->pwd;
     }
@@ -370,7 +348,7 @@ class User
      * @param string $login
      * @return User
      */
-    public function setLogin($login)
+    public function setUsername($login)
     {
         $this->login = $login;
 
@@ -382,9 +360,37 @@ class User
      *
      * @return string 
      */
-    public function getLogin()
+    public function getUsername()
     {
         return $this->login;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param Role[] $roles
+     * @return User
+     */
+    public function setRoles($roles) {
+        $this->roles = $roles;
+    } 
+
+    /**
+     * Get roles
+     * 
+     * @return Role[]
+     */
+    public function getRoles() {
+        if(!empty($this->roles)) {
+            return array($this->roles);
+        } else {
+            return array('ROLE_USER');
+        }
     }
 
     /**
@@ -418,5 +424,33 @@ class User
     public function getUser()
     {
         return $this->user;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->user,
+            $this->login,
+            $this->pwd,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->user,
+            $this->login,
+            $this->pwd,
+            // see section on salt below
+            // $this->salt
+        ) = unserialize($serialized);
+    }
+
+    public function eraseCredentials()
+    {
     }
 }

@@ -33,7 +33,7 @@
                     <li><a href="/cd">Disques</a></li>
                     <li><a href="/artiste">Artistes</a></li>
                     <li><a href="/label">Labels</a></li>
-                    <p class="navbar-text navbar-right">Connecté en tant que <a href="#" class="navbar-link">Petit Bonhomme</a></p>
+                    <p class="navbar-text navbar-right">{% if app.user %}{{app.user.getLibelle}}{% else %}Non connecté{% endif %}</p>
                 </ul>
             </div>
         </nav>
@@ -61,6 +61,8 @@
                 {% block body %}{% endblock %}
             </div>
         </div>
+
         {% block javascripts %}{% endblock %}
+        
     </body>
 </html>
