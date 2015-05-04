@@ -59,8 +59,10 @@
                                 </td>
                                 <td>
                                     <a href="{{ path('showArtiste',{'id':result.getArtiste}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
-                                    <a href="{{ path('editArtiste',{'id':result.getArtiste}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-                                    <a href="#" onclick="confirmDelArtiste('{{result.getLibelle}}',{{result.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+                                    {% if is_granted('ROLE_PROGRA') %}
+                                        <a href="{{ path('editArtiste',{'id':result.getArtiste}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
+                                        <a href="#" onclick="confirmDelArtiste('{{result.getLibelle}}',{{result.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+                                    {% endif %}
                                 </td>
                             {% elseif class(result)=='Label' %}
                                 <td>Label</td>
@@ -71,8 +73,10 @@
                                 </td>
                                 <td>
                                     <a href="{{ path('showLabel',{'id':result.getLabel}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
-                                    <a href="{{ path('editLabel',{'id':result.getLabel}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-                                    <a href="#" onclick="confirmDelLabel('{{result.getLibelle}}',{{result.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+                                    {% if is_granted('ROLE_PROGRA') %}
+                                        <a href="{{ path('editLabel',{'id':result.getLabel}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
+                                        <a href="#" onclick="confirmDelLabel('{{result.getLibelle}}',{{result.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+                                    {% endif %}
                                 </td>
                             {% endif %}
                         </tr>

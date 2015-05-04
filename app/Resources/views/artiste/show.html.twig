@@ -5,12 +5,14 @@
         Fiche Artiste
         <small>
             {{artiste.getLibelle}} (#{{artiste.getArtiste}})
-            <a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}" class="label label-info">
-				<span class="glyphicon glyphicon-edit"></span> Editer
-			</a>
-			<a onclick="confirmDelArtiste('{{artiste.getLibelle}}',{{artiste.getArtiste}})" class="label label-danger">
-				<span class="glyphicon glyphicon-remove"></span> Supprimer
-			</a>
+            {% if is_granted('ROLE_PROGRA') %}
+	            <a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}" class="label label-info">
+					<span class="glyphicon glyphicon-edit"></span> Editer
+				</a>
+				<a onclick="confirmDelArtiste('{{artiste.getLibelle}}',{{artiste.getArtiste}})" class="label label-danger">
+					<span class="glyphicon glyphicon-remove"></span> Supprimer
+				</a>
+			{% endif %}
         </small>
     </h1>
 
@@ -41,7 +43,7 @@
 							{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 						</td>
 						<td><a href="{{ path('showCd',{'id':cd.getCd}) }}">{{cd.getTitre}}</a></td>
-						<td>{% if cd.getLabel.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>
+						<td>{% if cd.getLabel and cd.getLabel.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>
 						<td>{{cd.getAnnee}}</td>
 					</tr>
 				{% endfor %}

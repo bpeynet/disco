@@ -37,7 +37,10 @@
 		</fieldset>
 		</form>
 
-		<a href="{{ path('createLabel') }}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un Label</a>
+		{% if is_granted('ROLE_PROGRA') %}
+			<a href="{{ path('createLabel') }}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un Label</a>
+		{% endif %}
+
 	</div>
 </div>
 
@@ -62,8 +65,10 @@
 								<td>{{label.getLibelle}}</td>
 								<td>
 									<a href="{{ path('showLabel',{'id':label.getLabel}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
-									<a href="{{ path('editLabel',{'id':label.getLabel}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-									<a href="#" onclick="confirmDelLabel('{{label.getLibelle}}',{{label.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+									{% if is_granted('ROLE_PROGRA') %}
+										<a href="{{ path('editLabel',{'id':label.getLabel}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
+										<a href="#" onclick="confirmDelLabel('{{label.getLibelle}}',{{label.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+									{% endif %}
 								</td>
 								<td>{{label.getEmail}}</td>
 							</tr>

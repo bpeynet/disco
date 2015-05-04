@@ -133,7 +133,9 @@
 		</fieldset>
 		</form>
 
-		<a href="{{path('createCd')}}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un CD</a>
+		{% if is_granted('ROLE_PROGRA') %}
+			<a href="{{path('createCd')}}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un CD</a>
+		{% endif %}
 	</div>
 </div>
 
@@ -172,7 +174,9 @@
 								<td>{{cd.getTitre}}</td>
 								<td>
 									<a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-									<a href="#" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+									{% if is_granted('ROLE_PROGRA') %}
+										<a href="#" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+									{% endif %}
 								</td>
 								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
 								<td>{% if cd.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>

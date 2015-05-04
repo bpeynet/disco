@@ -20,38 +20,13 @@ class DefaultController extends Controller
  		return $this->redirect($this->generateUrl('search'));
  	}
 
-
-	/**
-	 * @Route("/form", name="form")
-     */
-	public function formAction(Request $request) {
-		$post = new Cd();
-		$form = $this->createForm(new CdType(),$post);
-		$form->add('submit', 'submit', array(
-				'label' => 'Create',
-				'attr' => array('class' => 'btn btn-default pull-right')
-			));
-		return $this->render('default/form.html.twig',array('form'=>$form->createView()));
-		/*
-		$form->handleRequest($request);
-		if($form->isSubmitted() && $form->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($post);
-			$em->flush();
-		}
-
-		return $this->redirect( $this->generateUrl(
-				'post',
-				array('id'=>$post->getCd()
-			)
-		));
-		*/
-	}
-
     /**
      * @Route("/search", name="search")
      */
     public function search(Request $request) {
+
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
+
         $results = array();
         $q = $request->query->get('q');
         if ($q) {

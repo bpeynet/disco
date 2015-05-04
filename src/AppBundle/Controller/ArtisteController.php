@@ -17,6 +17,7 @@ class ArtisteController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
 
     	$doctrine = $this->getDoctrine();
 	    $em = $doctrine->getManager();
@@ -64,6 +65,8 @@ class ArtisteController extends Controller
 	 * @Route("/artiste/show/{id}", name="showArtiste")
      */
 	public function showAction($id) {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
+
 		$artiste = $this->getDoctrine()
 			->getRepository('AppBundle:Artiste')
 			->find($id);
@@ -84,6 +87,8 @@ class ArtisteController extends Controller
      * @Route("/artiste/delete/{id}", name="deleteArtiste")
      */
     public function deleteAction($id) {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un artiste.');
+
         $artiste = $this->getDoctrine()
             ->getRepository('AppBundle:Artiste')
             ->find($id);
@@ -110,6 +115,8 @@ class ArtisteController extends Controller
      * @Route("/artiste/edit/{id}", name="editArtiste")
      */
     public function editAction($id, Request $request) {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut modifier un artiste.');
+
         $artiste = $this->getDoctrine()
             ->getRepository('AppBundle:Artiste')
             ->find($id);
@@ -147,6 +154,8 @@ class ArtisteController extends Controller
      */
     public function createAction(Request $request, $libelle = "")
     {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un artiste.');
+
         $post = new Artiste();
         $post->setLibelle($libelle);
         $form = $this->createForm(new ArtisteType(),$post);

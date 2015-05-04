@@ -211,5 +211,13 @@
   	});
 
   });
-  </script>
+
+
+	{% if app.user %}
+		test = {{app.user.getUser|json_encode|raw}}
+		$("#appbundle_cd_userProgra").val(test);
+
+	{% endif %}
+
+</script>
 {% endblock %}

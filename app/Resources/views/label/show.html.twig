@@ -1,7 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<h1>Fiche Label <small>{{label.getLibelle}} (#{{label.getLabel}})</small></h1>
+	<h1>
+		Fiche Label 
+		<small>
+			{{label.getLibelle}} (#{{label.getLabel}})
+			{% if is_granted('ROLE_PROGRA') %}
+	            <a href="{{ path('editLabel',{'id':label.getLabel}) }}" class="label label-info">
+					<span class="glyphicon glyphicon-edit"></span> Editer
+				</a>
+				<a onclick="confirmDelLabel('{{label.getLibelle}}',{{label.getLabel}})" class="label label-danger">
+					<span class="glyphicon glyphicon-remove"></span> Supprimer
+				</a>
+			{% endif %}
+		</small>
+	</h1>
 
 <div class="row">
 	<div class="col-md-5">

@@ -19,6 +19,7 @@ class CdController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
 
     	$doctrine = $this->getDoctrine();
 	    $em = $doctrine->getManager();
@@ -124,6 +125,8 @@ class CdController extends Controller
      * @Route("/cd/show/{id}", name="showCd")
      */
     public function showAction($id) {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
+
         $cd = $this->getDoctrine()
             ->getRepository('AppBundle:Cd')
             ->find($id);
@@ -144,6 +147,8 @@ class CdController extends Controller
 	 * @Route("/cd/delete/{id}", name="deleteCd")
      */
 	public function deleteAction($id) {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un disque.');
+
 		$cd = $this->getDoctrine()
 			->getRepository('AppBundle:Cd')
 			->find($id);
@@ -169,6 +174,8 @@ class CdController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un disque.');
+
         $post = new Cd();
         $form = $this->createForm(new CdType(),$post);
         $form->add('submit', 'submit', array(
@@ -254,6 +261,7 @@ class CdController extends Controller
      */
     public function autocompleteAction($like, Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut modifier un disque.');
         $limit = $this->container->getParameter('listingLimit');
 
         $em = $this->getDoctrine()->getManager();

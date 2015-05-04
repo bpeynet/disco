@@ -1,7 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<h1>Fiche de disque <small>{{cd.getTitre}} de {{cd.getArtiste.getLibelle}} (#{{cd.getCD}})</small></h1>
+	<h1>
+		Fiche de disque 
+		<small>
+			{{cd.getTitre}} de {{cd.getArtiste.getLibelle}} (#{{cd.getCD}})
+			{% if is_granted('ROLE_PROGRA') %}
+	            <a href="{{ path('editCd',{'id':cd.getCd}) }}" class="label label-info">
+					<span class="glyphicon glyphicon-edit"></span> Editer
+				</a>
+				<a onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})" class="label label-danger">
+					<span class="glyphicon glyphicon-remove"></span> Supprimer
+				</a>
+			{% endif %}
+		</small>
+	</h1>
 	
 	<div class="label label-info">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
 
@@ -146,7 +159,7 @@
 			</div>
 		</div>
 	</div>
-
+{% if is_granted('ROLE_PROGRA') %}
 	<div class="row">
 		<div id="tabs" class="col-md-12">
 			<ul class="nav nav-tabs nav-justified">
@@ -290,7 +303,7 @@
 			</div>
 		</div>
 	</div>
-
+{% endif %}
 {% endblock %}
 
 {% block javascripts %}

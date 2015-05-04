@@ -17,6 +17,7 @@ class LabelController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
 
     	$doctrine = $this->getDoctrine();
 	    $em = $doctrine->getManager();
@@ -64,6 +65,8 @@ class LabelController extends Controller
      * @Route("/label/show/{id}", name="showLabel")
      */
     public function showAction($id) {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
+        
         $label = $this->getDoctrine()
             ->getRepository('AppBundle:Label')
             ->find($id);
@@ -84,6 +87,8 @@ class LabelController extends Controller
 	 * @Route("/label/delete/{id}", name="deleteLabel")
      */
 	public function deleteAction($id) {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un label.');
+
 		$label = $this->getDoctrine()
 			->getRepository('AppBundle:Label')
 			->find($id);
@@ -113,6 +118,8 @@ class LabelController extends Controller
      * @Route("/label/edit/{id}", name="editLabel")
      */
     public function editAction($id,Request $request) {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut modifier un label.');
+
         $label = $this->getDoctrine()
             ->getRepository('AppBundle:Label')
             ->find($id);
@@ -154,6 +161,8 @@ class LabelController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un label.');
+
         $post = new Label();
         $form = $this->createForm(new LabelType(),$post);
         $form->add('submit', 'submit', array(

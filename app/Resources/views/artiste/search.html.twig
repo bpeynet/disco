@@ -36,7 +36,9 @@
 		</fieldset>
 		</form>
 
-		<a href="{{ path('createArtiste') }}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un Artiste</a>
+		{% if is_granted('ROLE_PROGRA') %}
+			<a href="{{ path('createArtiste') }}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un Artiste</a>
+		{% endif %}
 	</div>
 </div>
 
@@ -64,8 +66,10 @@
 							<td>{{artiste.getLibelle}}</td>
 							<td>
 								<a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-								<a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-edit"></span></a>
-								<a href="#" onclick="confirmDelArtiste('{{artiste.getLibelle}}',{{artiste.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+								{% if is_granted('ROLE_PROGRA') %}
+									<a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-edit"></span></a>
+									<a href="#" onclick="confirmDelArtiste('{{artiste.getLibelle}}',{{artiste.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+								{% endif %}
 							</td>
 							<td>{{ artiste.getDisques|length }}</td>
 							<td>{% if artiste.getSiteweb %}<a href="{{artiste.getSiteweb}}" target="_blank">Visiter</a>{% endif %}</td>
