@@ -33,6 +33,9 @@
                     <li><a href="/cd">Disques</a></li>
                     <li><a href="/artiste">Artistes</a></li>
                     <li><a href="/label">Labels</a></li>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <li><a href="/admin">Administration</a></li>
+                    {% endif %}
                     <p class="navbar-text navbar-right">{% if app.user %}{{app.user.getLibelle}}{% else %}Non connecté{% endif %}</p>
                 </ul>
             </div>

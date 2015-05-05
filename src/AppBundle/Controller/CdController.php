@@ -177,6 +177,8 @@ class CdController extends Controller
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un disque.');
 
         $post = new Cd();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if($user != false) { $post->setUserProgra($user); }
         $form = $this->createForm(new CdType(),$post);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer le CD',

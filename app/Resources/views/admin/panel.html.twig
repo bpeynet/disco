@@ -1,0 +1,50 @@
+{% block title %}Administration{% endblock %}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="row">
+		{% if users %}
+			<div class="col-md-6 table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Utilisateur</th>
+							<th>Action</th>
+							<th>Rôle</th>
+						</tr>
+					</thead>
+					{% for user in users %}
+						<tr>
+							<td>{{user.getUser}}</td>
+							<td>{{user.getLibelle}}</td>
+							<td>
+								<a href="{{path('showUser',{'id':user.getUser})}}"><span title="Regarder" class="glyphicon glyphicon-eye-open"></span></a>
+								<a href="{{path('editUser',{'id':user.getUser})}}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
+								<a href="#" onclick="confirmDelUser('{{user.getLibelle}}',{{user.getUser}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+							</td>
+							<td>
+								 <select onChange="editRole(this,{{user.getUser}})" {% if user.getUser == app.user.getUser %}disabled{% endif %}>
+								 	{% for role in roles %}
+										<option value="{{role['roles']}}" {% if user.getRoles[0] == role['roles'] %}selected{% endif %}>{{role['roles']}}</option>
+									{% endfor %}
+								</select> 
+							</td>
+						</tr>	
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+		function editRole(item,user) {
+
+		}
+	</script>
+{% endblock %}

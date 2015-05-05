@@ -1,3 +1,4 @@
+{% block title %}Fiche CD "{{cd.getTitre}}"{% endblock %}
 {% extends 'base.html.twig' %}
 
 {% block body %}
@@ -6,9 +7,9 @@
 		<small>
 			{{cd.getTitre}} de {{cd.getArtiste.getLibelle}} (#{{cd.getCD}})
 			{% if is_granted('ROLE_PROGRA') %}
-	            <a href="{{ path('editCd',{'id':cd.getCd}) }}" class="label label-info">
+	            {# <a href="{{ path('editCd',{'id':cd.getCd}) }}" class="label label-info">
 					<span class="glyphicon glyphicon-edit"></span> Editer
-				</a>
+				</a> #}
 				<a onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})" class="label label-danger">
 					<span class="glyphicon glyphicon-remove"></span> Supprimer
 				</a>

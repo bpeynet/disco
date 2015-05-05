@@ -108,10 +108,6 @@ class CdType extends AbstractType
                 ))
             ->add('comment', 'textarea', array('required' => false))
 
-
-
-
-
         ;
     }
     

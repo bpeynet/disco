@@ -15,3 +15,9 @@ function confirmDelCd(cd,id) {
 	 	window.location.replace('/cd/delete/'+id);
 	}  
 } 
+
+function confirmDelUser(user,id) {  
+	if (confirm("Supprimer l'Utilisateur "+user+" ?" )) {
+	 	window.location.replace('/user/delete/'+id);
+	}  
+} 

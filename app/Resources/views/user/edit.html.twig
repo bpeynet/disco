@@ -1,0 +1,21 @@
+{% block title %}Edition du Profil{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<fieldset>
+		<legend>Edition de vos informations<small> {{user.getLibelle}}</small></legend>
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		{{form_start(form)}}
+			<div class="row">
+				{{form_row(form.email)}}
+				{{form_row(form.password)}}
+				{{form_row(form.submit)}}
+				<div class="hidden">
+					{{form_rest(form)}}
+				</div>
+			</div>
+		{{form_end(form)}}
+	</fieldset>
+
+{% endblock %}

@@ -61,7 +61,7 @@ class User implements UserInterface
      *
      * @ORM\Column(name="cotisation", type="boolean", nullable=false)
      */
-    private $cotisation = '0';
+    private $cotisation = false;
 
     /**
      * @var string
@@ -87,14 +87,14 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="pwd", type="string", length=20, nullable=false)
+     * @ORM\Column(name="password", type="string", length=20, nullable=false)
      */
-    private $pwd = '';
+    private $password = '';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="login", type="string", length=45, nullable=false)
+     * @ORM\Column(name="username", type="string", length=45, nullable=false)
      */
     private $login = '';
 
@@ -258,6 +258,7 @@ class User implements UserInterface
      */
     public function setEmission($emission)
     {
+        if(!$emission) { $emission = ""; }
         $this->emission = $emission;
 
         return $this;
@@ -281,6 +282,7 @@ class User implements UserInterface
      */
     public function setEmail($email)
     {
+        if(!$email){$email="";}
         $this->email = $email;
 
         return $this;
@@ -320,26 +322,26 @@ class User implements UserInterface
     }
 
     /**
-     * Set pwd
+     * Set password
      *
-     * @param string $pwd
+     * @param string $password
      * @return User
      */
-    public function setPassword($pwd)
+    public function setPassword($password)
     {
-        $this->pwd = $pwd;
+        $this->password = $password;
 
         return $this;
     }
 
     /**
-     * Get pwd
+     * Get password
      *
      * @return string 
      */
     public function getPassword()
     {
-        return $this->pwd;
+        return $this->password;
     }
 
     /**
@@ -432,7 +434,7 @@ class User implements UserInterface
         return serialize(array(
             $this->user,
             $this->login,
-            $this->pwd,
+            $this->password,
             // see section on salt below
             // $this->salt,
         ));
@@ -444,7 +446,7 @@ class User implements UserInterface
         list (
             $this->user,
             $this->login,
-            $this->pwd,
+            $this->password,
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized);

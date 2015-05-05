@@ -1,0 +1,50 @@
+{% block title %}Profil de {{user.getLibelle}}{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<h1>
+		Visualisation d'un Utilisateur
+		<small>
+			 {{user.getLibelle}}
+		</small>
+	</h1>
+
+	<div class="row">
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<tr>
+					<th>Nom</th>
+					<td>{{user.nom}}</td>
+				</tr>	
+				<tr>
+					<th>Prénom</th>
+					<td>{{user.prenom}}</td>
+				</tr>	
+				<tr>
+					<th>Emission</th>
+					<td>{{user.emission}}</td>
+				</tr>	
+				<tr>
+					<th>Email</th>
+					<td>{{user.email}}</td>
+				</tr>
+				{% if is_granted('ROLE_SUPER_ADMIN') or app.user.getUser == user.getUser %}
+				<tr>
+					<th>Password</th>
+					<td>{{user.password}}</td>
+				</tr>	
+				<tr>
+					<th>Username</th>
+					<td>{{user.username}}</td>
+				</tr>	
+				<tr>
+					<th>Droits</th>
+					<td>{{user.roles[0]}}</td>
+				</tr>
+				{% endif %}
+			</table>
+		</div>	
+	</div>
+
+{% endblock %}

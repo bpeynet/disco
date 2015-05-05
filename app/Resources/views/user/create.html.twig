@@ -1,0 +1,30 @@
+{% block title %}Création d'un Utilisateur{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<fieldset>
+		<legend>Création d'Utilisateur</legend>
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		{{form_start(form)}}
+			<div class="row">
+				{{form_errors(form)}}
+				{{form_row(form.nom)}}
+				{{form_row(form.prenom)}}
+				{{form_row(form.emission)}}
+				{{form_row(form.email)}}
+				{{form_row(form.password)}}
+				{{form_row(form.username)}}
+				<div class="form-group">
+					<label for="role" class="control-label">Droits</label>
+					<select id="role" name="role" class="form-control">
+						<option value="ROLE_USER">Membre</option>
+						<option value="ROLE_PROGRA">Programmateur</option>
+						<option value="ROLE_SUPER_ADMIN">Admin</option>
+					</select>
+				</div>
+			</div>
+		{{form_end(form)}}
+	</fieldset>
+
+{% endblock %}
