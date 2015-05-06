@@ -5,6 +5,12 @@
 {% block body %}
 
 	<div class="row">
+		{% if app.user.getPassword|first != '$' %}
+			<a href="{{path('encryptPwd')}}">Encrypt Password</a>(à ne faire qu'une seule fois, a près avoir passé de plaintext au bon mode d'encrypt : <br>encoders:<br>
+		        AppBundle\Entity\User:<br>
+		            algorithm: bcrypt<br>
+		            cost: 12
+		{% endif %}
 		{% if users %}
 			<div class="col-md-6 table-responsive">
 				<table class="table table-striped">
@@ -26,11 +32,7 @@
 								<a href="#" onclick="confirmDelUser('{{user.getLibelle}}',{{user.getUser}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 							</td>
 							<td>
-								 <select onChange="editRole(this,{{user.getUser}})" {% if user.getUser == app.user.getUser %}disabled{% endif %}>
-								 	{% for role in roles %}
-										<option value="{{role['roles']}}" {% if user.getRoles[0] == role['roles'] %}selected{% endif %}>{{role['roles']}}</option>
-									{% endfor %}
-								</select> 
+								{{user.getRoles[0]}}
 							</td>
 						</tr>	
 					{% endfor %}
@@ -39,12 +41,4 @@
 		{% endif %}
 	</div>
 
-{% endblock %}
-
-{% block javascripts %}
-	<script type="text/javascript">
-		function editRole(item,user) {
-
-		}
-	</script>
 {% endblock %}

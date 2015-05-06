@@ -245,24 +245,30 @@
 			</div>
 			<div id="comments" class="panel panel-default">
 				<div class="panel-body">
-					{% if cd.getComments.toArray %}
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th>Date</th>
-									<th>Utilisateur</th>
-									<th>Commentaire</th>
-								</tr>
-							</thead>
-							{% for commentaire in cd.getComments.toArray %}
-								<tr>
-									<td>{{commentaire.getChrono|date("d M Y")}}</td>
-									<td>{{commentaire.getUser.getLibelle}}</td>
-									<td>{{commentaire.getComment}}</td>
-								</tr>		
-							{% endfor %}
-						</table>
-					{% endif %}
+					<div class="danger col-md-8">
+						{% if cd.getComments.toArray %}
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Date</th>
+										<th>Utilisateur</th>
+										<th>Commentaire</th>
+									</tr>
+								</thead>
+								{% for commentaire in cd.getComments.toArray %}
+									<tr>
+										<td>{{commentaire.getChrono|date("d M Y - H:i:s")}}</td>
+										<td>{{commentaire.getUser.getLibelle}}</td>
+										<td>{{commentaire.getComment}}</td>
+									</tr>		
+								{% endfor %}
+							</table>
+						{% endif %}
+					</div>
+					<div class="col-md-4">
+						<textarea style="width:100%" id="textbox_comment"></textarea>
+						<button id="button_comment" class="btn btn-info btn-block" value="{{cd.getCd}}">Commenter</button>
+					</div>
 				</div>
 			</div>
 			<div id="divers" class="panel panel-default">
@@ -315,6 +321,23 @@
 		});
 		$(function() {
 			$("#menu_gauche").accordion();
+		});
+
+		$("#button_comment").click(function() {
+			var comment = $("#textbox_comment").val();
+			if (comment.trim() != "") {
+				var route = "{{ path('commentCd', {'id': 'cd_id'}) }}";
+
+				var res = $.post( route.replace("cd_id", this.value), {
+					message: comment
+				});
+
+				$("#textbox_comment").val("");
+			};
+		});
+
+		$(function() {
+			
 		});
 
 	</script>

@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Cd;
+use AppBundle\Entity\CdComment;
 use AppBundle\Entity\Piste;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
@@ -287,6 +288,30 @@ class CdController extends Controller
         return $response;
     }
 
+    /**
+     * @Route("/cd/{id}/comment", name="commentCd")
+     */ 
+    public function commentAction(Request $request, $id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour poster un commentaire.');
+        $em = $this->getDoctrine()->getManager();
+
+        $post = $request->request;
+        $comment = new CdComment();
+        $cd = $em->getRepository('AppBundle:Cd')->find($id);
+
+
+        $comment->setComment($post->get('message'));
+        $comment->setUser($this->get('security.token_storage')->getToken()->getUser());
+        $comment->setCd($cd);
+
+        $em->persist($comment);
+        $em->flush();
+
+        $response = new JsonResponse();
+        $response->setData();
+        return $response;
+    }
 
 }
 

@@ -80,30 +80,45 @@ class UserController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour faire cela.');
 
-        $id = $this->get('security.token_storage')->getToken()->getUser()->getUser();
-
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $id = $user->getUser();
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')->find($id);
-
 
         if($request->isMethod('POST')) {
             $mail = $request->request->get('email');
             $mdp = $request->request->get('mdp');
+            $mdp_v = $request->request->get('v_mdp');
+            $mdp_a = $request->request->get('a_mdp');
+
+            $encoder = $this->container->get('security.password_encoder');
+
             if($mail or $mdp) {
-                if($mail) {
-                    $user->setEmail($mail);
-                }
-                if($mdp) {
-                    $user->setPassword($mdp);
+                if($encoder->isPasswordValid($user,$mdp_a)) {
+                    if($mail) {
+                        $this->addFlash('success','Votre mail a bien été modifié.');
+                        $user->setEmail($mail);
+                    }
+                    if($mdp) {
+                        if($mdp == $mdp_v) {
+                            //Encodage du MDP
+                            $encoded = $encoder->encodePassword($user, $mdp);
+                            $user->setPassword($encoded);
+                            $this->addFlash('success','Votre mot de passe a bien été modifié.');
+                        } else {
+                            $this->addFlash('error','Les mots de passe en correspondent pas.');
+                        }
+                    }
+
+                    $em->persist($user);
+                    $em->flush();
+
+                    return $this->redirect($this->generateUrl('showUser',array('id' => $id)));
+                } else {
+                    $this->addFlash('error','L\'ancien mot de passe semble eronné');
                 }
 
-                $em->persist($user);
-                $em->flush();
-
-                $this->addFlash('success','Vos informations ont bien été mises à jour.');
-                return $this->redirect($this->generateUrl('showUser',array('id' => $id)));
             } else {
-                $this->addFlash('error','Aucune information n\'a pu être modifiée.');
+                $this->addFlash('info','Aucune information n\'a pu être modifiée.');
            }
         }
         return $this->render('user/edit.html.twig',array('user' => $user));
@@ -129,18 +144,38 @@ class UserController extends Controller
 
         if($request->isMethod('POST')) {
             if ($form->isValid()) {
-                $data = $form->getData();
+                $user = $form->getData();
                 $em = $this->getDoctrine()->getManager();
 
-                $data->setPrenom(ucfirst(strtolower($data->getPrenom())));
-                $data->setNom(strtoupper($data->getNom()));
-                $data->setRoles($request->request->get('role'));
-                $data->setLibelle($data->getPrenom()." ".$data->getNom());
+                $mdp = $request->request->get('mdp');
+                $mdp_v = $request->request->get('v_mdp');
 
-                $em->persist($data);
+                $user->setPrenom(ucfirst(strtolower($user->getPrenom())));
+                $user->setNom(strtoupper($user->getNom()));
+                $user->setRoles($request->request->get('role'));
+                $user->setLibelle($user->getPrenom()." ".$user->getNom());
+
+                $em->persist($user);
                 $em->flush();
 
-                $this->addFlash('success','Edition terminée !');
+                $this->addFlash('success','Informations éditées !');
+
+                if(!empty($mdp)) {
+                    if($mdp == $mdp_v) {
+                        $encoder = $this->container->get('security.password_encoder');
+                        $encoded = $encoder->encodePassword($user, $mdp);
+                        $user->setPassword($encoded);
+                        $this->addFlash('success','Mot de Passe édité correctement !');
+                    } else {
+                        $this->addFlash('error','Les mots de passe ne correspondent pas !');
+                        return $this->render('user/editAdmin.html.twig',array('form'=>$form->createView(), 'user' => $user));
+                    }                
+                    
+                }
+
+                $em->persist($user);
+                $em->flush();
+
                 return $this->redirect($this->generateUrl('showUser',array('id' => $id)));
             } else {
                 $this->addFlash('error','Les champs on été mal renseignés.');
@@ -166,19 +201,31 @@ class UserController extends Controller
 
         if($request->isMethod('POST')) {
             if ($form->isValid()) {
-                $data = $form->getData();
-                $em = $this->getDoctrine()->getManager();
+                $infos = $request->request;
+                if(!empty($infos->get('pwd')) && $infos->get('pwd') == $infos->get('pwd_verif')) {
+                    $user = $form->getData();
+                    $em = $this->getDoctrine()->getManager();
 
-                $data->setPrenom(ucfirst(strtolower($data->getPrenom())));
-                $data->setNom(strtoupper($data->getNom()));
-                $data->setRoles($request->request->get('role'));
-                $data->setLibelle($data->getPrenom()." ".$data->getNom());
+                    //Encodage du MDP
+                    $encoder = $this->container->get('security.password_encoder');
+                    $encoded = $encoder->encodePassword($user, $infos->get('pwd'));
 
-                $em->persist($data);
-                $em->flush();
+                    $user->setPassword($encoded);
 
-                $this->addFlash('success','L\'Utilisateur a bien été créé !');
-                return $this->redirect($this->generateUrl('admin'));
+                    //Mise en forme des infos concernant l'utilisateur
+                    $user->setPrenom(ucfirst(strtolower($user->getPrenom())));
+                    $user->setNom(strtoupper($user->getNom()));
+                    $user->setRoles($request->request->get('role'));
+                    $user->setLibelle($user->getPrenom()." ".$user->getNom());
+
+                    $em->persist($user);
+                    $em->flush();
+
+                    $this->addFlash('success','L\'Utilisateur a bien été créé !');
+                    return $this->redirect($this->generateUrl('admin'));
+                } else {
+                    $this->addFlash('error','Les mots de passe doivent correspondre, et ne pas être vides.');
+                }
             } else {
                 $this->addFlash('error','Les champs on été mal renseignés.');
            }

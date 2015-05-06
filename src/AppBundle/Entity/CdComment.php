@@ -184,4 +184,8 @@ class CdComment
     {
         return $this->dbkey;
     }
+
+    public function __construct() {
+        $this->chrono = new \DateTime();
+    }
 }

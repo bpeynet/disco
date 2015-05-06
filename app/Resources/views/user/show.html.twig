@@ -40,10 +40,6 @@
 				</tr>
 				{% if is_granted('ROLE_SUPER_ADMIN') or app.user.getUser == user.getUser %}
 				<tr>
-					<th>Password</th>
-					<td>{{user.password}}</td>
-				</tr>	
-				<tr>
 					<th>Username</th>
 					<td>{{user.username}}</td>
 				</tr>	

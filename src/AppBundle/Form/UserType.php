@@ -19,7 +19,6 @@ class UserType extends AbstractType
             ->add('prenom')
             ->add('emission','text', array('required'=>false))
             ->add('email','email', array('required'=>false))
-            ->add('password','text')
             ->add('username','text');
     }
     

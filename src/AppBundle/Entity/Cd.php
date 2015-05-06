@@ -46,6 +46,7 @@ class Cd
      *
      * @ORM\OneToMany(targetEntity="CdComment", mappedBy="cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     * @ORM\OrderBy({"dbkey" = "DESC"})
      */
     protected $comments = array();
 

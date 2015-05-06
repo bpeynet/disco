@@ -428,7 +428,8 @@ class User implements UserInterface
         return $this->user;
     }
 
-    /** @see \Serializable::serialize() */
+/*
+   
     public function serialize()
     {
         return serialize(array(
@@ -440,7 +441,6 @@ class User implements UserInterface
         ));
     }
 
-    /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
         list (
@@ -451,6 +451,7 @@ class User implements UserInterface
             // $this->salt
         ) = unserialize($serialized);
     }
+*/
 
     public function eraseCredentials()
     {

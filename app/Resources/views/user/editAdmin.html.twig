@@ -13,7 +13,15 @@
 				{{form_row(form.prenom)}}
 				{{form_row(form.emission)}}
 				{{form_row(form.email)}}
-				{{form_row(form.password)}}
+				<div class="form-group">
+				  <label class="control-label" for="mdp">Mot de Passe</label>
+				    <input id="mdp" name="mdp" placeholder="" class="form-control input-md" type="password">
+				</div>
+
+				<div class="form-group">
+				  <label class="control-label" for="v_mdp">Verification MDP</label>
+				    <input id="v_mdp" name="v_mdp" placeholder="" class="form-control input-md" type="password">
+				</div>
 				{{form_row(form.username)}}
 				<div class="form-group">
 					<label for="role" class="control-label">Droits</label>
