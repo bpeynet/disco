@@ -54,7 +54,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/user/show/{id}", name="showUser")
+     * @Route("/user/profile/{id}", name="showUser")
      */
     public function showUser($id)
     {
@@ -74,45 +74,39 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/user/edit", name="editUserOwn")
+     * @Route("/user/edit", name="editProfile")
      */
     public function editMyselftAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour faire cela.');
 
-        $id = $this->get('security.token_storage')->getToken()->getUser();
+        $id = $this->get('security.token_storage')->getToken()->getUser()->getUser();
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('AppBundle:User')->find($id);
 
-        $form = $this->createForm(new UserType(),$user);
-        $form->add('submit', 'submit', array(
-                'label' => 'Editer mes informations',
-                'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
-            ));
-
-        $form->handleRequest($request);
 
         if($request->isMethod('POST')) {
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $em = $this->getDoctrine()->getManager();
+            $mail = $request->request->get('email');
+            $mdp = $request->request->get('mdp');
+            if($mail or $mdp) {
+                if($mail) {
+                    $user->setEmail($mail);
+                }
+                if($mdp) {
+                    $user->setPassword($mdp);
+                }
 
-                $data->setPrenom(ucfirst(strtolower($data->getPrenom())));
-                $data->setNom(strtoupper($data->getNom()));
-                $data->setRoles($request->request->get('role'));
-                $data->setLibelle($data->getPrenom()." ".$data->getNom());
-
-                $em->persist($data);
+                $em->persist($user);
                 $em->flush();
 
-                $this->addFlash('success','L\'Utilisateur a bien été mis à jour.');
+                $this->addFlash('success','Vos informations ont bien été mises à jour.');
                 return $this->redirect($this->generateUrl('showUser',array('id' => $id)));
             } else {
-                $this->addFlash('error','Les champs on été mal renseignés.');
+                $this->addFlash('error','Aucune information n\'a pu être modifiée.');
            }
         }
-        return $this->render('user/edit.html.twig',array('form'=>$form->createView(), 'user' => $user));
+        return $this->render('user/edit.html.twig',array('user' => $user));
     }
 
     /**

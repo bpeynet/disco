@@ -4,18 +4,40 @@
 {% block body %}
 
 	<fieldset>
-		<legend>Edition de vos informations<small> {{user.getLibelle}}</small></legend>
-		{% form_theme form 'bootstrap_3_layout.html.twig' %}
-		{{form_start(form)}}
-			<div class="row">
-				{{form_row(form.email)}}
-				{{form_row(form.password)}}
-				{{form_row(form.submit)}}
-				<div class="hidden">
-					{{form_rest(form)}}
-				</div>
+		<div class="row">
+			<div class="col-xs-10">
+				<legend>
+					Edition de vos informations
+					<small> 
+						{{user.getLibelle}}
+					</small>
+				</legend>
 			</div>
-		{{form_end(form)}}
+			<div class="col-xs-2">
+				<a href="{{path('showUser',{'id':user.getUser})}}" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span> Retour</a>
+			</div>
+		</div>
+		<div class="row col-md-12">
+			<form class="form-horizontal" method="POST" action="">
+				<div class="form-group">
+				  <label class="control-label" for="email">Email</label>  
+				  <input id="email" name="email" type="email" placeholder="" class="form-control input-md" type="text">
+				  <span class="help-block">Si vous voulez changer votre adresse mail, veuillez remplir ce champ</span>  
+				</div>
+
+				<!-- Password input-->
+				<div class="form-group">
+				  <label class="control-label" for="mdp">Mot de Passe</label>
+				    <input id="mdp" name="mdp" placeholder="" class="form-control input-md" type="password">
+				    <span class="help-block">Si vous souhaitez modifier votre mot de passe, veuillez le noter ici.</span>
+				</div>
+
+				<!-- Button -->
+				<div class="form-group">
+				    <button id="" name="" class="btn btn-success btn-block" style="font-weight:bold;">Modifier mes informations</button>
+				</div>
+			</form>
+		</div>
 	</fieldset>
 
 {% endblock %}
