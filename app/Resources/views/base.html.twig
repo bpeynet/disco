@@ -38,7 +38,12 @@
                     {% if is_granted('ROLE_SUPER_ADMIN') %}
                         <li><a href="/admin">Administration</a></li>
                     {% endif %}
-                    <li>{% if app.user %}<a href="{{path('showUser',{'id':app.user.getUser})}}">{{app.user.getLibelle}}</a>{% else %}Non connecté{% endif %}</li>
+                    {% if app.user %}
+                        <li><a href="{{path('showUser',{'id':app.user.getUser})}}">{{app.user.getLibelle}}</a>
+                        <li><a href="{{path('logout')}}" class="btn"><span class="glyphicon glyphicon-log-out"></span> </a></li>
+                    {% else %}
+                        <li><a href="{{path('login')}}">Non connecté</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
