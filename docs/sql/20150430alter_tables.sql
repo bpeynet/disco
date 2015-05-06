@@ -8,6 +8,6 @@ ALTER TABLE `f_user` CHANGE `groupe` `role` VARCHAR(45) CHARACTER SET latin1 COL
 
 UPDATE `f_user` SET role = 'ROLE_SUPER_ADMIN' WHERE role = 'SUPERADMIN';
 UPDATE `f_user` SET role = 'ROLE_USER' WHERE role = 'USER';
-UPDATE `f_user` SET role = 'ROLE_PROGRA' WHERE role = 'PROGRA' 
+UPDATE `f_user` SET role = 'ROLE_PROGRA' WHERE role = 'PROGRA';
 
 ALTER TABLE `f_user` CHANGE `pwd` `password` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL, CHANGE `login` `username` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
