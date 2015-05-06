@@ -40,7 +40,7 @@
                     {% endif %}
                     {% if app.user %}
                         <li><a href="{{path('showUser',{'id':app.user.getUser})}}">{{app.user.getLibelle}}</a>
-                        <li><a href="{{path('logout')}}" class="btn"><span class="glyphicon glyphicon-log-out"></span> </a></li>
+                        <li><a href="{{path('logout')}}" class="btn"><span title="Se déconnecter" class="glyphicon glyphicon-log-out"></span> </a></li>
                     {% else %}
                         <li><a href="{{path('login')}}">Non connecté</a></li>
                     {% endif %}
