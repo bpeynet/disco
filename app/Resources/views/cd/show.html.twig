@@ -163,151 +163,155 @@
 {% if is_granted('ROLE_PROGRA') %}
 	<div class="row">
 		<div id="tabs" class="col-md-12">
-			<ul class="nav nav-tabs nav-justified">
+			<ul class="nav nav-justified  nav-pills">
 				<li role="presentation" class="active"><a href="#progra">Programmateur</a></li>
 				<li role="presentation"><a href="#comments">Commentaires</a></li>
 				<li role="presentation"><a href="#divers">Divers</a></li>
 				<li role="presentation"><a href="#retLabel">Retour label</a></li>
 			</ul>
-			<div id="progra" class="panel panel-default">
-				<div class="panel-body">
-					<div class="col-md-8">
-						<table class="table">
-							<tr>
-								{% if cd.getNbpiste %}
-									<th>Nombre de pistes</th>
-									<td>{{cd.getNbpiste}}</td>
-								{% endif %}
-								{%if cd.getVarious %}
-									<th>Plusieurs artistes</th>
-								{% endif %}
-							</tr>
-						</table>
+			<hr style="opacity:0">
+			<div id="progra">
+				<div class="col-md-8">
+					<table class="table">
+						<tr>
+							{% if cd.getNbpiste %}
+								<th>Nombre de pistes</th>
+								<td>{{cd.getNbpiste}}</td>
+							{% endif %}
+							{%if cd.getVarious %}
+								<th>Plusieurs artistes</th>
+							{% endif %}
+						</tr>
+					</table>
 
-						{% if cd.getPistes.toArray != null %}
-						<h4>Pistes en détail</h4>
-						<table class="table table-striped">
-							<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Fr</th><th>Anim</th><th>Paulo</th><th>Star</th></tr></thead>
-							{% for piste in cd.getPistes.toArray %}
-								<tr>
-									<td>{{piste.getTitre}}</td>
-									<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
-									<td {% if piste.getLangue %}class="success"{% endif %}></td>
-									<td class="{% if piste.getAnim %}success{% endif %}"></td>
-									<td class="{% if piste.getPaulo %}success{% endif %}"></td>
-									<td class="{% if piste.getStar %}success{% endif %}"></td>
-								</tr>
-							{% endfor %}
-						</table>
-						{% endif %}
-					</div>
-					<div class="col-md-4">
-						<table class="table table-striped">
-							{% if cd.getUserprogra and cd.getUserprogra.getUser %}
-								<tr>
-									<th>Programmateur</th>
-									<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
-								</tr>
-							{% endif %}
-							{% if cd.getRotation and cd.getRotation.getRotation <= 8 %}
-								<tr>
-									<th>Rotation</th>
-									<td>{% if cd.getRotation.getRotation <= 8 and cd.getRotation.getRotation > 0 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
-								</tr>
-							{% endif %}
-							{% if cd.getNotemoy %}
-								<tr>
-									<th>Note moyenne</th>
-									<td class="{% if cd.getNotemoy|round(1, 'ceil') >= 3.5 %}sucess{% elseif cd.getNotemoy|round(1, 'ceil') > 2 %}warning{% else %}danger{% endif %}"> {{cd.getNotemoy|round(1, 'ceil')}}</td>
-								</tr>
-							{% endif %}
-							{% if cd.getComment %}
-								<tr>
-									<th colspan="2">Commentaire</th>
-								</tr>
-								<tr><td colspan="2">{% if cd.getComment %}{{cd.getComment}}{% endif %}</td></tr>
-							{% endif %}
-						</table>
-						{% if cd.getNotes.toArray != null %}
-						<h3>Toutes les notes :</h3>
-						<table class="table table-striped">
-							<thead><tr><th>Utilisateur</th><th>Note</th></tr></thead>
-							{% for note in cd.getNotes.toArray %}
-								<tr>
-									<td>{{note.getUser.getLibelle}}</td>
-									<td>{{note.getNote|round(1, 'ceil')}}</td>
-								</tr>
-							{% endfor %}
-						</table>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-			<div id="comments" class="panel panel-default">
-				<div class="panel-body">
-					<div class="danger col-md-8">
-						{% if cd.getComments.toArray %}
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th>Date</th>
-										<th>Utilisateur</th>
-										<th>Commentaire</th>
-									</tr>
-								</thead>
-								{% for commentaire in cd.getComments.toArray %}
-									<tr>
-										<td>{{commentaire.getChrono|date("d M Y - H:i:s")}}</td>
-										<td>{{commentaire.getUser.getLibelle}}</td>
-										<td>{{commentaire.getComment}}</td>
-									</tr>		
-								{% endfor %}
-							</table>
-						{% endif %}
-					</div>
-					<div class="col-md-4">
-						<textarea style="width:100%" id="textbox_comment"></textarea>
-						<button id="button_comment" class="btn btn-info btn-block" value="{{cd.getCd}}">Commenter</button>
-					</div>
-				</div>
-			</div>
-			<div id="divers" class="panel panel-default">
-				<div class="panel-body">
-					
-					<h4>Historique des emprunts</h4>
+					{% if cd.getPistes.toArray != null %}
+					<h4>Pistes en détail</h4>
 					<table class="table table-striped">
-						<thead>
+						<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Fr</th><th>Anim</th><th>Paulo</th><th>Star</th></tr></thead>
+						{% for piste in cd.getPistes.toArray %}
 							<tr>
-								<th>N° d'exemplaire</th>
-								<th>Utilisateur</th>
-								<th>Date</th>
-								<th>Perte</th>
-							</tr>
-						</thead>
-						{% for emprunt in cd.getEmprunts.toArray %}
-							<tr>
-								<td>{{emprunt.getNumex}}</td>
-								<td>{% if emprunt.getUser.getUser !=0 %}{{emprunt.getUser.getLibelle}}{% endif %}</td>
-								<td>{% if emprunt.getChrono|date("Y") != -0001 %}{{emprunt.getChrono|date("d/m/Y")}}{%endif%}</td>
-								<td>{{emprunt.getDisparu}}</td>
+								<td>{{piste.getTitre}}</td>
+								<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
+								<td {% if piste.getLangue %}class="success"{% endif %}></td>
+								<td class="{% if piste.getAnim %}success{% endif %}"></td>
+								<td class="{% if piste.getPaulo %}success{% endif %}"></td>
+								<td class="{% if piste.getStar %}success{% endif %}"></td>
 							</tr>
 						{% endfor %}
 					</table>
-
-					<h4>Airplays</h4>
-					#TODO
-
+					{% endif %}
+				</div>
+				<div class="col-md-4">
+					<table class="table table-striped">
+						{% if cd.getUserprogra and cd.getUserprogra.getUser %}
+							<tr>
+								<th>Programmateur</th>
+								<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
+							</tr>
+						{% endif %}
+						{% if cd.getRotation and cd.getRotation.getRotation <= 8 %}
+							<tr>
+								<th>Rotation</th>
+								<td>{% if cd.getRotation.getRotation <= 8 and cd.getRotation.getRotation > 0 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
+							</tr>
+						{% endif %}
+						{% if cd.getNotemoy %}
+							<tr>
+								<th>Note moyenne</th>
+								<td class="{% if cd.getNotemoy|round(1, 'ceil') >= 3.5 %}sucess{% elseif cd.getNotemoy|round(1, 'ceil') > 2 %}warning{% else %}danger{% endif %}"> {{cd.getNotemoy|round(1, 'ceil')}}</td>
+							</tr>
+						{% endif %}
+						{% if cd.getComment %}
+							<tr>
+								<th colspan="2">Commentaire</th>
+							</tr>
+							<tr><td colspan="2">{% if cd.getComment %}{{cd.getComment}}{% endif %}</td></tr>
+						{% endif %}
+					</table>
+					<h3>Toutes les notes :</h3>
+					{% if cd.getNotes.toArray != null %}
+					<table class="table table-striped">
+						<thead><tr><th>Utilisateur</th><th>Note</th></tr></thead>
+						{% for note in cd.getNotes.toArray %}
+							<tr>
+								<td>{{note.getUser.getLibelle}}</td>
+								<td>{{note.getNote|round(1, 'ceil')}}</td>
+							</tr>
+						{% endfor %}
+					</table>
+					{% else %}
+						<span class="label label-info">Aucune notation pour le moment</span>
+					{% endif %}
+					<form method="post" action="{{path('noteCd',{'id':cd.getCd})}}">
+						<input type="text" name="note" placeholder="Choisir une note entre 0 et 5">
+						<button type="submit">Noter</button>
+					</form>
 				</div>
 			</div>
-			<div id="retLabel" class="panel panel-default">
-				<div class="panel-body">
+			<div id="comments">
+				<div class="row">
+					<div class="col-md-4">
+						<textarea style="width:100%;resize:none;" rows="5" id="textbox_comment"></textarea>
+						<button id="button_comment" class="btn btn-info btn-block" value="{{cd.getCd}}">Commenter</button>
+					</div>
+					<div class="col-md-8">
+						<div class="table-responsive"  style="display: block;height:400px;overflow-y:auto;width:100%;">
+						<table class="table table-striped">
+							<tbody id="comment_table" style="width:100%;">
+							{% if cd.getComments.toArray %}
+								{% for commentaire in cd.getComments.toArray %}
+									<tr  style="width:100%;" id="comment_{{commentaire.getDbkey}}" class="comment">
+										<td><strong>{{commentaire.getUser.getLibelle}}</strong> - {{commentaire.getChrono|date("d/m/Y - H:i")}}<br>{{commentaire.getComment}}</td>
+									</tr>		
+								{% endfor %}
+							{% endif %}
+							</tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="divers">
+					
+				<h4>Historique des emprunts</h4>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>N° d'exemplaire</th>
+							<th>Utilisateur</th>
+							<th>Date</th>
+							<th>Perte</th>
+						</tr>
+					</thead>
+					{% for emprunt in cd.getEmprunts.toArray %}
+						<tr>
+							<td>{{emprunt.getNumex}}</td>
+							<td>{% if emprunt.getUser.getUser !=0 %}{{emprunt.getUser.getLibelle}}{% endif %}</td>
+							<td>{% if emprunt.getChrono|date("Y") != -0001 %}{{emprunt.getChrono|date("d/m/Y")}}{%endif%}</td>
+							<td>{{emprunt.getDisparu}}</td>
+						</tr>
+					{% endfor %}
+				</table>
+
+				<h4>Airplays</h4>
+				#TODO
+
+			</div>
+			<div id="retLabel">
 					
 					<h4>Retour Label : <span class="label label-{%if cd.getRetourlabel%}success{% else %}warning{% endif %}">{%if cd.getRetourlabel%}Effectué{% else %}En attente{% endif %}</span></h4>
 					{% if cd.getRetourmail %}<h5>Mail de retour</h5><span>{{cd.getRetourmail}}</span>{% endif %}
-					<div>#TODO</div>
+					
+					<form class="form-horizontal col-md-6" method="post" action="{{path('editRetourLabel',{'id':cd.getCd})}}">
+						<div class="form-group">
+							<textarea name="retour_comment" rows="8" style="width:100%; resize:vertical;">{{cd.getRetourComment}}</textarea>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-info btn-block" type="submit">Enregistrer</button>
+						</div>
+					</form>
 
 				</div>
-			</div>
 		</div>
 	</div>
 {% endif %}
@@ -319,9 +323,11 @@
 		$(function() {
 			$("#tabs").tabs();
 		});
-		$(function() {
-			$("#menu_gauche").accordion();
-		});
+
+		$('#tabs a').click(function (e) {
+		  e.preventDefault();
+		  $(this).tab('show');
+		})
 
 		$("#button_comment").click(function() {
 			var comment = $("#textbox_comment").val();
@@ -334,11 +340,42 @@
 
 				$("#textbox_comment").val("");
 			};
+			$("#textbox_comment").focus();
 		});
 
-		$(function() {
-			
-		});
+		if((".comment:first").length == 0) {
+			var last_comment = $(".comment:first").attr('id').replace('comment_', '');
+		} else {	
+			var last_comment = 1;
+		}
+
+		function refreshComments(){
+			var cd = "{{cd.getCd}}"
+			if($(".comment").length != 0 && last_comment <= $(".comment:first").attr('id').replace('comment_', '')) {
+				last_comment = $(".comment:first").attr('id').replace('comment_', '');
+			}
+			console.log(last_comment);
+			var route = "{{ path('recupComments', {'cd': 'cd_id', 'comment':'comment_id'}) }}";
+			$.get( route.replace("cd_id", cd).replace("comment_id",last_comment) ).done(function( data ) {
+
+				    var comment_row = '<tr id="comment_:id_comment " class="comment"><td><strong>:user</strong> - :chrono <br>:commentaire</td></tr>';
+				    for (var i = 0; i < data.length; i++) {
+				    	var new_comment_row = comment_row.replace(':id_comment',data[i]['dbkey']).replace(':chrono',data[i]['chrono']).replace(':user',data[i]['user']).replace(':commentaire',data[i]['comment']);
+
+				    	if($(".comment").length != 0) {
+				    		if($("#comment_"+data[i]['dbkey']).length <= 0) {
+				    			$(".comment:first").parent().prepend(new_comment_row);
+				    		}
+				    	} else {
+				    		$("#comment_table").prepend(new_comment_row);
+				    	}
+				    };
+					setTimeout(refreshComments,5000); /* rappel après 5 secondes = 5000 millisecondes */
+				  });
+		}
+		 
+		refreshComments();
+
 
 	</script>
 {% endblock %}

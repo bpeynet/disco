@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use AppBundle\Entity\Cd;
+use AppBundle\Entity\CdNote;
 use AppBundle\Entity\CdComment;
 use AppBundle\Entity\Piste;
 use AppBundle\Form\CdType;
@@ -312,6 +313,128 @@ class CdController extends Controller
         $response->setData();
         return $response;
     }
+
+    /**
+     * @Route("/cd/{cd}/comments/{comment}", name="recupComments")
+     */
+    public function recupComment(Request $request, $cd, $comment)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $comments = $em->getRepository('AppBundle:CdComment')->createQueryBuilder('c')
+            ->select('c')
+            ->where('c.cd = :cd')
+            ->setParameter('cd',$cd)
+            ->andWhere('c.dbkey > :last_comment')
+            ->setParameter('last_comment',$comment)
+            ->orderBy('c.dbkey','ASC')
+            ->getQuery()
+            ->getResult();
+
+        $retour = array();
+        foreach ($comments as $key => $comment) {
+            $retour[$key]['user'] = $comment->getUser()->getLibelle();
+            $retour[$key]['dbkey'] = $comment->getDbkey();
+            $retour[$key]['chrono'] = $comment->getChrono()->format("d/m/Y - H:i");
+            $retour[$key]['comment'] = $comment->getComment();
+        }
+
+
+        $response = new JsonResponse();
+        $response->setData($retour);
+        return $response;
+    }
+
+    /**
+     * @Route("/cd/note/{id}", name="noteCd")
+     */
+    public function noteAction(Request $request, $id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs peuvent noter un CD.');
+
+        if(!empty($request->request->get('note'))) {
+            $note = $request->request->get('note');
+            $note = str_replace(',', '.', $note);
+
+            if(is_numeric($note) && $note >= 0 && $note <= 5) {
+                round($note, 1);
+
+                $user = $this->get('security.token_storage')->getToken()->getUser();
+                $cd = $this->getDoctrine()->getRepository('AppBundle:Cd')->find($id);
+
+                if(!$cd) {
+                    throw $this->createNotFoundException(
+                        'Aucun cd trouvé pour cet id : '.$id
+                    );
+                }
+
+                $repository = $this->getDoctrine()->getRepository('AppBundle:CdNote');
+                $verif_note = $repository->findOneBy(array('user'=>$user,'cd'=>$cd));
+
+                if(!$verif_note) {
+                    $cd_note = new CdNote();
+                    $cd_note->setCd($cd);
+                    $cd_note->setUser($user);
+                    $cd_note->setNote($note);
+
+                    $this->getDoctrine()->getManager()->persist($cd_note);
+                    $this->getDoctrine()->getManager()->flush();
+
+                    $note_moy = $this->getDoctrine()->getManager()->getRepository('AppBundle:CdNote')->createQueryBuilder('n')
+                        ->select('avg(n.note)')
+                        ->where('n.cd = :cd')
+                        ->setParameter('cd',$cd)
+                        ->getQuery()
+                        ->getResult();
+
+                    $cd->setNoteMoy($note_moy[0][1]);    
+
+                    $this->getDoctrine()->getManager()->persist($cd);
+                    $this->getDoctrine()->getManager()->flush();
+                
+                    $this->addFlash('success','La note que vous avez choisie a été affectée au CD.');
+                } else {
+                    $this->addFlash('error','Impossible de noter deux fois un CD.');
+                }
+
+
+            } else {
+                $this->addFlash('error','La note d\'un CD doit être numérique, comprise entre 0 et 5.');
+            }
+
+        } else {
+            $this->addFlash('error','Une erreur est survenue lors de la notation du CD !');
+        }
+        
+        return $this->redirect($this->generateUrl('showCd',array('id'=>$id)));
+    }
+
+    /**
+     * @Route("/cd/{id}/editRetour", name="editRetourLabel")
+     */
+    public function editRetourLabelAction(Request $request, $id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs peuvent éditer le retour label.');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $cd = $em->getRepository('AppBundle:Cd')->find($id);
+
+        if(!$cd) {
+            throw $this->createNotFoundException(
+                'Aucun cd trouvé pour cet id : '.$id
+            );
+        }
+
+        $cd->setRetourComment($request->request->get('retour_comment'));
+
+        $em->persist($cd);
+        $em->flush();
+
+        $this->addFlash('info','Le message de retour label a été modifié.');
+
+        return $this->redirect($this->generateUrl('showCd',array('id'=>$id)));
+    }
+
 
 }
 

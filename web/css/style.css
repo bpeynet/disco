@@ -96,3 +96,7 @@ ol, ul {
 	font-weight: bold;
 	color: #c77405;
 }
+
+#tabs > div {
+    min-height:450px;
+}
