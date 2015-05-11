@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FAirplayCd
+ * AirplayCd
  *
  * @ORM\Table(name="f_airplay_cd", uniqueConstraints={@ORM\UniqueConstraint(name="cle", columns={"airplay", "cd"})}, indexes={@ORM\Index(name="airplay", columns={"airplay"}), @ORM\Index(name="cd", columns={"cd"})})
  * @ORM\Entity
  */
-class FAirplayCd
+class AirplayCd
 {
     /**
      * @var integer
@@ -22,16 +22,16 @@ class FAirplayCd
     private $dbkey;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="airplay", type="integer", nullable=false)
+     * @var Airplay
+     * @ORM\ManyToOne(targetEntity="Airplay")
+     * @ORM\JoinColumn(name="airplay", referencedColumnName="airplay")
      */
     private $airplay = '0';
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="cd", type="integer", nullable=false)
+     * @var Cd
+     * @ORM\ManyToOne(targetEntity="Cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     private $cd = '0';
 
@@ -47,8 +47,8 @@ class FAirplayCd
     /**
      * Set airplay
      *
-     * @param integer $airplay
-     * @return FAirplayCd
+     * @param Airplay $airplay
+     * @return AirplayCd
      */
     public function setAirplay($airplay)
     {
@@ -60,7 +60,7 @@ class FAirplayCd
     /**
      * Get airplay
      *
-     * @return integer 
+     * @return Airplay 
      */
     public function getAirplay()
     {
@@ -70,8 +70,8 @@ class FAirplayCd
     /**
      * Set cd
      *
-     * @param integer $cd
-     * @return FAirplayCd
+     * @param Cd $cd
+     * @return AirplayCd
      */
     public function setCd($cd)
     {
@@ -83,7 +83,7 @@ class FAirplayCd
     /**
      * Get cd
      *
-     * @return integer 
+     * @return Cd 
      */
     public function getCd()
     {
@@ -94,7 +94,7 @@ class FAirplayCd
      * Set ordre
      *
      * @param integer $ordre
-     * @return FAirplayCd
+     * @return AirplayCd
      */
     public function setOrdre($ordre)
     {

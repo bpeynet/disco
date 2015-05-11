@@ -13,3 +13,5 @@ UPDATE `f_user` SET role = 'ROLE_PROGRA' WHERE role = 'PROGRA';
 ALTER TABLE `f_user` CHANGE `pwd` `password` VARCHAR(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL, CHANGE `login` `username` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
 
 ALTER TABLE `f_user` CHANGE `password` `password` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+DELETE FROM f_airplay_cd WHERE cd NOT IN (SELECT cd from f_cd);

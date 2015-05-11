@@ -1,0 +1,56 @@
+<link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" />
+{% if airplay %}
+
+<style type="text/css">
+.table thead {
+	background: none repeat scroll 0% 0% #5C0909;
+	color: white;
+}
+
+.table thead tr th {
+	border-bottom: 2px solid darkgrey;
+}
+</style>
+
+<h2>{{airplay.libelle}}</h2>
+
+<div class="responsive-table">
+	<table class="table table-striped table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Artiste</th>
+				<th>Titre</th>
+				{% if is_granted('ROLE_PROGRA') %}
+					<th>Année</th>
+					<th>Rotation</th>
+					<th>Note</th>
+					<th>Star</th>
+					<th>Rivendel</th>
+					<th>Anim</th>
+				{% endif %}
+				<th>Genre</th>
+			</tr>	
+		</thead>
+		{% for ligne in liste %}
+			<tr>
+				<td>{{ligne.ordre}}</td>
+				<td>{{ligne.cd.artiste.libelle}}</td>
+				<td>{{ligne.cd.titre}}</td>
+				{% if is_granted('ROLE_PROGRA') %}
+					<td>{{ligne.cd.annee}}</td>
+					<td>{{ligne.cd.rotation.libelle}}</td>
+					<td>{% if ligne.cd.notemoy %}{{ligne.cd.notemoy|round(1,'ceil')}}{% endif %}</td>
+					<td>{% set star = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.star > 0 %}{% set star = star+1 %}{% endif %}{% endfor %}{{star}}</td>
+					<td>{% set paulo = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.paulo > 0 %}{% set paulo = paulo+1 %}{% endif %}{% endfor %}{{paulo}}</td>
+					<td>{% set anim = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.anim > 0 %}{% set anim = anim+1 %}{% endif %}{% endfor %}{{anim}}</td>
+				{% endif %}
+				<td>{{ligne.cd.genre.libelle}}</td>
+
+			</tr>	
+		{% endfor %}
+	</table>
+</div>
+{% endif %}
+
+
