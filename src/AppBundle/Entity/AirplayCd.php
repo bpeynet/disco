@@ -12,17 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AirplayCd
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="dbkey", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $dbkey;
 
     /**
      * @var Airplay
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Airplay")
      * @ORM\JoinColumn(name="airplay", referencedColumnName="airplay")
      */
@@ -30,6 +23,7 @@ class AirplayCd
 
     /**
      * @var Cd
+     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */

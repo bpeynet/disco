@@ -36,20 +36,6 @@ class Airplay
     private $dcreat = '0000-00-00 00:00:00';
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="annee", type="integer", nullable=false)
-     */
-    private $annee = '0';
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="mois", type="integer", nullable=false)
-     */
-    private $mois = '0';
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="dmodif", type="datetime", nullable=false)
@@ -77,22 +63,7 @@ class Airplay
      *
      * @ORM\Column(name="publie", type="boolean", nullable=false)
      */
-    private $publie = '0';
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="chrono", type="datetime", nullable=false)
-     */
-    private $chrono = '0000-00-00 00:00:00';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="courant", type="boolean", nullable=false)
-     */
-    private $courant = '0';
-
+    private $publie = false;
 
 
     /**
@@ -139,52 +110,6 @@ class Airplay
     public function getDcreat()
     {
         return $this->dcreat;
-    }
-
-    /**
-     * Set annee
-     *
-     * @param integer $annee
-     * @return Airplay
-     */
-    public function setAnnee($annee)
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    /**
-     * Get annee
-     *
-     * @return integer 
-     */
-    public function getAnnee()
-    {
-        return $this->annee;
-    }
-
-    /**
-     * Set mois
-     *
-     * @param integer $mois
-     * @return Airplay
-     */
-    public function setMois($mois)
-    {
-        $this->mois = $mois;
-
-        return $this;
-    }
-
-    /**
-     * Get mois
-     *
-     * @return integer 
-     */
-    public function getMois()
-    {
-        return $this->mois;
     }
 
     /**
@@ -277,52 +202,6 @@ class Airplay
     public function getPublie()
     {
         return $this->publie;
-    }
-
-    /**
-     * Set chrono
-     *
-     * @param \DateTime $chrono
-     * @return Airplay
-     */
-    public function setChrono($chrono)
-    {
-        $this->chrono = $chrono;
-
-        return $this;
-    }
-
-    /**
-     * Get chrono
-     *
-     * @return \DateTime 
-     */
-    public function getChrono()
-    {
-        return $this->chrono;
-    }
-
-    /**
-     * Set courant
-     *
-     * @param boolean $courant
-     * @return Airplay
-     */
-    public function setCourant($courant)
-    {
-        $this->courant = $courant;
-
-        return $this;
-    }
-
-    /**
-     * Get courant
-     *
-     * @return boolean 
-     */
-    public function getCourant()
-    {
-        return $this->courant;
     }
 
     /**

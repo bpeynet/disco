@@ -20,17 +20,21 @@
 			<tr>
 				<th>Date</th>
 				<th>Nom</th>
+				<th>Publication ?</th>
 			</tr>	
 		</thead>
+		<form method="post" action="">
 		{% for airplay in airplays %}
-			{% if airplay.publie %}
-				<tr onclick="seeAirplay({{airplay.airplay}})">
-					<td>{{airplay.chrono|date("d/m/Y")}}</td>
-					<td>{{airplay.libelle}}</td>
-				</tr>
-			{% endif %}
+			<tr onclick="seeAirplay({{airplay.airplay}})">
+				<td>{{airplay.dmodif|date("d/m/Y")}}</td>
+				<td>{{airplay.libelle}}</td>
+				<td><input type="checkbox" name="publie" value="{{airplay.airplay}}" {% if airplay.publie == 1 %}checked{% endif %}></td>
+			</tr>
 		{% endfor %}
+		
 	</table>
+		<button type="submit" class="btn btn-success pull-right">Enregistrer</button>
+		</form>
 </div>
 <iframe src="{{path('showAirplay',{'id':airplays[0].airplay})}}" style="border:none;width:100%;height:400px;"></iframe>
 {% endif %}

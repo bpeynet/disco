@@ -1,0 +1,121 @@
+{% block title %}Création d'Artiste{% endblock %}
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+
+	<fieldset>
+		<legend>Création d'Airplay</legend>
+		<form id="addCd">
+			<input type="text" id="newCD"><button type="submit" class="btn btn-info">Ajouter le CD</button>
+		</form>
+		<div class="row">
+			<form method="post" action="{{path('createAirplay')}}" id="types_table">
+				<div class="col-md-8">
+					<table class="table table-striped">
+						<tr>
+						{% for type in types %}
+								<td><label for="type_{{type.getLibelle}}">{{type.getLibelle}}</label>
+									<input type="checkbox" name="type[{{type.getType}}]" value="{{type.getLibelle}}" id="type_{{type.getLibelle}}"></td>
+						{% endfor %}
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-4">
+					<input class="datepicker" name="date"></input>
+					<button type="submit" class="btn btn-info">Générer l'Airplay</button>
+				</div>
+			</form>
+		</div>
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		{{form_start(form)}}
+			{{form_errors(form)}}
+			<div class="row">
+				<div class="col-xs-10">
+					{{form_row(form.libelle,{'label':'Titre de l\'airplay'})}}
+				</div>
+			</div>
+			<div class="row">
+				{% if generation %}
+				<div class="table-responsive">
+					<table class="table table-striped" id="sort_A">
+						<thead>
+							<th>#</th>
+							<th>Artiste</th>
+							<th>Titre</th>
+							<th>Année</th>
+							<th>Rotation</th>
+							<th>Note</th>
+							<th>Star</th>
+							<th>Rivendel</th>
+							<th>Anim</th>
+							<th>Genre</th>
+						</thead>
+						{% set ordre = 1 %}
+						{% for cd in generation %}
+							<tr>
+								<td class="num_row_airplay visible">{{ordre}}</td>
+								<td>{{cd.artiste.libelle}}</td>
+								<td>{{cd.titre}}</td>
+								<td>{{cd.annee}}</td>
+								<td>{% if cd.rotation and cd.rotation.rotation %}{{cd.rotation.libelle}}{% endif %}</td>
+								<td>{% if cd.notemoy %}{{cd.notemoy|round(1,'ceil')}}{% endif %}</td>
+								<td>{% set star = 0 %}{% for piste in cd.pistes %}{% if piste.star > 0 %}{% set star = star+1 %}{% endif %}{% endfor %}{{star}}</td>
+								<td>{% set paulo = 0 %}{% for piste in cd.pistes %}{% if piste.paulo > 0 %}{% set paulo = paulo+1 %}{% endif %}{% endfor %}{{paulo}}</td>
+								<td>{% set anim = 0 %}{% for piste in cd.pistes %}{% if piste.anim > 0 %}{% set anim = anim+1 %}{% endif %}{% endfor %}{{anim}}</td>
+								<td>{{cd.genre.libelle}}</td>
+							</tr>
+							{% set ordre = ordre+1 %}
+						{% endfor %}
+					</table>
+				</div>
+				{% endif %}
+			</div>
+		{{form_end(form)}}
+	</fieldset>
+
+{% endblock %}
+{% block javascripts %}
+	<script type="text/javascript">
+		$("#sort_A tbody").sortable({
+			update: function() {
+						var num = 1;
+						$("#sort_A .num_row_airplay").each(function() {
+							$(this).html(num);
+							num++;
+						})
+						
+					}
+		});
+
+		$(".datepicker").datepicker({
+		    format: 'dd/mm/yyyy',
+		    endDate: '-0d'
+		});
+		$(".datepicker").datepicker('setDate','-3m');
+
+		$("#types_table input").each(function() { $(this).prop('checked', true); })
+
+		$("#addCd").submit(function(event) {
+			var id = $("#newCD").val();
+			var new_row = "<tr class='num_row_airplay'><td>:id</td><td>:artiste</td><td>:titre</td><td>:annee</td><td>:rotation</td><td>:note</td><td>:star</td><td>:paulo</td><td>:anim</td><td>:genre</td></tr>";
+			$.get("/cd/getinfos/"+id, function(cd){
+				console.log(cd)
+				if(cd == null) {
+
+				} else {
+					new_row = new_row.replace(':id',0).replace(':artiste',cd.artiste).replace(':titre',cd.titre).replace(':annee',cd.annee).replace(':rotation',cd.rotation).replace(':note',cd.note).replace(':star',0).replace(':paulo',0).replace(':anim',0).replace(':genre',cd.genre);
+					$("#sort_A tbody").prepend(new_row);
+				}
+			})
+			event.preventDefault();
+			$("#newCD").val("");
+		});
+	</script>
+{% endblock %}

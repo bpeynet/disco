@@ -209,10 +209,10 @@
 								<td>{% if cd.getUserprogra.getUser != 0 %} {{cd.getUserprogra.getLibelle}} {% endif %} </td>
 							</tr>
 						{% endif %}
-						{% if cd.getRotation and cd.getRotation.getRotation <= 8 %}
+						{% if cd.getRotation %}
 							<tr>
 								<th>Rotation</th>
-								<td>{% if cd.getRotation.getRotation <= 8 and cd.getRotation.getRotation > 0 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
+								<td>{% if cd.getRotation.getRotation > 0 %} {{cd.getRotation.getLibelle}} {% endif %}</td>
 							</tr>
 						{% endif %}
 						{% if cd.getNotemoy %}

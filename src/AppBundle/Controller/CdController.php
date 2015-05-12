@@ -435,6 +435,38 @@ class CdController extends Controller
         return $this->redirect($this->generateUrl('showCd',array('id'=>$id)));
     }
 
+    /**
+     * @Route("/cd/getinfos/{id}", name="getInfosCd")
+     */
+    public function getInfosAction($id)
+    {
+        $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
+
+        if(!$cd || $cd->get) {
+            return null;
+        }
+
+        $tab = array(
+            'artiste'=>$cd->getArtiste()->getLibelle(),
+            'titre' => $cd->getTitre(),
+            'annee' => $cd->getAnnee(),
+            'note' => $cd->getNoteMoy()
+        );
+        if ($cd->getRotation()) {
+            $tab['rotation'] = $cd->getRotation()->getLibelle();
+        } else {
+            $tab['rotation'] = '';
+        }
+        if ($cd->getGenre()) {
+            $tab['genre'] = $cd->getGenre()->getLibelle();
+        }
+
+        $response = new JsonResponse();
+        $response->setData($tab);
+        return $response;
+
+    }
+
 
 }
 

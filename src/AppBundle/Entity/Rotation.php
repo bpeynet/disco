@@ -56,13 +56,6 @@ class Rotation
     private $retourLabel = '';
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="apu", type="boolean", nullable=false)
-     */
-    private $apu = '0';
-
-    /**
      * Set disques
      *
      * @param ArrayCollection $disques
@@ -175,29 +168,6 @@ class Rotation
     public function getRetourLabel()
     {
         return $this->retourLabel;
-    }
-
-    /**
-     * Set apu
-     *
-     * @param boolean $apu
-     * @return Rotation
-     */
-    public function setApu($apu)
-    {
-        $this->apu = $apu;
-
-        return $this;
-    }
-
-    /**
-     * Get apu
-     *
-     * @return boolean 
-     */
-    public function getApu()
-    {
-        return $this->apu;
     }
 
     /**
