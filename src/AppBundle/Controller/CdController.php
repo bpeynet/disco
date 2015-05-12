@@ -442,7 +442,7 @@ class CdController extends Controller
     {
         $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
 
-        if(!$cd || $cd->get) {
+        if(!$cd) {
             return null;
         }
 

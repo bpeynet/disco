@@ -152,7 +152,8 @@ class AirplayController extends Controller
                 }
            }
         }
-        return $this->render('airplay/create.html.twig',array('form'=>$form->createView(),'generation'=>$generatedAirplay, 'types' => $types, 'date' => $date_mini, 'types_check' => $rq->get('type')));
+
+        return $this->render('airplay/create.html.twig',array('form'=>$form->createView(),'generation'=>$generatedAirplay, 'types' => $types, 'date_mini' => $date_mini, 'types_check' => $rq->get('type')));
 
     }
 

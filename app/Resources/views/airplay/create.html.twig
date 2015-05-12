@@ -22,13 +22,14 @@
 						<tr>
 						{% for type in types %}
 								<td><label for="type_{{type.getLibelle}}">{{type.getLibelle}}</label>
-									<input type="checkbox" name="type[{{type.getType}}]" value="{{type.getLibelle}}" id="type_{{type.getLibelle}}"></td>
+									<input type="checkbox" name="type[{{type.getType}}]" value="{{type.getLibelle}}" id="type_{{type.getLibelle}}" {% if types_check and types_check[type.getType] is defined %}checked{% endif %}></td>
 						{% endfor %}
 						</tr>
 					</table>
 				</div>
 				<div class="col-md-4">
-					<input class="datepicker" name="date"></input>
+					<label for="datepicker">Depuis le </label>
+					<input class="datepicker" id="datepicker" name="date"></input>
 					<button type="submit" class="btn btn-info">Générer l'Airplay</button>
 				</div>
 			</form>
@@ -42,7 +43,6 @@
 				</div>
 			</div>
 			<div class="row">
-				{% if generation %}
 				<div class="table-responsive">
 					<table class="table table-striped" id="sort_A">
 						<thead>
@@ -58,7 +58,9 @@
 							<th>Genre</th>
 						</thead>
 						{% set ordre = 1 %}
-						{% for cd in generation %}
+						<tbody>
+						{% if generation %}
+							{% for cd in generation %}
 							<tr>
 								<td class="num_row_airplay visible">{{ordre}}</td>
 								<td>{{cd.artiste.libelle}}</td>
@@ -72,10 +74,11 @@
 								<td>{{cd.genre.libelle}}</td>
 							</tr>
 							{% set ordre = ordre+1 %}
-						{% endfor %}
+							{% endfor %}
+						{% endif %}
+						</tbody>
 					</table>
 				</div>
-				{% endif %}
 			</div>
 		{{form_end(form)}}
 	</fieldset>
@@ -98,17 +101,16 @@
 		    format: 'dd/mm/yyyy',
 		    endDate: '-0d'
 		});
-		$(".datepicker").datepicker('setDate','-3m');
-
-		$("#types_table input").each(function() { $(this).prop('checked', true); })
+		var date_mini = "{{date_mini|date('d/m/Y')}}";
+		$(".datepicker").datepicker('setDate',date_mini);
 
 		$("#addCd").submit(function(event) {
 			var id = $("#newCD").val();
-			var new_row = "<tr class='num_row_airplay'><td>:id</td><td>:artiste</td><td>:titre</td><td>:annee</td><td>:rotation</td><td>:note</td><td>:star</td><td>:paulo</td><td>:anim</td><td>:genre</td></tr>";
+			var new_row = "<tr class='ui-sortable-handle'><td class='num_row_airplay'>:id</td><td>:artiste</td><td>:titre</td><td>:annee</td><td>:rotation</td><td>:note</td><td>:star</td><td>:paulo</td><td>:anim</td><td>:genre</td></tr>";
 			$.get("/cd/getinfos/"+id, function(cd){
+					console.log("yes");
 				console.log(cd)
 				if(cd == null) {
-
 				} else {
 					new_row = new_row.replace(':id',0).replace(':artiste',cd.artiste).replace(':titre',cd.titre).replace(':annee',cd.annee).replace(':rotation',cd.rotation).replace(':note',cd.note).replace(':star',0).replace(':paulo',0).replace(':anim',0).replace(':genre',cd.genre);
 					$("#sort_A tbody").prepend(new_row);
