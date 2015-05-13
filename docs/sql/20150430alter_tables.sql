@@ -40,3 +40,5 @@ UPDATE f_cd SET rotation= NULL WHERE rotation=0;
 UPDATE f_cd SET label= NULL WHERE label=0;
 UPDATE f_cd SET maison= NULL WHERE maison=0;
 UPDATE f_cd SET distrib= NULL WHERE distrib=0;
+
+ALTER TABLE `f_cd` CHANGE `paulo` `rivendell` TINYINT(1) NOT NULL;

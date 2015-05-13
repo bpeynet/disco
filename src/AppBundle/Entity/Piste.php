@@ -75,9 +75,9 @@ class Piste
     /**
      * @var boolean
      *
-     * @ORM\Column(name="paulo", type="boolean", nullable=false)
+     * @ORM\Column(name="rivendell", type="boolean", nullable=false)
      */
-    private $paulo = false;
+    private $rivendell = false;
 
     /**
      * @var boolean
@@ -250,26 +250,49 @@ class Piste
     }
 
     /**
-     * Set paulo
+     * Set rivendell
      *
-     * @param boolean $paulo
+     * @param boolean $rivendell
      * @return Piste
      */
-    public function setPaulo($paulo)
+    public function setRivendell($rivendell)
     {
-        $this->paulo = $paulo;
+        $this->rivendell = $rivendell;
 
         return $this;
     }
 
     /**
-     * Get paulo
+     * Get rivendell
+     *
+     * @return boolean 
+     */
+    public function getRivendell()
+    {
+        return $this->rivendell;
+    }
+
+    /**
+     * Set rivendell
+     *
+     * @param boolean $rivendell
+     * @return Piste
+     */
+    public function setPaulo($rivendell)
+    {
+        $this->rivendell = $rivendell;
+
+        return $this;
+    }
+
+    /**
+     * Get rivendell
      *
      * @return boolean 
      */
     public function getPaulo()
     {
-        return $this->paulo;
+        return $this->rivendell;
     }
 
     /**
