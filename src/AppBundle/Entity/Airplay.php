@@ -48,7 +48,7 @@ class Airplay
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="mUser", referencedColumnName="user")
      */
-    private $cUser = '0';
+    private $cUser;
 
     /**
      * @var User
@@ -56,7 +56,7 @@ class Airplay
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="mUser", referencedColumnName="user")
      */
-    private $mUser = '0';
+    private $mUser;
 
     /**
      * @var boolean
@@ -213,4 +213,10 @@ class Airplay
     {
         return $this->airplay;
     }
+
+    public function __construct() {
+        $this->dcreat = new \DateTime();
+        $this->dmodif = new \DateTime();
+    }
+
 }

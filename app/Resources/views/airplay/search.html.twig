@@ -20,6 +20,7 @@
 			<tr>
 				<th>Date</th>
 				<th>Nom</th>
+				<th>Action</th>
 				<th>Publication ?</th>
 			</tr>	
 		</thead>
@@ -28,6 +29,9 @@
 			<tr onclick="seeAirplay({{airplay.airplay}})">
 				<td>{{airplay.dmodif|date("d/m/Y")}}</td>
 				<td>{{airplay.libelle}}</td>
+				<td>
+					<a href="{{path('editAirplay',{'id':airplay.airplay})}}"><span class="glyphicon glyphicon-edit" title="Editer"></span></a>
+				</td>	
 				<td><input type="checkbox" name="publie" value="{{airplay.airplay}}" {% if airplay.publie == 1 %}checked{% endif %}></td>
 			</tr>
 		{% endfor %}

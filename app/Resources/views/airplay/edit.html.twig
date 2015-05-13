@@ -1,4 +1,4 @@
-{% block title %}Création d'Airplay{% endblock %}
+{% block title %}Edition d'Airplay{% endblock %}
 {% extends 'base.html.twig' %}
 
 
@@ -11,12 +11,12 @@
 
 
 	<fieldset>
-		<legend>Création d'Airplay</legend>
+		<legend>Edition d'Airplay</legend>
 		<form id="addCd">
 			<input type="text" id="newCD"><button type="submit" class="btn btn-info">Ajouter le CD</button>
 		</form>
 		<div class="row">
-			<form method="post" action="{{path('createAirplay')}}" id="types_table">
+			<form method="post" action="" id="types_table">
 				<div class="col-md-8">
 					<table class="table table-striped">
 						<tr>
@@ -41,6 +41,9 @@
 			<div class="row">
 				<div class="col-xs-10">
 					{{form_row(form.libelle,{'label':'Titre de l\'airplay'})}}
+				</div>
+				<div class="col-xs-2">
+					<input type="checkbox" name="publier" id="publier"><label for="publier" class="control-label"> Publier</label>
 				</div>
 			</div>
 			<div class="row">
@@ -130,7 +133,6 @@
 			event.preventDefault();
 			$("#newCD").val("");
 		});
-
 
 		function deleteRow (cd) {
 			$("#row_"+cd).remove();

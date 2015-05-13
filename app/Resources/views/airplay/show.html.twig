@@ -39,7 +39,7 @@
 				<td>{{ligne.cd.titre}}</td>
 				{% if is_granted('ROLE_PROGRA') %}
 					<td>{{ligne.cd.annee}}</td>
-					<td>{{ligne.cd.rotation.libelle}}</td>
+					<td>{% if ligne.cd.rotation and ligne.cd.rotation.rotation %}{{ligne.cd.rotation.libelle}}{% endif %}</td>
 					<td>{% if ligne.cd.notemoy %}{{ligne.cd.notemoy|round(1,'ceil')}}{% endif %}</td>
 					<td>{% set star = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.star > 0 %}{% set star = star+1 %}{% endif %}{% endfor %}{{star}}</td>
 					<td>{% set paulo = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.paulo > 0 %}{% set paulo = paulo+1 %}{% endif %}{% endfor %}{{paulo}}</td>

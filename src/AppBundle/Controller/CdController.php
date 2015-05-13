@@ -442,7 +442,7 @@ class CdController extends Controller
     {
         $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
 
-        if(!$cd) {
+        if(!$cd || $cd->getSuppr()) {
             return null;
         }
 
@@ -459,6 +459,27 @@ class CdController extends Controller
         }
         if ($cd->getGenre()) {
             $tab['genre'] = $cd->getGenre()->getLibelle();
+        } else {
+            $tab['genre'] = '';
+        }
+        if ($cd->getType()) {
+            $tab['type'] = $cd->getType()->getLibelle();
+        } else {
+            $tab['type'] = '';
+        }
+
+        $tab['star'] = 0;
+        $tab['paulo'] = 0;
+        $tab['anim'] = 0;
+
+        foreach ($cd->getPistes() as $key => $piste) {
+            if($piste->getStar()) {
+                $tab['star']++;
+            }if($piste->getPaulo()) {
+                $tab['paulo']++;
+            }if($piste->getAnim()) {
+                $tab['anim']++;
+            }
         }
 
         $response = new JsonResponse();

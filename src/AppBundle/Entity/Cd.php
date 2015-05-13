@@ -131,6 +131,7 @@ class Cd
      * @var Type
      *
      * @ORM\ManyToOne(targetEntity="Type")
+     * @Assert\NotBlank(message="Le type de disque doit être renseigné.")
      * @ORM\JoinColumn(name="type", referencedColumnName="type")
      */
     private $type = 0;

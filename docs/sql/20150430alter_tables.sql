@@ -30,3 +30,10 @@ UPDATE `f_cd` SET rotation = NULL WHERE rotation > 7;
 
 
 ALTER TABLE `f_airplay_cd` DROP `dbkey`;
+
+UPDATE f_cd SET type= NULL WHERE type=0;
+UPDATE f_cd SET support= NULL WHERE support=0;
+UPDATE f_cd SET genre= NULL WHERE genre=0;
+UPDATE f_cd SET langue= NULL WHERE langue=0;
+UPDATE f_cd SET langue= NULL WHERE langue=0;
+UPDATE f_cd SET rotation= NULL WHERE rotation=0;
