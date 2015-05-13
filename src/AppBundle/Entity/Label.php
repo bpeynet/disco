@@ -143,7 +143,7 @@ class Label
      *
      * @ORM\Column(name="suppr", type="boolean", nullable=false)
      */
-    private $suppr = '0';
+    private $suppr = false;
 
     /**
      * @var string
