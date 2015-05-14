@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\DiscoController;
 use AppBundle\Entity\Cd;
 use AppBundle\Entity\CdNote;
 use AppBundle\Entity\CdComment;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
-class CdController extends Controller
+class CdController extends DiscoController
 {
     /**
      * @Route("/cd", name="cd")
@@ -166,6 +166,7 @@ class CdController extends Controller
         $em->persist($cd);
         $em->flush();
 
+        $this->discoLog("suppression logique du CD ".$cd->getCd()." ".$cd->getTitre());
         $this->addFlash('success','Le Cd ne s\'affichera plus. Si cela est une erreur, contactez l\'admin !');
         return $this->redirect($this->generateUrl('cd'));
 	}
@@ -193,7 +194,7 @@ class CdController extends Controller
             $em = $this->getDoctrine()->getManager();
 
 
-            
+
             $cd = $form->getData();
 
             $cd->setLabel(null);
@@ -208,7 +209,6 @@ class CdController extends Controller
             $cd->setGenre($genre);
 
             $em->persist($cd);
-            $em->flush();
 
             for($i = 1; $i <= $req['nbPiste']; $i++) {
                 $piste = new Piste();
@@ -237,17 +237,13 @@ class CdController extends Controller
                 } else { $piste->setStar(false); }
 
                 $em->persist($piste);
-                $em->flush();
-
             }
-            $num = $em->createQuery(
-                    'SELECT max(c.cd)
-                    FROM AppBundle:Cd c')
-                ->getResult()[0][1];
 
+            $em->flush();
 
+            $num = $cd->getCd();
 
-
+            $this->discoLog("a créé le CD $num ".$cd->getTitre());
             $this->addFlash('success','Le CD a bien été créé !');
 
             return $this->redirect($this->generateUrl('showCd',array('id'=>$num)));
@@ -265,7 +261,7 @@ class CdController extends Controller
      */
     public function autocompleteAction($like, Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut modifier un disque.');
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour chercher un disque.');
         $limit = $this->container->getParameter('listingLimit');
 
         $em = $this->getDoctrine()->getManager();
@@ -278,7 +274,7 @@ class CdController extends Controller
             $res = $res->where('c.titre = :titre')
                 ->setParameter('titre',$request->query->get('term'));
         }
-            $res= $res
+        $res= $res
             ->orderBy('c.titre','ASC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -291,7 +287,7 @@ class CdController extends Controller
 
     /**
      * @Route("/cd/{id}/comment", name="commentCd")
-     */ 
+     */
     public function commentAction(Request $request, $id)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour poster un commentaire.');
@@ -358,8 +354,10 @@ class CdController extends Controller
             if(is_numeric($note) && $note >= 0 && $note <= 5) {
                 round($note, 1);
 
+                $em = $this->getDoctrine()->getManager();
+
                 $user = $this->get('security.token_storage')->getToken()->getUser();
-                $cd = $this->getDoctrine()->getRepository('AppBundle:Cd')->find($id);
+                $cd = $em->getRepository('AppBundle:Cd')->find($id);
 
                 if(!$cd) {
                     throw $this->createNotFoundException(
@@ -367,7 +365,7 @@ class CdController extends Controller
                     );
                 }
 
-                $repository = $this->getDoctrine()->getRepository('AppBundle:CdNote');
+                $repository = $em->getRepository('AppBundle:CdNote');
                 $verif_note = $repository->findOneBy(array('user'=>$user,'cd'=>$cd));
 
                 if(!$verif_note) {
@@ -376,21 +374,20 @@ class CdController extends Controller
                     $cd_note->setUser($user);
                     $cd_note->setNote($note);
 
-                    $this->getDoctrine()->getManager()->persist($cd_note);
-                    $this->getDoctrine()->getManager()->flush();
+                    $em->persist($cd_note);
 
-                    $note_moy = $this->getDoctrine()->getManager()->getRepository('AppBundle:CdNote')->createQueryBuilder('n')
+                    $note_moy = $em->getRepository('AppBundle:CdNote')->createQueryBuilder('n')
                         ->select('avg(n.note)')
                         ->where('n.cd = :cd')
                         ->setParameter('cd',$cd)
                         ->getQuery()
                         ->getResult();
 
-                    $cd->setNoteMoy($note_moy[0][1]);    
+                    $cd->setNoteMoy($note_moy[0][1]);
 
-                    $this->getDoctrine()->getManager()->persist($cd);
-                    $this->getDoctrine()->getManager()->flush();
-                
+                    $em->persist($cd);
+                    $em->flush();
+
                     $this->addFlash('success','La note que vous avez choisie a été affectée au CD.');
                 } else {
                     $this->addFlash('error','Impossible de noter deux fois un CD.');
@@ -404,7 +401,7 @@ class CdController extends Controller
         } else {
             $this->addFlash('error','Une erreur est survenue lors de la notation du CD !');
         }
-        
+
         return $this->redirect($this->generateUrl('showCd',array('id'=>$id)));
     }
 
@@ -430,6 +427,7 @@ class CdController extends Controller
         $em->persist($cd);
         $em->flush();
 
+        $this->discoLog("a modifié le message de retour au label du disque ".$cd->getCd()." ".$cd->getTitre());
         $this->addFlash('info','Le message de retour label a été modifié.');
 
         return $this->redirect($this->generateUrl('showCd',array('id'=>$id)));
