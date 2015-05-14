@@ -7,6 +7,17 @@ services:
 #    service_name:
 #        class: AcmeBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+    disco.logger:
+        class:     Symfony\Bridge\Monolog\Logger
+        arguments: [app]
+        calls:
+            - [pushHandler, [@disco.logger_handler]]
+
+    disco.logger_handler:
+        class:     Monolog\Handler\StreamHandler
+        arguments: [%kernel.logs_dir%/disco.log, 200] # 200 is INFO
+
     appbundle.twig.classname:
         class: AppBundle\Twig\ClassTwigExtension
         tags:

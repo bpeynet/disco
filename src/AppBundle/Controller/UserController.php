@@ -95,6 +95,7 @@ class UserController extends Controller
             if($mail or $mdp) {
                 if($encoder->isPasswordValid($user,$mdp_a)) {
                     if($mail) {
+                        $this->get("disco.logger")->info($user->getUsername()." a changé son mail de ".$user->getEmail()." à ".$mail);
                         $this->addFlash('success','Votre mail a bien été modifié.');
                         $user->setEmail($mail);
                     }
@@ -103,6 +104,7 @@ class UserController extends Controller
                             //Encodage du MDP
                             $encoded = $encoder->encodePassword($user, $mdp);
                             $user->setPassword($encoded);
+                            $this->get("disco.logger")->info($user->getUsername()." a changé son mot de passe.");
                             $this->addFlash('success','Votre mot de passe a bien été modifié.');
                         } else {
                             $this->addFlash('error','Les mots de passe en correspondent pas.');
@@ -169,8 +171,8 @@ class UserController extends Controller
                     } else {
                         $this->addFlash('error','Les mots de passe ne correspondent pas !');
                         return $this->render('user/editAdmin.html.twig',array('form'=>$form->createView(), 'user' => $user));
-                    }                
-                    
+                    }
+
                 }
 
                 $em->persist($user);
