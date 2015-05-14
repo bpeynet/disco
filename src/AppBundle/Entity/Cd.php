@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Cd
  *
- * @ORM\Table(name="f_cd", uniqueConstraints={@ORM\UniqueConstraint(name="cd", columns={"cd"})}, indexes={@ORM\Index(name="artiste", columns={"artiste"}), @ORM\Index(name="genre", columns={"genre"}), @ORM\Index(name="support", columns={"support"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="airplay", columns={"cd", "airplay"}), @ORM\Index(name="dprogra", columns={"dprogra"}), @ORM\Index(name="jsaisie", columns={"jsaisie"}), @ORM\Index(name="alllabel", columns={"label", "maison", "distrib"}), @ORM\Index(name="jsaisie_anne", columns={"jsaisie", "annee"})})
+ * @ORM\Table(name="f_cd",indexes={@ORM\Index(name="artiste", columns={"artiste"}), @ORM\Index(name="genre", columns={"genre"}), @ORM\Index(name="support", columns={"support"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="airplay", columns={"cd", "airplay"}), @ORM\Index(name="dprogra", columns={"dprogra"}), @ORM\Index(name="jsaisie", columns={"jsaisie"}), @ORM\Index(name="alllabel", columns={"label", "maison", "distrib"}), @ORM\Index(name="jsaisie_anne", columns={"jsaisie", "annee"})})
  * @ORM\Entity
  */
 class Cd
@@ -86,12 +86,6 @@ class Cd
      * @var Label
      *
      * @ORM\ManyToOne(targetEntity="Label")
-     * @Assert\Length(
-     *      min="1",
-     *      max = "255",
-     *      minMessage=" Le titre est trop court : limit }} caractère minimum.",
-     *      maxMessage=" Le nom de le titre est trop long : {{ limit }} caractères maximum."
-     * )
      * @ORM\JoinColumn(name="label", referencedColumnName="label")
      */
     private $label = null;
@@ -134,7 +128,7 @@ class Cd
      * @Assert\NotBlank(message="Le type de disque doit être renseigné.")
      * @ORM\JoinColumn(name="type", referencedColumnName="type")
      */
-    private $type = 0;
+    private $type = null;
 
     /**
      * @var Support
@@ -142,7 +136,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Support")
      * @ORM\JoinColumn(name="support", referencedColumnName="support")
      */
-    private $support = 0;
+    private $support = null;
 
     /**
      * @var Genre
@@ -150,7 +144,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="Genre")
      * @ORM\JoinColumn(name="genre", referencedColumnName="genre")
      */
-    private $genre = 0;
+    private $genre = null;
 
     /**
      * @var Langue
@@ -251,7 +245,7 @@ class Cd
      *
      * @ORM\Column(name="nb_piste", type="integer", nullable=false)
      */
-    private $nbPiste = '0';
+    private $nbPiste = 0;
 
     /**
      * @var boolean
@@ -353,7 +347,7 @@ class Cd
      * @param $piste
      */
     public function addPistes($piste) {
-        
+
     }
 
     /**
@@ -751,7 +745,7 @@ class Cd
      */
     public function setComment($comment)
     {
-        if(empty($comment)) {$comment='';} 
+        if(empty($comment)) {$comment='';}
         $this->comment = $comment;
 
         return $this;

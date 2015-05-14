@@ -26,19 +26,6 @@ UPDATE `disco`.`f_rotation` SET `retour_label` = 'n''a pas été retenu.' WHERE 
 UPDATE `disco`.`f_rotation` SET `retour_label` = 'n''a pas été retenu.' WHERE `f_rotation`.`rotation` = 7;
 UPDATE `disco`.`f_rotation` SET `retour_label` = 'a été mis à disposition des émissions spéciales.' WHERE `f_rotation`.`rotation` = 6;
 
-UPDATE `f_cd` SET rotation = NULL WHERE rotation > 7;
-
-
 ALTER TABLE `f_airplay_cd` DROP `dbkey`;
-
-UPDATE f_cd SET type= NULL WHERE type=0;
-UPDATE f_cd SET support= NULL WHERE support=0;
-UPDATE f_cd SET genre= NULL WHERE genre=0;
-UPDATE f_cd SET langue= NULL WHERE langue=0;
-UPDATE f_cd SET langue= NULL WHERE langue=0;
-UPDATE f_cd SET rotation= NULL WHERE rotation=0;
-UPDATE f_cd SET label= NULL WHERE label=0;
-UPDATE f_cd SET maison= NULL WHERE maison=0;
-UPDATE f_cd SET distrib= NULL WHERE distrib=0;
 
 ALTER TABLE `f_cd` CHANGE `paulo` `rivendell` TINYINT(1) NOT NULL;
