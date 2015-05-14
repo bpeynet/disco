@@ -3,14 +3,14 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\DiscoController;
 use AppBundle\Entity\Label;
 use AppBundle\Form\LabelType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class LabelController extends Controller
+class LabelController extends DiscoController
 {
     /**
      * @Route("/label", name="label")
@@ -66,7 +66,7 @@ class LabelController extends Controller
      */
     public function showAction($id) {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
-        
+
         $label = $this->getDoctrine()
             ->getRepository('AppBundle:Label')
             ->find($id);
@@ -101,6 +101,7 @@ class LabelController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         if($label->getDisques()->isEmpty()) {
+            $this->discoLog("a supprimé de label ".$label->getLabel()." ".$label->getLibelle());
             $em->remove($label);
             $em->flush();
 
@@ -137,15 +138,12 @@ class LabelController extends Controller
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
         $form->handleRequest($request);
-        
+
         if($request->isMethod('POST')) {
             if ($form->isValid()) {
-                $data = $form->getData();
+                $em = $this->getDoctrine()->getManager()->flush();
 
-                
-                $em = $this->getDoctrine()->getManager();
-                $em->flush();
-
+                $this->discoLog("a édité le label ".$label->getLabel()." ".$label->getLibelle());
                 $this->addFlash('success','Edition terminée !');
 
             } else {
@@ -163,8 +161,8 @@ class LabelController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un label.');
 
-        $post = new Label();
-        $form = $this->createForm(new LabelType(),$post);
+        $label = new Label();
+        $form = $this->createForm(new LabelType(),$label);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer le Label',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
@@ -173,27 +171,21 @@ class LabelController extends Controller
         $form->handleRequest($request);
 
         if($request->isMethod('POST')) {
-            $form->handleRequest($request);
             if ($form->isValid()) {
-                $data = $form->getData();
-
                 $em = $this->getDoctrine()->getManager();
-
-                $em->persist($data);
+                $em->persist($label);
                 $em->flush();
 
-                $num = $em->createQuery(
-                        'SELECT max(l.label)
-                        FROM AppBundle:Label l')
-                    ->getResult()[0][1];
+                $num = $label->getLabel();
 
+                $this->discoLog("a créé le label ".$label->getLabel()." ".$label->getLibelle());
                 $this->addFlash('success','Le label a été créé !');
 
                 return $this->redirect($this->generateUrl('showLabel',array('id'=>$num)));
             } else {
                 $this->addFlash('error','Certains champs sont mal remplis.');
                 return $this->render('label/create.html.twig',array('form'=>$form->createView()));
-            }        
+            }
         }
 
         return $this->render('label/create.html.twig',array('form'=>$form->createView()));
@@ -204,6 +196,8 @@ class LabelController extends Controller
      */
     public function autocompleteAction($like, Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
+
         $limit = $this->container->getParameter('listingLimit');
 
         $em = $this->getDoctrine()->getManager();
