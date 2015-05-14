@@ -13,24 +13,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends Controller
 {
-
-    /**
-     *  @Route("/user/edit/{id}/role/{value}", name="editUserRole")
-     */
-    public function editRoleAction($id, $value, Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')->find($id);
-
-        if (!$user) {
-            $reponse = "Erreur lors du traitement : utilisateur non trouvé.";
-        } else {
-            $reponse = "Edition effectuée";
-        }
-
-        return $reponse;
-    }
-
     /**
      * @Route("/user/delete/{id}", name="deleteUser")
      */
