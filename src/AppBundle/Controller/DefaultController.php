@@ -3,13 +3,13 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\DiscoController;
 use AppBundle\Entity\Cd;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 
 
-class DefaultController extends Controller
+class DefaultController extends DiscoController
 {
 
 	/**
