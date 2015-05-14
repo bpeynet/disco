@@ -3,14 +3,14 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\DiscoController;
 use AppBundle\Entity\Artiste;
 use AppBundle\Form\ArtisteType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class ArtisteController extends Controller
+class ArtisteController extends DiscoController
 {
     /**
      * @Route("/artiste", name="artiste")
@@ -101,6 +101,7 @@ class ArtisteController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         if($artiste->getDisques()->isEmpty()) {
+            $this->discoLog("a supprimé l'artiste ".$artiste->getArtiste()." - ".$artiste->getLibelle());
             $em->remove($artiste);
             $em->flush();
             $this->addFlash('success','Suppression effectuée !');
@@ -139,6 +140,7 @@ class ArtisteController extends Controller
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
+                $this->discoLog("a modifié l'artiste ".$artiste->getArtiste()." ".$artiste->getLibelle());
                 $this->addFlash('success','L\'Artiste a bien été édité !');
             } else {
                 $this->addFlash('error','Les champs on été mal renseignés.');
@@ -146,7 +148,7 @@ class ArtisteController extends Controller
         }
 
         return $this->render('artiste/edit.html.twig',array('form'=>$form->createView(),'artiste' => $artiste));
-        
+
     }
 
     /**
@@ -156,9 +158,9 @@ class ArtisteController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un artiste.');
 
-        $post = new Artiste();
-        $post->setLibelle($libelle);
-        $form = $this->createForm(new ArtisteType(),$post);
+        $artiste = new Artiste();
+        $artiste->setLibelle($libelle);
+        $form = $this->createForm(new ArtisteType(),$artiste);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer l\'Artiste',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
@@ -168,10 +170,10 @@ class ArtisteController extends Controller
 
         if($request->isMethod('POST')) {
             if ($form->isValid()) {
-                $data = $form->getData();
+                $artiste = $form->getData();
                 $em = $this->getDoctrine()->getManager();
 
-                $em->persist($data);
+                $em->persist($artiste);
                 $em->flush();
 
                 $num = $em->createQuery(
@@ -179,6 +181,7 @@ class ArtisteController extends Controller
                         FROM AppBundle:Artiste a')
                     ->getResult()[0][1];
 
+                $this->discoLog("a créé l'artiste ".$artiste->getArtiste()." ".$artiste->getLibelle());
                 $this->addFlash('success','L\'Artiste a bien été créé !');
 
                 return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
@@ -210,7 +213,7 @@ class ArtisteController extends Controller
             $res = $res->where('a.libelle = :libelle')
                 ->setParameter('libelle',$request->query->get('term'));
         }
-        $res = $res 
+        $res = $res
             ->orderBy('a.libelle','ASC')
             ->setMaxResults($limit)
             ->getQuery()
