@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\DiscoController;
 use AppBundle\Entity\Airplay;
 use AppBundle\Entity\AirplayCd;
 use AppBundle\Form\AirplayType;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class AirplayController extends Controller
+class AirplayController extends DiscoController
 {
     /**
      * @Route("/airplay", name="airplay")
@@ -129,7 +129,7 @@ class AirplayController extends Controller
 
         if($request->isMethod('POST') && !empty($rq->get('appbundle_airplay'))) {
 
-            
+
             if ($form->isValid()) {
 
                 $user = $this->get('security.context')->getToken()->getUser();
@@ -139,6 +139,8 @@ class AirplayController extends Controller
 
                 if($rq->get('publier')) {
                     $airplay->setPublie(true);
+                } else {
+                    $airplay->setPublie(false);
                 }
 
                 $em->persist($airplay);
@@ -168,6 +170,7 @@ class AirplayController extends Controller
                     }
                 }
 
+                $this->discoLog("a modifié l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été modifié !');
 
                 return $this->redirect($this->generateUrl('editAirplay',array('id'=>$airplay->getAirplay())));
@@ -219,7 +222,7 @@ class AirplayController extends Controller
         } else {
             $date_mini = date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
         }
-        
+
         $generatedAirplay = $em->createQuery(
                 'SELECT cd
                 FROM AppBundle:Cd cd
@@ -237,7 +240,7 @@ class AirplayController extends Controller
 
         if($request->isMethod('POST') && !empty($rq->get('appbundle_airplay'))) {
 
-            
+
             if ($form->isValid()) {
 
                 $user = $this->get('security.context')->getToken()->getUser();
@@ -266,6 +269,7 @@ class AirplayController extends Controller
                     }
                 }
 
+                $this->discoLog("a créé l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été créé !');
 
                 return $this->redirect($this->generateUrl('editAirplay',array('id'=>$airplay->getAirplay())));
