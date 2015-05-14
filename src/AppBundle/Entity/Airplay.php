@@ -46,7 +46,7 @@ class Airplay
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="mUser", referencedColumnName="user")
+     * @ORM\JoinColumn(name="c_user", referencedColumnName="user")
      */
     private $cUser;
 
@@ -54,7 +54,7 @@ class Airplay
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="mUser", referencedColumnName="user")
+     * @ORM\JoinColumn(name="m_user", referencedColumnName="user")
      */
     private $mUser;
 
@@ -82,7 +82,7 @@ class Airplay
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -105,7 +105,7 @@ class Airplay
     /**
      * Get dcreat
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDcreat()
     {
@@ -128,7 +128,7 @@ class Airplay
     /**
      * Get dmodif
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDmodif()
     {
@@ -151,7 +151,7 @@ class Airplay
     /**
      * Get cUser
      *
-     * @return User 
+     * @return User
      */
     public function getCUser()
     {
@@ -174,7 +174,7 @@ class Airplay
     /**
      * Get mUser
      *
-     * @return User 
+     * @return User
      */
     public function getMUser()
     {
@@ -197,7 +197,7 @@ class Airplay
     /**
      * Get publie
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPublie()
     {
@@ -207,7 +207,7 @@ class Airplay
     /**
      * Get airplay
      *
-     * @return integer 
+     * @return integer
      */
     public function getAirplay()
     {
