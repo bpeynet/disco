@@ -3,14 +3,14 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\DiscoController;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class AdminController extends Controller
+class AdminController extends DiscoController
 {
     /**
      * @Route("/admin", name="admin")
@@ -35,7 +35,7 @@ class AdminController extends Controller
 
         return $this->render('admin/panel.html.twig',array(
                 'users'=>$users,
-                'roles'=>$roles 
+                'roles'=>$roles
             ));
     }
 
@@ -65,6 +65,7 @@ class AdminController extends Controller
             }
         }
 
+        $this->discoLog("a chiffré les mots de passe");
         $this->addFlash('success','Mots de passe encryptés !');
         return $this->redirect($this->generateUrl('admin'));
 
