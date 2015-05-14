@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\DiscoController;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 use AppBundle\Form\UserOwnType;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class UserController extends Controller
+class UserController extends DiscoController
 {
     /**
      * @Route("/user/delete/{id}", name="deleteUser")
@@ -28,6 +28,7 @@ class UserController extends Controller
             );
         }
 
+        $this->discoLog("a supprimé ".$user->getUsername());
         $em->remove($user);
         $em->flush();
 
@@ -77,7 +78,7 @@ class UserController extends Controller
             if($mail or $mdp) {
                 if($encoder->isPasswordValid($user,$mdp_a)) {
                     if($mail) {
-                        $this->get("disco.logger")->info($user->getUsername()." a changé son mail de ".$user->getEmail()." à ".$mail);
+                        $this->discoLog("a changé son mail de ".$user->getEmail()." à ".$mail);
                         $this->addFlash('success','Votre mail a bien été modifié.');
                         $user->setEmail($mail);
                     }
@@ -86,7 +87,7 @@ class UserController extends Controller
                             //Encodage du MDP
                             $encoded = $encoder->encodePassword($user, $mdp);
                             $user->setPassword($encoded);
-                            $this->get("disco.logger")->info($user->getUsername()." a changé son mot de passe.");
+                            $this->discoLog("a changé son mot de passe.");
                             $this->addFlash('success','Votre mot de passe a bien été modifié.');
                         } else {
                             $this->addFlash('error','Les mots de passe en correspondent pas.');
@@ -142,6 +143,7 @@ class UserController extends Controller
                 $em->persist($user);
                 $em->flush();
 
+                $this->discoLog("a édité ".$user->getUsername());
                 $this->addFlash('success','Informations éditées !');
 
                 if(!empty($mdp)) {
@@ -149,6 +151,10 @@ class UserController extends Controller
                         $encoder = $this->container->get('security.password_encoder');
                         $encoded = $encoder->encodePassword($user, $mdp);
                         $user->setPassword($encoded);
+
+                        $em->flush();
+
+                        $this->discoLog("a changé le mot de passe de ".$user->getUsername());
                         $this->addFlash('success','Mot de Passe édité correctement !');
                     } else {
                         $this->addFlash('error','Les mots de passe ne correspondent pas !');
@@ -157,8 +163,6 @@ class UserController extends Controller
 
                 }
 
-                $em->persist($user);
-                $em->flush();
 
                 return $this->redirect($this->generateUrl('showUser',array('id' => $id)));
             } else {
@@ -205,6 +209,7 @@ class UserController extends Controller
                     $em->persist($user);
                     $em->flush();
 
+                    $this->discoLog("a créé ".$user->getUsername());
                     $this->addFlash('success','L\'Utilisateur a bien été créé !');
                     return $this->redirect($this->generateUrl('admin'));
                 } else {
