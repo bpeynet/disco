@@ -62,6 +62,102 @@ class AirplayController extends DiscoController
     }
 
     /**
+     * Création d'une date minimale
+     */
+    private function dateMini($date_mini)
+    {
+        if(!empty($date_mini)) {
+            return $date_mini = substr($date_mini,6,4).'-'.substr($date_mini,3,2).'-'.substr($date_mini,0,2).' 00:00:00';
+        } else {
+            return $date_mini = date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
+        }
+    }
+
+    /**
+     * Fonction pour générer un airplay à partir de paramètres
+     */
+    private function generateAirplay($date_mini, $type)
+    {
+        return $this->getDoctrine()->getManager()->createQuery(
+                    'SELECT cd
+                    FROM AppBundle:Cd cd
+                    WHERE cd.rotation <= 3
+                        AND cd.dsaisie >= :date_mini
+                        AND cd.type IN (:type_select)
+                        AND cd.airplay = 0
+                        AND cd.suppr = 0
+                    ORDER BY cd.rotation DESC,
+                        cd.noteMoy DESC'
+                )
+                ->setParameter('date_mini',$date_mini)
+                ->setParameter('type_select', $type)
+                ->getResult();
+    }
+
+    /**
+     * Permet de sauver l'état de l'Airplay
+     */
+    private function saveAirplay($airplay, $request, $rq, $cUser = false)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        if ($cUser) {
+            $airplay->setCuser($user);
+        }
+        $airplay->setMuser($user);
+
+        $classement = explode(",", $request->request->get('classement'));
+
+        if($rq->get('publier')) {
+            $airplay->setPublie(true);
+        } else {
+            $airplay->setPublie(false);
+        }
+
+        $em->persist($airplay);
+        $em->flush();
+
+        $em->createQuery(
+            'DELETE FROM AppBundle:AirplayCd ac
+                WHERE ac.airplay = :airplay'
+            )
+            ->setParameter('airplay',$airplay->getAirplay())
+            ->getResult();
+
+        foreach ($classement as $key => $row) {
+            if($row && $row != "") {
+                $cd = $em->getRepository('AppBundle:Cd')->find($row);
+                if($cd) {
+                    $airplay_cd = new AirplayCd();
+                    $airplay_cd->setCd($cd);
+                    $airplay_cd->setAirplay($airplay);
+                    $airplay_cd->setOrdre($key+1);
+
+                    $em->persist($airplay_cd);
+                } else {
+                    $this->addFlash('error','Erreur lors du traitement d\'un CD.');
+                }
+            }
+        }
+
+        $em->flush();
+    }
+
+    /**
+     * Return en fonction de l'édition ou création
+     */
+    private function returnHtmlAirplay($action,$form,$generatedAirplay,$types,$date_mini,$type)
+    {
+        return $this->render('airplay/'.$action.'.html.twig',array(
+            'form'=>$form->createView(),
+            'generation'=>$generatedAirplay,
+            'types' => $types,
+            'date_mini' => $date_mini,
+            'types_check' => $type
+        ));
+    }
+
+    /**
      * @Route("/airplay/edit/{id}", name="editAirplay")
      */
     public function editAction(Request $request, $id)
@@ -83,29 +179,18 @@ class AirplayController extends DiscoController
 
         $types = $em->getRepository('AppBundle:Type')->findAll();
 
-        if(!empty($rq->get('date'))) {
-            $date_mini = substr($rq->get('date'),6,4).'-'.substr($rq->get('date'),3,2).'-'.substr($rq->get('date'),0,2).' 00:00:00';
-        } else {
-            $date_mini = date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
-        }
+        $form = $this->createForm(new AirplayType(),$airplay);
+        $form->add('submit', 'submit', array(
+                'label' => 'Editer l\'Airplay',
+                'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
+            ));
 
+        $form->handleRequest($request);
 
+        $date_mini = $this->dateMini($rq->get('date'));
 
         if(!empty($rq->get('type'))) {
-            $generatedAirplay = $em->createQuery(
-                    'SELECT cd
-                    FROM AppBundle:Cd cd
-                    WHERE cd.rotation <= 3
-                        AND cd.dsaisie >= :date_mini
-                        AND cd.type IN (:type_select)
-                        AND cd.airplay = 0
-                        AND cd.suppr = 0
-                    ORDER BY cd.rotation DESC,
-                        cd.noteMoy DESC'
-                )
-                ->setParameter('date_mini',$date_mini)
-                ->setParameter('type_select', $rq->get('type'))
-                ->getResult();
+            $generatedAirplay = $this->generateAirplay($date_mini, $rq->get('type'));
         } else {
             $generatedAirplay = $em->createQuery(
                     'SELECT cd
@@ -119,56 +204,12 @@ class AirplayController extends DiscoController
         }
 
 
-        $form = $this->createForm(new AirplayType(),$airplay);
-        $form->add('submit', 'submit', array(
-                'label' => 'Editer l\'Airplay',
-                'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
-            ));
-
-        $form->handleRequest($request);
-
         if($request->isMethod('POST') && !empty($rq->get('appbundle_airplay'))) {
 
 
             if ($form->isValid()) {
 
-                $user = $this->get('security.context')->getToken()->getUser();
-                $airplay->setMuser($user);
-
-                $classement = explode(",", $request->request->get('classement'));
-
-                if($rq->get('publier')) {
-                    $airplay->setPublie(true);
-                } else {
-                    $airplay->setPublie(false);
-                }
-
-                $em->persist($airplay);
-                $em->flush();
-
-                $em->createQuery(
-                    'DELETE FROM AppBundle:AirplayCd ac
-                        WHERE ac.airplay = :airplay'
-                    )
-                    ->setParameter('airplay',$id)
-                    ->getResult();
-
-                foreach ($classement as $key => $row) {
-                    if($row && $row != "") {
-                        $cd = $em->getRepository('AppBundle:Cd')->find($row);
-                        if($cd) {
-                            $airplay_cd = new AirplayCd();
-                            $airplay_cd->setCd($cd);
-                            $airplay_cd->setAirplay($airplay);
-                            $airplay_cd->setOrdre($key+1);
-
-                            $em->persist($airplay_cd);
-                            $em->flush();
-                        } else {
-                            $this->addFlash('error','Erreur lors du traitement d\'un CD.');
-                        }
-                    }
-                }
+                $this->saveAirplay($airplay, $request, $rq);
 
                 $this->discoLog("a modifié l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été modifié !');
@@ -182,15 +223,7 @@ class AirplayController extends DiscoController
            }
         }
 
-
-        return $this->render('airplay/edit.html.twig', array(
-                'form'=>$form->createView(),
-                'generation'=>$generatedAirplay,
-                'types' => $types,
-                'date_mini' => $date_mini,
-                'types_check' => $rq->get('type')
-            ));
-
+        return $this->returnHtmlAirplay('edit',$form,$generatedAirplay,$types,$date_mini,$rq->get('type'));
     }
 
     /**
@@ -200,9 +233,9 @@ class AirplayController extends DiscoController
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un airplay.');
 
-
         $post = new Airplay();
-        $form = $this->createForm(new AirplayType(),$post);
+        
+        $form = $this->createForm(new AirplayType());
         $form->add('submit', 'submit', array(
                 'label' => 'Créer l\'Airplay',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
@@ -217,57 +250,14 @@ class AirplayController extends DiscoController
 
         $types = $em->getRepository('AppBundle:Type')->findAll();
 
-        if(!empty($rq->get('date'))) {
-            $date_mini = substr($rq->get('date'),6,4).'-'.substr($rq->get('date'),3,2).'-'.substr($rq->get('date'),0,2).' 00:00:00';
-        } else {
-            $date_mini = date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
-        }
+        $date_mini = $this->dateMini($rq->get('date'));
 
-        $generatedAirplay = $em->createQuery(
-                'SELECT cd
-                FROM AppBundle:Cd cd
-                WHERE cd.rotation <= 3
-                    AND cd.dsaisie >= :date_mini
-                    AND cd.type IN (:type_select)
-                    AND cd.airplay = 0
-                    AND cd.suppr = 0
-                ORDER BY cd.rotation DESC,
-                    cd.noteMoy DESC'
-            )
-            ->setParameter('date_mini',$date_mini)
-            ->setParameter('type_select', $rq->get('type'))
-            ->getResult();
+        $generatedAirplay = $this->generateAirplay($date_mini, $rq->get('type'));
 
         if($request->isMethod('POST') && !empty($rq->get('appbundle_airplay'))) {
-
-
             if ($form->isValid()) {
 
-                $user = $this->get('security.context')->getToken()->getUser();
-                $airplay->setCuser($user);
-                $airplay->setMuser($user);
-
-                $classement = explode(",", $request->request->get('classement'));
-
-                $em->persist($airplay);
-                $em->flush();
-
-                foreach ($classement as $key => $row) {
-                    if($row && $row != "") {
-                        $cd = $em->getRepository('AppBundle:Cd')->find($row);
-                        if($cd) {
-                            $airplay_cd = new AirplayCd();
-                            $airplay_cd->setCd($cd);
-                            $airplay_cd->setAirplay($airplay);
-                            $airplay_cd->setOrdre($key+1);
-
-                            $em->persist($airplay_cd);
-                            $em->flush();
-                        } else {
-                            $this->addFlash('error','Erreur lors du traitement d\'un CD.');
-                        }
-                    }
-                }
+                $this->saveAirplay($airplay, $request, $rq, true);
 
                 $this->discoLog("a créé l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été créé !');
@@ -281,7 +271,7 @@ class AirplayController extends DiscoController
            }
         }
 
-        return $this->render('airplay/create.html.twig',array('form'=>$form->createView(),'generation'=>$generatedAirplay, 'types' => $types, 'date_mini' => $date_mini, 'types_check' => $rq->get('type')));
+        return $this->returnHtmlAirplay('create',$form,$generatedAirplay,$types,$date_mini,$rq->get('type'));
 
     }
 

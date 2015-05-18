@@ -81,7 +81,7 @@
 								<td>{% set anim = 0 %}{% for piste in cd.pistes %}{% if piste.anim > 0 %}{% set anim = anim+1 %}{% endif %}{% endfor %}{{anim}}</td>
 								<td>{{cd.genre.libelle}}</td>
 								<td>{% if cd.type and cd.type.type %}{{cd.type.libelle}}{% endif %}</td>
-								<td><button onclick="deleteRow({{cd.cd}})" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button></td>
+								<td><a onclick="deleteRow({{cd.cd}})" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></a></td>
 							</tr>
 							{% set ordre = ordre+1 %}
 							{% endfor %}
