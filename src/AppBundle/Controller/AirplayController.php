@@ -14,24 +14,34 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AirplayController extends DiscoController
 {
     /**
-     * @Route("/airplay", name="airplay")
+     * @Route("/airplay/{page}", name="airplay")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $page = 1)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour voir cette page.');
 
         $doctrine = $this->getDoctrine();
         $em = $doctrine->getManager();
-        $limit = $this->container->getParameter('listingLimit');
+        $limit = 10;
 
         $airplays = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
             ->orderBy('a.airplay','DESC')
+            ->setFirstResult(($page-1)*10)
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
 
+        $nbAirplay = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
+            ->select('count(a)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $pageMax = ceil($nbAirplay/10);
+
         return $this->render('airplay/search.html.twig',array(
-                'airplays'=>$airplays
+                'airplays'=>$airplays,
+                'page' => $page,
+                'pageMax' => $pageMax
             ));
     }
 
@@ -188,20 +198,17 @@ class AirplayController extends DiscoController
         $form->handleRequest($request);
 
         $date_mini = $this->dateMini($rq->get('date'));
+        
+        $generatedAirplay = $em->createQuery(
+                'SELECT cd
+                FROM AppBundle:Cd cd, AppBundle:AirplayCd ac
+                WHERE cd.cd = ac.cd
+                    AND ac.airplay = :airplay
+                ORDER BY ac.ordre ASC'
+            )
+            ->setParameter('airplay',$id)
+            ->getResult();
 
-        if(!empty($rq->get('type'))) {
-            $generatedAirplay = $this->generateAirplay($date_mini, $rq->get('type'));
-        } else {
-            $generatedAirplay = $em->createQuery(
-                    'SELECT cd
-                    FROM AppBundle:Cd cd, AppBundle:AirplayCd ac
-                    WHERE cd.cd = ac.cd
-                        AND ac.airplay = :airplay
-                    ORDER BY ac.ordre ASC'
-                )
-                ->setParameter('airplay',$id)
-                ->getResult();
-        }
 
 
         if($request->isMethod('POST') && !empty($rq->get('appbundle_airplay'))) {

@@ -15,25 +15,7 @@
 		<form id="addCd">
 			<input type="text" id="newCD"><button type="submit" class="btn btn-info">Ajouter le CD</button>
 		</form>
-		<div class="row">
-			<form method="post" action="" id="types_table">
-				<div class="col-md-8">
-					<table class="table table-striped">
-						<tr>
-						{% for type in types %}
-								<td><label for="type_{{type.getLibelle}}">{{type.getLibelle}}</label>
-									<input type="checkbox" name="type[{{type.getType}}]" value="{{type.getType}}" id="type_{{type.getLibelle}}" {% if types_check and types_check[type.getType] is defined %}checked{% endif %}></td>
-						{% endfor %}
-						</tr>
-					</table>
-				</div>
-				<div class="col-md-4">
-					<label for="datepicker">Depuis le </label>
-					<input class="datepicker" id="datepicker" name="date"></input>
-					<button type="submit" class="btn btn-info">Générer l'Airplay</button>
-				</div>
-			</form>
-		</div>
+		
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
 		{{form_start(form,{'attr': {'id': 'airplay_form'}})}}
 			{{form_errors(form)}}
