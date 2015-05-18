@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 
 class SecurityController extends Controller
 {
+    // route declarée dans routing.yml
     public function loginAction()
     {
         $request = $this->getRequest();
