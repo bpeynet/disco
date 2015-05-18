@@ -213,7 +213,8 @@
 	      delay: 300,
 	      select: function( event, ui ) {
 	        $(this).text(ui.item.libelle);
-	      }
+	      },
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    };
 	    $( "#artiste" ).autocomplete(artisteCompleteParameters);
 
@@ -223,7 +224,8 @@
 	      delay: 300,
 	      select: function( event, ui ) {
 	        log('label',ui.item);
-	    	}
+	    	},
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    });
 
 	    $( "#titre" ).autocomplete({
@@ -232,8 +234,10 @@
 	      delay: 300,
 	      select: function( event, ui ) {
 	        	log('titre',ui.item);
-	    	}
+	    	},
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    });
 	});
+
 </script>
 {% endblock %}
