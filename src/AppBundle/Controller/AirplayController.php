@@ -38,6 +38,37 @@ class AirplayController extends DiscoController
 
         $pageMax = ceil($nbAirplay/10);
 
+        $nonPublies = $request->request->get('non_publies');
+        $publies = $request->request->get('publie');
+
+        if($publies or $nonPublies) {
+            if ($nonPublies) {
+                $tabNonPublies = explode(",", $request->request->get('non_publies'));
+
+                foreach ($tabNonPublies as $key => $publication) {
+                    if ($publication) {
+                        $airplay = $em->getRepository('AppBundle:Airplay')->find($publication);
+                        $airplay->setPublie(false);
+                        $em->persist($airplay);
+                    }
+                }                
+            }
+
+            if($publies) {
+                foreach ($publies as $key => $publication) {
+                    $airplay = $em->getRepository('AppBundle:Airplay')->find($publication);
+                    $airplay->setPublie(true);
+                    $em->persist($airplay);
+                }
+            }
+
+            $this->discoLog("a modifié les publications d'Airplays");
+            $this->addFlash('success','Les publications d\'Airplays ont été éditées.');
+
+        }
+
+        $em->flush();
+
         return $this->render('airplay/search.html.twig',array(
                 'airplays'=>$airplays,
                 'page' => $page,
@@ -198,7 +229,7 @@ class AirplayController extends DiscoController
         $form->handleRequest($request);
 
         $date_mini = $this->dateMini($rq->get('date'));
-        
+
         $generatedAirplay = $em->createQuery(
                 'SELECT cd
                 FROM AppBundle:Cd cd, AppBundle:AirplayCd ac
