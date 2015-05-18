@@ -29,3 +29,4 @@ UPDATE `disco`.`f_rotation` SET `retour_label` = 'a été mis à disposition des
 ALTER TABLE `f_airplay_cd` DROP `dbkey`;
 
 ALTER TABLE `f_cd` CHANGE `paulo` `rivendell` TINYINT(1) NOT NULL;
+ALTER TABLE `f_piste` CHANGE `paulo` `rivendell` TINYINT(1) NOT NULL;
