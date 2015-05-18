@@ -141,6 +141,8 @@ class AirplayController extends DiscoController
     private function saveAirplay($airplay, $request, $rq, $cUser = false)
     {
         $em = $this->getDoctrine()->getManager();
+        $ecoute_manquant = 0;
+
         $user = $this->get('security.context')->getToken()->getUser();
         if ($cUser) {
             $airplay->setCuser($user);
@@ -173,6 +175,14 @@ class AirplayController extends DiscoController
                     $airplay_cd->setCd($cd);
                     $airplay_cd->setAirplay($airplay);
                     $airplay_cd->setOrdre($key+1);
+                    
+                    //correspond au lien d'écoute
+                    if($rq->get('ecoute')[$row]) {
+                        $cd->setEcoute($rq->get('ecoute')[$row]);
+                        $em->persist($cd);
+                    } else {
+                        $ecoute_manquant++;
+                    }
 
                     $em->persist($airplay_cd);
                 } else {
@@ -182,6 +192,8 @@ class AirplayController extends DiscoController
         }
 
         $em->flush();
+
+        return $ecoute_manquant;
     }
 
     /**
@@ -247,10 +259,14 @@ class AirplayController extends DiscoController
 
             if ($form->isValid()) {
 
-                $this->saveAirplay($airplay, $request, $rq);
+                $ecoute_manquant = $this->saveAirplay($airplay, $request, $rq);
 
                 $this->discoLog("a modifié l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été modifié !');
+
+                if($ecoute_manquant>0) {
+                    $this->addFlash('info','Il y a '.$ecoute_manquant.' lien(s) d\'écoute non renseigné(s).');
+                }
 
                 return $this->redirect($this->generateUrl('editAirplay',array('id'=>$airplay->getAirplay())));
 
@@ -295,10 +311,14 @@ class AirplayController extends DiscoController
         if($request->isMethod('POST') && !empty($rq->get('appbundle_airplay'))) {
             if ($form->isValid()) {
 
-                $this->saveAirplay($airplay, $request, $rq, true);
+                $ecoute_manquant = $this->saveAirplay($airplay, $request, $rq, true);
 
                 $this->discoLog("a créé l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été créé !');
+
+                if($ecoute_manquant>0) {
+                    $this->addFlash('info','Il y a '.$ecoute_manquant.' lien(s) d\'écoute non renseigné(s).');
+                }
 
                 return $this->redirect($this->generateUrl('editAirplay',array('id'=>$airplay->getAirplay())));
 

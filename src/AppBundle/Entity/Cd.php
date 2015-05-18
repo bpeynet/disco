@@ -310,6 +310,12 @@ class Cd
      */
     private $img = '';
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ecoute", type="string")
+     */
+    private $ecoute = '0';
 
 
     /**
@@ -1209,6 +1215,29 @@ class Cd
     public function getCd()
     {
         return $this->cd;
+    }
+
+    /**
+     * Set ecoute
+     *
+     * @param integer $ecoute
+     * @return AirplayCd
+     */
+    public function setEcoute($ecoute)
+    {
+        $this->ecoute = $ecoute;
+
+        return $this;
+    }
+
+    /**
+     * Get ecoute
+     *
+     * @return integer 
+     */
+    public function getEcoute()
+    {
+        return $this->ecoute;
     }
 
     public function __construct() {
