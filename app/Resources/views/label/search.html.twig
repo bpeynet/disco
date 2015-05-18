@@ -61,7 +61,7 @@
 							</tr>
 						</thead>
 						{% for label in recherche %}
-							<tr>
+							<tr onclick="window.location.href='{{path('showLabel',{'id':label.label})}}';">
 								<td>{{label.getLabel}}</td>
 								<td>{{label.getLibelle}}</td>
 								<td>

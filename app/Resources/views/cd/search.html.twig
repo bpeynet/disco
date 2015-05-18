@@ -166,7 +166,7 @@
 							</tr>
 						</thead>
 						{% for cd in recherche %}
-							<tr>
+							<tr onclick="window.location.href='{{path('showCd',{'id':cd.cd})}}';">
 								<td>{{cd.getCd}}</td>
 								<td>
 									{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
