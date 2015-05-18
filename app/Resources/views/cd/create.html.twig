@@ -54,7 +54,16 @@
 							{{form_row(form.nbPiste, { 'id': 'nbPiste' })}}
 						</div>
 						<div class="col-md-3">
-							{{form_row(form.various, { 'id': 'various' })}}
+							<div class="from-group row">
+								<label for="various">Various Artists</label>
+								{{form_widget(form.various, { 'id': 'various' })}}
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group row">
+								<label for="full_fr">Toutes Fr.</label>
+								<input class="form-control" type="checkbox" name="full_fr" id="full_fr">
+							</div>
 						</div>
 					</div>
 					<div class="row">
@@ -188,13 +197,14 @@
   	$("#nbPiste").change(function() {
   		var nbPiste = $("#nbPiste").val();
   		var table = $("#pistes > tbody");
-  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN'></td><td><input type='checkbox' name='fr_NNN'></td><td><input type='checkbox' name='anim_NNN'></td><td><input type='checkbox' name='paulo_NNN'></td><td><input type='checkbox' name='star_NNN'></td></tr>";
+  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN'></td><td><input type='checkbox' class='fr_input' name='fr_NNN'></td><td><input type='checkbox' name='anim_NNN'></td><td><input type='checkbox' name='paulo_NNN'></td><td><input type='checkbox' name='star_NNN'></td></tr>";
   		table.empty();
   		for (var i = 1; i <= nbPiste; i++) {
   			table.append(template.replace(/NNN/g, i));
   			$( "#artiste_NNN".replace(/NNN/g, i) ).autocomplete(artisteCompleteParameters);
   		};
   		verifVarious();
+  		verifFr();
   	});
 
   	function verifVarious () {
@@ -207,8 +217,24 @@
 		}
   	}
 
+  	function verifFr () {
+  		if ($("#full_fr").is(":checked")) {
+  			$(".fr_input").each(function() {
+  				$(this).prop('checked',true);
+  			});
+  		} else {
+  			$(".fr_input").each(function() {
+  				$(this).prop('checked',false);
+  			});
+  		};
+  	}
+
   	$("#various").click(function() {
   		verifVarious();
+  	});
+
+  	$("#full_fr").click(function(){
+  		verifFr();
   	});
 
   });
