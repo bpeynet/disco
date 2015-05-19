@@ -187,21 +187,19 @@ class CdController extends DiscoController
                 'label' => 'Créer le CD',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
+        
+        $req = $request->request->get('appbundle_cd');
 
         $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
 
         if($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-
 
             $cd = $form->getData();
 
             $cd->setLabel(null);
             $cd->setMaison(null);
             $cd->setDistrib(null);
-
-            $req = $request->request->get('appbundle_cd');
 
             $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
             $genre = $em->getRepository('AppBundle:Genre')->find(intval($req['genre']));
@@ -252,7 +250,34 @@ class CdController extends DiscoController
             if ($request->isMethod('POST')) {
                 $this->addFlash('error','Les champs on été mal renseignés.');
             }
-            return $this->render('cd/create.html.twig',array('form'=>$form->createView()));
+            $pistes = null;
+            $pistes_var = null;
+            if ($req['nbPiste']>0) {
+                if($request->request->get('full_fr')) {
+                    $pistes_var['full_fr'] = 1;
+                }
+                for ($i=1; $i <= $req['nbPiste']; $i++) {
+                    $pistes[$i]['titre'] = $request->request->get('titre_'.$i);
+                    $pistes[$i]['artiste'] = $em->getRepository('AppBundle:Artiste')->find($request->request->get('artiste_'.$i));
+                    if($request->request->get('fr_'.$i)){
+                        $pistes[$i]['fr'] = 1;
+                    } else { $pistes[$i]['fr'] = 0; }
+                    if($request->request->get('paulo_'.$i)){
+                        $pistes[$i]['paulo'] = 1;
+                    } else { $pistes[$i]['paulo'] = 0; }
+                    if($request->request->get('star_'.$i)){
+                        $pistes[$i]['star'] = 1;
+                    } else { $pistes[$i]['star'] = 0; }
+                    if($request->request->get('anim_'.$i)){
+                        $pistes[$i]['anim'] = 1;
+                    } else { $pistes[$i]['anim'] = 0; }
+                }
+            }
+            return $this->render('cd/create.html.twig',array(
+                'form'=>$form->createView(),
+                'pistes' => $pistes,
+                'pistes_var' => $pistes_var
+            ));
         }
     }
 

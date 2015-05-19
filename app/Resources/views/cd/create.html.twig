@@ -62,7 +62,7 @@
 						<div class="col-md-3">
 							<div class="form-group row">
 								<label for="full_fr">Toutes Fr.</label>
-								<input class="form-control" type="checkbox" name="full_fr" id="full_fr">
+								<input class="form-control" type="checkbox" name="full_fr" id="full_fr" {% if pistes_var.full_fr %}checked{% endif %}>
 							</div>
 						</div>
 					</div>
@@ -81,7 +81,20 @@
 									</tr>
 								</thead>
 								<tbody>
-
+									{% if pistes %}
+										{% set id_piste = 1 %}
+										{% for piste in pistes %}
+												<td>{{id_piste}}</td>
+												<td><input name='titre_{{id_piste}}' value='{{piste.titre}}'></td>
+												<td><input id='artiste_{{id_piste}}' name='artiste_{{id_piste}}' value='{% if piste.artiste %}{{piste.artiste.libelle}}{% endif %}' class='artiste_autocomplete'></td>
+												<td><input type='checkbox' class='fr_input' name='fr_{{id_piste}}' {% if piste.fr %}checked{% endif %}></td>
+												<td><input type='checkbox' name='anim_{{id_piste}}' {% if piste.anim %}checked{% endif %}></td>
+												<td><input type='checkbox' name='paulo_{{id_piste}}' {% if piste.paulo %}checked{% endif %}></td>
+												<td><input type='checkbox' name='star_{{id_piste}}' {% if piste.star %}checked{% endif %}></td>
+											</tr>	
+											{% set id_piste = id_piste+1 %}
+										{% endfor %}
+									{% endif %}
 								</tbody>
 							</table>
 						</div>
@@ -113,7 +126,8 @@
       delay: 300,
       select: function( event, ui ) {
         $(this).text(ui.item.libelle);
-      }
+      },
+      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
     };
     $( "#artiste" ).autocomplete(artisteCompleteParameters);
 
@@ -197,14 +211,16 @@
   	$("#maison").blur(function() {labelsVerif($("#maison"),$("#maison_hidden"))});
   	$("#distrib").blur(function() {labelsVerif($("#distrib"),$("#distrib_hidden"))});
 
+  	$(".artiste_autocomplete").autocomplete(artisteCompleteParameters);
+
   	$("#nbPiste").change(function() {
   		var nbPiste = $("#nbPiste").val();
   		var table = $("#pistes > tbody");
-  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN'></td><td><input type='checkbox' class='fr_input' name='fr_NNN'></td><td><input type='checkbox' name='anim_NNN'></td><td><input type='checkbox' name='paulo_NNN'></td><td><input type='checkbox' name='star_NNN'></td></tr>";
+  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN' class='artiste_autocomplete'></td><td><input type='checkbox' class='fr_input' name='fr_NNN'></td><td><input type='checkbox' name='anim_NNN'></td><td><input type='checkbox' name='paulo_NNN'></td><td><input type='checkbox' name='star_NNN'></td></tr>";
   		table.empty();
   		for (var i = 1; i <= nbPiste; i++) {
   			table.append(template.replace(/NNN/g, i));
-  			$( "#artiste_NNN".replace(/NNN/g, i) ).autocomplete(artisteCompleteParameters);
+  			$( "#artiste_NNN".replace(/NNN/g, i) );
   		};
   		verifVarious();
   		verifFr();
