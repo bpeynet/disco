@@ -187,15 +187,15 @@
 					{% if cd.getPistes.toArray != null %}
 					<h4>Pistes en détail</h4>
 					<table class="table table-striped">
-						<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Fr</th><th>Anim</th><th>Rivendell</th><th>Star</th></tr></thead>
+						<thead><tr><th>titre de la piste</th><th>Artiste</th><th  style="width:60px">Fr</th><th style="width:60px">Anim</th><th  style="width:60px">Riven.</th><th  style="width:60px">Star</th></tr></thead>
 						{% for piste in cd.getPistes.toArray %}
 							<tr>
 								<td>{{piste.getTitre}}</td>
 								<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
-								<td {% if piste.getLangue %}class="success"{% endif %}></td>
-								<td class="{% if piste.getAnim %}success{% endif %}"></td>
-								<td class="{% if piste.getPaulo %}success{% endif %}"></td>
-								<td class="{% if piste.getStar %}success{% endif %}"></td>
+								<td {% if piste.getLangue %}class="success"{% endif %}  style="width:60px"></td>
+								<td class="{% if piste.getAnim %}success{% endif %}"  style="width:60px"></td>
+								<td class="{% if piste.getPaulo %}success{% endif %}"  style="width:60px"></td>
+								<td class="{% if piste.getStar %}success{% endif %}"  style="width:60px"></td>
 							</tr>
 						{% endfor %}
 					</table>

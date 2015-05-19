@@ -1,0 +1,115 @@
+body {
+	font-family: sans-serif;
+}
+
+.ligne_classement {
+	height: 100px;
+	background: #eee;
+	width: 600px;
+}
+
+.pochette_cd {
+	background: #ddd;
+	width: 100px;
+	height: 100px;
+}
+
+.pochette_cd img {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	opacity: 0.8;
+}
+
+.pochette_cd:hover img {
+	opacity: 1;
+}
+
+.pochette_cd a {
+	color: none;
+	text-decoration: none;
+}
+
+.rank_cd {
+	color: white;
+	font-weight: bold;
+	position: relative;
+	top: 10px;
+	left: 5px;
+	-webkit-text-stroke: 1px black;
+	text-shadow:
+		-1px -1px 0 #000,  
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+	border-radius: 20px;
+	padding: 5px;
+}
+
+.new_cd {
+	background: #5cb85c;
+}
+
+.informations_cd {
+	position: relative;
+	top: -100px;
+	left: 100px;
+	padding: 5px;
+	max-height: 95px;
+}
+
+a.popup {
+	color: none;
+	text-decoration: none;
+}
+
+a.popup span{
+	position:absolute;                
+	margin-top:23px;
+	margin-left:-50px;
+	color:#09c;
+	background:rgba(0,0,0,.9);
+	border-radius:3px;
+	box-shadow:0 0 2px rgba(0,0,0,.5);
+	transform:scale(0) rotate(-12deg);
+	transition:all .25s;
+	opacity:0;
+	z-index: 10;
+}
+
+a.popup .cadre {
+	padding: 5px;
+}
+
+a.popup:hover span, a:focus span{
+	transform:scale(1) rotate(0);        
+	opacity:1;
+}
+
+a.popup span .head {
+	border-bottom: 1px solid #666;
+	color: white;
+	font-weight: bold;
+	padding: 5px;
+}
+
+a.popup span .body {
+	background: white;
+	color: black;
+	padding: 5px;
+}
+
+label {
+	color: white;
+	font-size: 10px;
+	font-weight: bold;
+	border-radius: 3px;
+	display: inline;
+	padding: 3px;
+	position: relative;
+}
+
+.success {
+	background: #5cb85c;
+}
+

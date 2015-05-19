@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AirplayController extends DiscoController
 {
     /**
-     * @Route("/airplay/{page}", name="airplay")
+     * @Route("/airplay/page/{page}", name="airplay")
      */
     public function indexAction(Request $request, $page = 1)
     {
@@ -23,7 +23,7 @@ class AirplayController extends DiscoController
         $doctrine = $this->getDoctrine();
         $em = $doctrine->getManager();
         $limit = 10;
-
+        if($page < 1 ) {$page = 1;}
         $airplays = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
             ->orderBy('a.airplay','DESC')
             ->setFirstResult(($page-1)*10)
@@ -100,6 +100,35 @@ class AirplayController extends DiscoController
                 'liste' => $liste
             ));
 
+    }
+
+    /**
+     * @Route("/airplay/published", name="publishedCd")
+     */
+    public function publishedAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+            $airplays = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
+                ->orderBy('a.airplay', 'DESC')
+                ->setMaxResults(2)
+                ->getQuery()
+                ->getResult();
+
+        if(!$airplays) {
+            $this->addFlash('error','Erreur lors du chargement des airplays.');
+        } else {
+            foreach ($airplays as $key => $airplay) {
+                $listes[$key] = $em->getRepository('AppBundle:AirplayCd')->findBy(
+                        array('airplay' => $airplay->getAirplay()),
+                        array('ordre' => 'asc')
+                    );
+            }
+        }
+
+        return $this->render('airplay/published.html.twig', array(
+                'airplays' => $airplays,
+                'listes' => $listes
+            ));
     }
 
     /**
