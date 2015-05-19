@@ -192,8 +192,7 @@ class CdController extends DiscoController
 
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
-        $pistes = null; //Les pistes à sauver si jamais il y a une erreur
-        $pistes_var = null;
+        $pistes_var['full_fr'] = false;
 
         if($form->isValid()) {
 
@@ -281,6 +280,7 @@ class CdController extends DiscoController
 
     private function savePistes($nbPistes, $request)
     {
+        $pistes = null;
         if ($nbPistes>0) {
             for ($i=1; $i <= $nbPistes; $i++) {
                 $pistes[$i]['titre'] = $request->request->get('titre_'.$i);
