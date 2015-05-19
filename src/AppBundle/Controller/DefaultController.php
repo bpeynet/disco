@@ -21,6 +21,24 @@ class DefaultController extends DiscoController
  	}
 
     /**
+     * @Route("/test/mail", name="testMail")
+     */
+    public function testMailAction()
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Test D:')
+            ->setFrom('send@example.com')
+            ->setTo('cc@yopmail.com')
+            ->setBody($this->renderView('mails/retour-label.html.twig', array('name' => 'coucou')))
+        ;
+        $this->get('mailer')->send($message);
+
+        $this->addFlash('success','Le mail a été envoyé !!!! :DDDDDDD');
+
+        return $this->redirect($this->generateUrl('search'));
+    }
+
+    /**
      * @Route("/search", name="search")
      */
     public function search(Request $request) {
