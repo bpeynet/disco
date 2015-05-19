@@ -192,6 +192,8 @@ class CdController extends DiscoController
 
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
+        $pistes = null; //Les pistes à sauver si jamais il y a une erreur
+        $pistes_var = null;
 
         if($form->isValid()) {
 
@@ -202,6 +204,21 @@ class CdController extends DiscoController
             $cd->setDistrib(null);
 
             $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
+
+            if(!$artiste) {
+                $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
+
+                if($request->request->get('full_fr')) {
+                    $pistes_var['full_fr'] = 1;
+                }
+                $pistes = $this->savePistes($req['nbPiste'],$request);
+                return $this->render('cd/create.html.twig',array(
+                    'form'=>$form->createView(),
+                    'pistes' => $pistes,
+                    'pistes_var' => $pistes_var
+                ));
+            }
+
             $genre = $em->getRepository('AppBundle:Genre')->find(intval($req['genre']));
             $cd->setArtiste($artiste);
             $cd->setGenre($genre);
@@ -250,35 +267,39 @@ class CdController extends DiscoController
             if ($request->isMethod('POST')) {
                 $this->addFlash('error','Les champs on été mal renseignés.');
             }
-            $pistes = null;
-            $pistes_var = null;
-            if ($req['nbPiste']>0) {
-                if($request->request->get('full_fr')) {
-                    $pistes_var['full_fr'] = 1;
-                }
-                for ($i=1; $i <= $req['nbPiste']; $i++) {
-                    $pistes[$i]['titre'] = $request->request->get('titre_'.$i);
-                    $pistes[$i]['artiste'] = $em->getRepository('AppBundle:Artiste')->find($request->request->get('artiste_'.$i));
-                    if($request->request->get('fr_'.$i)){
-                        $pistes[$i]['fr'] = 1;
-                    } else { $pistes[$i]['fr'] = 0; }
-                    if($request->request->get('paulo_'.$i)){
-                        $pistes[$i]['paulo'] = 1;
-                    } else { $pistes[$i]['paulo'] = 0; }
-                    if($request->request->get('star_'.$i)){
-                        $pistes[$i]['star'] = 1;
-                    } else { $pistes[$i]['star'] = 0; }
-                    if($request->request->get('anim_'.$i)){
-                        $pistes[$i]['anim'] = 1;
-                    } else { $pistes[$i]['anim'] = 0; }
-                }
+            if($request->request->get('full_fr')) {
+                $pistes_var['full_fr'] = 1;
             }
+            $pistes = $this->savePistes($req['nbPiste'],$request);
             return $this->render('cd/create.html.twig',array(
                 'form'=>$form->createView(),
                 'pistes' => $pistes,
                 'pistes_var' => $pistes_var
             ));
         }
+    }
+
+    private function savePistes($nbPistes, $request)
+    {
+        if ($nbPistes>0) {
+            for ($i=1; $i <= $nbPistes; $i++) {
+                $pistes[$i]['titre'] = $request->request->get('titre_'.$i);
+                $pistes[$i]['artiste'] = $this->getDoctrine()->getManager()->getRepository('AppBundle:Artiste')->find($request->request->get('artiste_'.$i));
+                if($request->request->get('fr_'.$i)){
+                    $pistes[$i]['fr'] = 1;
+                } else { $pistes[$i]['fr'] = 0; }
+                if($request->request->get('paulo_'.$i)){
+                    $pistes[$i]['paulo'] = 1;
+                } else { $pistes[$i]['paulo'] = 0; }
+                if($request->request->get('star_'.$i)){
+                    $pistes[$i]['star'] = 1;
+                } else { $pistes[$i]['star'] = 0; }
+                if($request->request->get('anim_'.$i)){
+                    $pistes[$i]['anim'] = 1;
+                } else { $pistes[$i]['anim'] = 0; }
+            }
+        }
+        return $pistes;
     }
 
     /**
