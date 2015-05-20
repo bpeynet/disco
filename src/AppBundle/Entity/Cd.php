@@ -76,6 +76,13 @@ class Cd
     protected $styles;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AirplayCd", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $airplays;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="titre", type="string", length=250, nullable=false)
@@ -604,6 +611,29 @@ class Cd
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set airplays
+     *
+     * @param ArrayCollection $airplays
+     * @return Cd
+     */
+    public function setAirplays($airplays)
+    {
+        $this->airplays = $airplays;
+
+        return $this;
+    }
+
+    /**
+     * Get airplays
+     *
+     * @return ArrayCollection
+     */
+    public function getAirplays()
+    {
+        return $this->airplays;
     }
 
     /**

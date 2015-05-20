@@ -50,7 +50,7 @@ class CdController extends DiscoController
 	    	}
 
     		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
-    			->where('c.titre LIKE :titre_l')
+    			->andWhere('c.titre LIKE :titre_l')
     			->setParameter('titre_l','%'.$titre.'%')
                 ->orWhere('c.titre = :titre')
                 ->setParameter('titre',$titre);
@@ -95,6 +95,7 @@ class CdController extends DiscoController
 			}
 
 			$retour = $retour->orderBy('c.titre', 'ASC')
+                ->andWhere('c.suppr != 1')
 				->setMaxResults($limit)
 				->getQuery()
 				->getResult();
@@ -146,7 +147,7 @@ class CdController extends DiscoController
     }
 
     /**
-	 * @Route("/cd/delete/{id}", name="deleteCd")
+	 * @Route("/cd/delete/{id}", name="deleteCd", options={"expose"=true})
      */
 	public function deleteAction($id) {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un disque.');
@@ -480,13 +481,13 @@ class CdController extends DiscoController
     }
 
     /**
-     * @Route("/cd/getinfos/{id}", name="getInfosCd")
+     * @Route("/cd/getinfos/{id}", name="getInfosCd", options={"expose"=true})
      */
     public function getInfosAction($id)
     {
         $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
 
-        if(!$cd || $cd->getSuppr()) {
+        if(!$cd || $cd->getSuppr() || $cd->getAirplay()) {
             return null;
         }
 
@@ -494,7 +495,8 @@ class CdController extends DiscoController
             'artiste'=>$cd->getArtiste()->getLibelle(),
             'titre' => $cd->getTitre(),
             'annee' => $cd->getAnnee(),
-            'note' => $cd->getNoteMoy()
+            'note' => $cd->getNoteMoy(),
+            'ecoute' => $cd->getEcoute()
         );
         if ($cd->getRotation()) {
             $tab['rotation'] = $cd->getRotation()->getLibelle();

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Label
@@ -51,6 +52,10 @@ class Label
      *      max = "45",
      *      minMessage=" {{ limit }} caractères minimum.",
      *      maxMessage=" {{ limit }} caractères maximum."
+     * )
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas un email valide, cela doit-être une adresse mail.",
+     *     checkMX = true
      * )
      * @ORM\Column(name="email", type="string", length=45, nullable=false)
      */
@@ -114,6 +119,10 @@ class Label
      *      minMessage=" {{ limit }} caractères minimum.",
      *      maxMessage=" {{ limit }} caractères maximum."
      * )
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas un email valide, cela doit-être une adresse mail.",
+     *     checkMX = true
+     * )
      * @ORM\Column(name="mail_progra", type="string", length=250, nullable=false)
      */
     private $mailProgra = '';
@@ -134,6 +143,7 @@ class Label
      *      max = "150",
      *      maxMessage=" {{ limit }} caractères maximum."
      * )
+     * @Assert\Url(message="Ce champ ne respecte pas le format habituel des URL.")
      * @ORM\Column(name="siteweb", type="string", length=150, nullable=false)
      */
     private $siteweb = '';
@@ -201,7 +211,9 @@ class Label
      */
     public function getDisques()
     {
-        return $this->disques;
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('suppr', false));
+        return $this->disques->matching($criteria);
     }
 
     /**

@@ -189,6 +189,18 @@ class AirplayController extends DiscoController
         $em->persist($airplay);
         $em->flush();
 
+        $cd_to_edit = $em->createQuery(
+            'SELECT cd FROM AppBundle:AirplayCd ac, AppBundle:Cd cd
+                WHERE ac.airplay = :airplay AND ac.cd = cd.cd'
+            )
+            ->setParameter('airplay',$airplay->getAirplay())
+            ->getResult();
+
+        foreach ($cd_to_edit as $key => $cd) {
+            $cd->setAirplay = null;
+            $em->persist($cd);
+        }
+
         $em->createQuery(
             'DELETE FROM AppBundle:AirplayCd ac
                 WHERE ac.airplay = :airplay'

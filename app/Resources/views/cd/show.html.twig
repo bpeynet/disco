@@ -294,7 +294,11 @@
 				</table>
 
 				<h4>Airplays</h4>
-				#TODO
+				{% if cd.airplays %}
+				{% for airplay_cd in cd.airplays %}
+					<a href="{{path('showAirplay',{'id':airplay_cd.airplay.airplay})}}" target="_blank" class="label label-success">{{airplay_cd.airplay.libelle}}</a>
+				{% endfor %}
+				{% endif %}
 
 			</div>
 			<div id="retLabel">
@@ -324,7 +328,7 @@
 			$("#tabs").tabs();
 		});
 
-		$('#tabs a').click(function (e) {
+		$('#tabs ul a').click(function (e) {
 		  e.preventDefault();
 		  $(this).tab('show');
 		})

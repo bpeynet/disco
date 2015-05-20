@@ -1,5 +1,15 @@
+html {
+    background: url('bg-rcg.gif') no-repeat center fixed; 
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover; /* version standardisée */
+}
+
 body {
     margin-top: 60px;
+}
+
+form {
+    background: none;
 }
 
 .panel-heading h3 {

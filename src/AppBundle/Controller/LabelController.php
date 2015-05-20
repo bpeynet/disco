@@ -155,13 +155,14 @@ class LabelController extends DiscoController
     }
 
     /**
-     * @Route("/label/create", name="createLabel")
+     * @Route("/label/create/{libelle}", name="createLabel")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $libelle="")
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un label.');
 
         $label = new Label();
+        $label->setLibelle($libelle);
         $form = $this->createForm(new LabelType(),$label);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer le Label',
