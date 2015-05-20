@@ -84,7 +84,7 @@ class LabelController extends DiscoController
     }
 
     /**
-	 * @Route("/label/delete/{id}", name="deleteLabel")
+	 * @Route("/label/delete/{id}", name="deleteLabel", options={"expose"=true})
      */
 	public function deleteAction($id) {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un label.');
@@ -109,8 +109,8 @@ class LabelController extends DiscoController
             return $this->redirect($this->generateUrl('label'));
         } else {
             $this->addFlash('error','Un Label lié à des disques ne peut pas être supprimé !');
-            return $this->redirect($this->generateUrl('showLabel',array('id'=>$label->getLabel())));
         }
+        return $this->redirect($this->generateUrl('showLabel',array('id'=>$label->getLabel())));
 
 	}
 

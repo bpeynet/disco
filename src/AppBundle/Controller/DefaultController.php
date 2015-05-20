@@ -12,14 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends DiscoController
 {
 
-	/**
-	 * @Route("/", name="index")
-	 */
- 	public function indexAction() {
-
- 		return $this->redirect($this->generateUrl('search'));
- 	}
-
     /**
      * @Route("/test/mail", name="testMail")
      */
@@ -39,7 +31,7 @@ class DefaultController extends DiscoController
     }
 
     /**
-     * @Route("/search", name="search")
+     * @Route("/", name="index")
      */
     public function search(Request $request) {
 

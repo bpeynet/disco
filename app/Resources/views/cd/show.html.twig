@@ -24,7 +24,7 @@
 
 	{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 
-	{% if cd.getRetourlabel %}<div class="label label-warning">Retour label en attente</div>{% endif %}
+	{% if not cd.getRetourlabel %}<div class="label label-warning">Retour label en attente</div>{% endif %}
 	{% if cd.getAirplay %}<div class="label label-success">Présent dans un airplay</div>{% endif %}
 	{% if cd.getEmprunts %}<div class="label label-success">CD libre</div>{% endif %}
 
