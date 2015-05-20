@@ -131,7 +131,7 @@ class ArtisteController extends DiscoController
         $form = $this->createForm(new ArtisteType(),$artiste);
 
         $form->add('submit', 'submit', array(
-                'label' => 'Editer l\'Artiste',
+                'label' => 'Sauvegarder l\'Artiste',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
         $form->handleRequest($request);

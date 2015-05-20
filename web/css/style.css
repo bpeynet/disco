@@ -1,7 +1,5 @@
 html {
-    background: url('bg-rcg.gif') no-repeat center fixed; 
-    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-    background-size: cover; /* version standardisée */
+    background: url('bg-rcg-opac.png') no-repeat center fixed;
 }
 
 body {

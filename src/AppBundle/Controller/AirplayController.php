@@ -275,7 +275,7 @@ class AirplayController extends DiscoController
 
         $form = $this->createForm(new AirplayType(),$airplay);
         $form->add('submit', 'submit', array(
-                'label' => 'Editer l\'Airplay',
+                'label' => 'Sauvegarder l\'Airplay',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
 

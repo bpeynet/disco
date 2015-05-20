@@ -134,7 +134,7 @@ class LabelController extends DiscoController
         $form = $this->createForm(new LabelType(),$label);
 
         $form->add('submit', 'submit', array(
-                'label' => 'Finaliser l\'édition',
+                'label' => 'Sauvegarder',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
         $form->handleRequest($request);
