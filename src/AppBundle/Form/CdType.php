@@ -16,7 +16,7 @@ class CdType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('artiste', 'text')
+            ->add('artiste', 'text', array('mapped' => false))
             ->add('titre')
             ->add('dsortie','date', array(
                     'widget' => 'single_text',
@@ -24,9 +24,9 @@ class CdType extends AbstractType
                     'format' => 'dd/MM/yyyy',
                     'required' => false))
             ->add('annee','text', array('required' => true, 'data' => date('Y')))
-            ->add('label', 'text', array('required' => false))
-            ->add('maison', 'text', array('required' => false))
-            ->add('distrib', 'text', array('required' => false))
+            ->add('label', 'text', array('required' => false, 'mapped' => false))
+            ->add('maison', 'text', array('required' => false,'mapped' => false))
+            ->add('distrib', 'text', array('required' => false, 'mapped' => false))
             ->add('refLabel','text', array('required' => false))
             ->add('dvd','checkbox', array('required' => false))
             ->add('etiquette','checkbox', array('required' => false))

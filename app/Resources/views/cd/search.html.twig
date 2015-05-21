@@ -135,6 +135,7 @@
 		</form>
 
 		{% if is_granted('ROLE_PROGRA') %}
+			<a href="{{path('cdNonTraites')}}" class="btn btn-block btn-lg btn-warning">Voir les CD à traiter</a>
 			<a href="{{path('createCd')}}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un CD</a>
 		{% endif %}
 	</div>
@@ -176,7 +177,7 @@
 								<td>
 									<a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 									{% if is_granted('ROLE_PROGRA') %}
-										<a href="#" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+										<a href="" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 									{% endif %}
 								</td>
 								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>

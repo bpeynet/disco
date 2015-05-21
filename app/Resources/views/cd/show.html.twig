@@ -17,16 +17,16 @@
 		</small>
 	</h1>
 	
-	<div class="label label-info">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
+	<div class="label label-default">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
 
-	<div class="label label-info">Image</div>
-	{{cd.getImg}}
+	<span class="label label-{% if cd.retourLabel %}success{% else %}warning{% endif %}">{% if cd.retourLabel %}Retour effectué{% elseif not cd.rotation  %}Délivré à un Progra.{% else %}Retour en attente{% endif %}</span>
 
 	{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 
-	{% if not cd.getRetourlabel %}<div class="label label-warning">Retour label en attente</div>{% endif %}
 	{% if cd.getAirplay %}<div class="label label-success">Présent dans un airplay</div>{% endif %}
 	{% if cd.getEmprunts %}<div class="label label-success">CD libre</div>{% endif %}
+
+	<hr>
 
 	<div class="row">
 		<div class="col-md-7">
