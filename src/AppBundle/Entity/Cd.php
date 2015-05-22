@@ -175,7 +175,7 @@ class Cd
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_progra", referencedColumnName="user")
      */
-    private $userProgra;
+    private $userProgra = null;
 
     /**
      * @var integer

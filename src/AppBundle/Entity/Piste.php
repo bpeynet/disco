@@ -55,7 +55,7 @@ class Piste
      * @ORM\ManyToOne(targetEntity="Artiste")
      * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
      */
-    private $artiste = '0';
+    private $artiste = null;
 
     /**
      * @var boolean

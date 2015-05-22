@@ -39,7 +39,7 @@ class Genre
      * @var boolean
      * ORM\Column(name="primaire", type="boolean", nullable=false)
      */
-    private $primaire = '0';
+    private $principal = false;
 
 
 
@@ -122,15 +122,15 @@ class Genre
         return $this->genre;
     }
 
-    public function setPrimaire($primaire)
+    public function setPrincipal($principal)
     {
-        $this->primaire = $primaire;
+        $this->principal = $principal;
 
         return $this;
     }
 
-    public function getPrimaire()
+    public function getPrincipal()
     {
-        return $this->primaire;
+        return $this->principal;
     }
 }
