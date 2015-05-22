@@ -28,7 +28,6 @@ class Cd
      * @var Artiste
      *
      * @ORM\ManyToOne(targetEntity="Artiste")
-     * @Assert\NotBlank(message="Le nom de l'artiste ne peut pas être vide")
      * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
      */
     protected $artiste;

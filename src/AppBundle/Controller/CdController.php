@@ -156,7 +156,7 @@ class CdController extends DiscoController
             ->getRepository('AppBundle:Cd')
             ->find($id);
 
-        if(!$cd) {
+        if(!$cd || $cd->getSuppr()) {
             throw $this->createNotFoundException(
                 'Aucun cd trouvé pour cet id : '.$id
             );
@@ -204,7 +204,7 @@ class CdController extends DiscoController
         $em = $this->getDoctrine()->getManager();
         $cd = $em->getRepository('AppBundle:Cd')->find($id);
 
-        if(!$cd) {
+        if(!$cd || $cd->getSuppr()) {
             throw $this->createNotFoundException(
                 'Aucun cd trouvé pour cet id : '.$id
             );
@@ -221,29 +221,26 @@ class CdController extends DiscoController
         $req = $request->request->get('appbundle_cd');
 
         $full_fr = true;
-        $various = false;
         foreach ($cd->getPistes() as $key => $piste) {
-            if(!$piste->getLangue()) { $full_fr = false;}
-            if($piste->getArtiste() != $cd->getArtiste()) { $various = true; }
+            if(!$piste->getLangue()) { $full_fr = false; break; }
         }
 
         if ($form->isValid()) {
             $cd = $form->getData();
 
-            if(!$artiste) {
-                $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
+            $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
+
+            if(!$artiste or empty($req['artiste'])) {
+                $this->addFlash('error','L\'artiste renseigné n\'existait pas.');
 
                 if($request->request->get('full_fr')) {
                     $pistes_var['full_fr'] = 1;
                 }
                 $pistes = $this->savePistes($req['nbPiste'],$request);
+            } else {
+                $cd->setArtiste($artiste);
             }
 
-            $genre = $em->getRepository('AppBundle:Genre')->find(intval($req['genre']));
-            $cd->setArtiste($artiste);
-            $cd->setGenre($genre);
-
-            $em->persist($cd);
 
             $em->createQuery(
                     'DELETE FROM AppBundle:Piste p
@@ -282,21 +279,46 @@ class CdController extends DiscoController
 
             $em->flush();
 
+            $pistes = $this->savePistes($req['nbPiste'],$request);
+
+            $this->discoLog("a modifié le CD ".$cd->getCd()." ".$cd->getTitre());
+            $this->addFlash('success','Le CD a bien été sauvegardé !');
+
         } else {
             if ($request->isMethod('POST')) {
-                $this->addFlash('error','Les champs on été mal renseignés.');
+                $this->addFlash('error','Les champs ont été mal renseignés.');
+                $pistes = $this->savePistes($req['nbPiste'],$request);
+            } else {
+                $pistes = array();
+                $i = 0;
+                foreach ($cd->getPistes() as $key => $piste) {
+                    $pistes[$i]['titre'] = $piste->getTitre();
+                    $pistes[$i]['artiste'] = $piste->getArtiste();
+                    if($piste->getLangue()){
+                        $pistes[$i]['fr'] = 1;
+                    } else { $pistes[$i]['fr'] = 0; }
+                    if($piste->getPaulo()){
+                        $pistes[$i]['paulo'] = 1;
+                    } else { $pistes[$i]['paulo'] = 0; }
+                    if($piste->getStar()){
+                        $pistes[$i]['star'] = 1;
+                    } else { $pistes[$i]['star'] = 0; }
+                    if($piste->getAnim()){
+                        $pistes[$i]['anim'] = 1;
+                    } else { $pistes[$i]['anim'] = 0; }
+                    $i++;
+                }
             }
             if($request->request->get('full_fr')) {
                 $pistes_var['full_fr'] = 1;
             }
-            $pistes = $this->savePistes($req['nbPiste'],$request);
         }
 
         return $this->render('cd/edit.html.twig', array(
+                'cd' => $cd,
                 'form' => $form->createView(),
                 'pistes' => $pistes,
-                'full_fr' => $full_fr,
-                'various' => $various
+                'full_fr' => $full_fr
             ));
 
     }
@@ -333,7 +355,7 @@ class CdController extends DiscoController
 
             $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
 
-            if(!$artiste) {
+            if(!$artiste or empty($req['artiste'])) {
                 $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
 
                 if($request->request->get('full_fr')) {
@@ -347,11 +369,7 @@ class CdController extends DiscoController
                 ));
             }
 
-            $genre = $em->getRepository('AppBundle:Genre')->find(intval($req['genre']));
             $cd->setArtiste($artiste);
-            $cd->setGenre($genre);
-
-            $em->persist($cd);
 
             for($i = 1; $i <= $req['nbPiste']; $i++) {
                 $piste = new Piste();
@@ -381,6 +399,7 @@ class CdController extends DiscoController
                 $em->persist($piste);
             }
 
+            $em->persist($cd);
             $em->flush();
 
             $num = $cd->getCd();
@@ -392,7 +411,7 @@ class CdController extends DiscoController
 
         } else {
             if ($request->isMethod('POST')) {
-                $this->addFlash('error','Les champs on été mal renseignés.');
+                $this->addFlash('error','Les champs ont été mal renseignés.');
             }
             if($request->request->get('full_fr')) {
                 $pistes_var['full_fr'] = 1;

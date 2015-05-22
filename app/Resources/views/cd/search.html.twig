@@ -177,6 +177,7 @@
 								<td>
 									<a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 									{% if is_granted('ROLE_PROGRA') %}
+										<a href="{{path('editCd',{'id':cd.cd})}}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
 										<a href="" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 									{% endif %}
 								</td>
