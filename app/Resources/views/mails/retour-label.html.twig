@@ -1,1 +1,17 @@
-salut {{name}} !
+Bonjour,<br>
+<br>
+Le disque {{cd.titre}} - {{cd.artiste.libelle}} {% if cd.refLabel %}(Ref. {{cd.refLabel}}){% endif %} {% if cd.rotation %}{{cd.rotation.retourLabel}}{% else %}n'a pas été retenu dans la diffusion régulière de Radio Campus Grenoble.{% endif %}<br>
+<br>
+{% if cd.retourComment %}
+Commentaire du programmateur :<br>
+{{cd.retourComment}}
+{% elseif cd.comment %}
+Commentaire du programmateur :<br>
+{{cd.comment}}
+{% endif %}
+<br>
+<br>
+L'équipe Programmation,<br>
+Radio Campus Grenoble<br>
+<br>
+N.B. : Ce mail a été généré automatiquement.<br>

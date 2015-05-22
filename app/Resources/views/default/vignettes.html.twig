@@ -1,0 +1,54 @@
+<html>
+<head>
+	<title>Vignettes</title>
+	<link rel="stylesheet" type="text/css" href="{{asset('css/vignettes.css')}}">
+</head>
+<body>
+	<div class="page">
+	{% for cd in cds %}
+		<div class="vignette">
+			<div class="head">
+				<h1>{{cd.titre}}</h1>
+				<h2>{{cd.artiste.libelle}}</h2>
+				<span>{{cd.annee}} {% if cd.label %}{{cd.label.libelle}}{% endif %}</span>
+			</div>
+			<div class="extra">
+				<div class="infos">
+					<div class="rotation">Rotation : {% if cd.rotation %}{{cd.rotation.libelle}}{% endif %}</div>
+					<div class="anim">Anim : 
+						{% for piste in cd.pistes %}
+							{% if piste.anim %}
+								{{piste.piste}}
+							{% endif %}
+						{% endfor %}
+					</div>
+					<div class="rivendell">Rivendell : 
+						{% for piste in cd.pistes %}
+							{% if piste.paulo %}
+								{{piste.piste}}
+							{% endif %}
+						{% endfor %}
+					</div>
+
+					<div class="langue">
+						Langue : {% if cd.langue %}{{cd.langue.libelle}}{% endif %}
+					</div>
+					<div class="genre">
+						Genre : {% if cd.genre %}{{cd.genre.libelle}}{% endif %}
+					</div>
+				</div>
+				<div class="identification">
+					<div class="num">
+						{{cd.cd}}
+					</div>
+					<div class="codebarre"></div>
+					<div class="logo">
+						<img src="{{asset('css/logorcg.jpg')}}">
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</body>
+</html>

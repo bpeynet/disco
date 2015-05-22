@@ -330,6 +330,8 @@ class CdController extends DiscoController
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un disque.');
 
+        $valid = true;
+
         $post = new Cd();
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if($user != false) { $post->setUserProgra($user); }
@@ -345,29 +347,20 @@ class CdController extends DiscoController
         $em = $this->getDoctrine()->getManager();
         $pistes_var['full_fr'] = false;
 
-        if($form->isValid()) {
+        $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
+
+        if(!$artiste or empty($req['artiste'])) {
+            $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
+            $valid = false;
+        }
+
+        if($form->isValid() && $valid) {
 
             $cd = $form->getData();
 
             $cd->setLabel(null);
             $cd->setMaison(null);
             $cd->setDistrib(null);
-
-            $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
-
-            if(!$artiste or empty($req['artiste'])) {
-                $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
-
-                if($request->request->get('full_fr')) {
-                    $pistes_var['full_fr'] = 1;
-                }
-                $pistes = $this->savePistes($req['nbPiste'],$request);
-                return $this->render('cd/create.html.twig',array(
-                    'form'=>$form->createView(),
-                    'pistes' => $pistes,
-                    'pistes_var' => $pistes_var
-                ));
-            }
 
             $cd->setArtiste($artiste);
 

@@ -13,27 +13,47 @@ class DefaultController extends DiscoController
 {
 
     /**
-     * @Route("/test/mail", name="testMail")
+     * @Route("/test/mail/{id}", name="testMail")
      */
-    public function testMailAction()
+    public function testMailAction($id)
     {
+        $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
+
         $message = \Swift_Message::newInstance()
-            ->setSubject('Test D:')
-            ->setFrom('send@example.com')
-            ->setTo('cc@yopmail.com')
-            ->setBody($this->renderView('mails/retour-label.html.twig', array('name' => 'coucou')))
+            ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." [retour d'écoute]")
+            ->setFrom('test@test.fr')
+            ->setTo('rcgtest@yopmail.com')
+            ->setBody($this->renderView('mails/retour-label.html.twig', array('cd' => $cd)))
         ;
-        $this->get('mailer')->send($message);
+        $test = $this->get('mailer')->send($message);
+
+
 
         $this->addFlash('success','Le mail a été envoyé !!!! :DDDDDDD');
 
-        return $this->redirect($this->generateUrl('search'));
+        return $this->redirect($this->generateUrl('index'));
+    }
+
+    /**
+     * @Route("/test/etiquettes", name="testEtiquettes")
+     */
+    public function etiquettesAction()
+    {
+        $cds = $this->getDoctrine()->getManager()->createQuery(
+                'SELECT cd
+                FROM AppBundle:Cd cd
+                ORDER BY cd.cd DESC'
+            )
+            ->setMaxResults(24)
+            ->getResult();
+
+        return $this->render('default/vignettes.html.twig', array('cds' => $cds));
     }
 
     /**
      * @Route("/", name="index")
      */
-    public function search(Request $request) {
+    public function indexAction(Request $request) {
 
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
 
