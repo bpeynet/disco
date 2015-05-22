@@ -191,7 +191,7 @@
 						{% for piste in cd.getPistes.toArray %}
 							<tr>
 								<td>{{piste.getTitre}}</td>
-								<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
+								<td>{% if piste.getArtiste %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
 								<td {% if piste.getLangue %}class="success"{% endif %}  style="width:60px"></td>
 								<td class="{% if piste.getAnim %}success{% endif %}"  style="width:60px"></td>
 								<td class="{% if piste.getPaulo %}success{% endif %}"  style="width:60px"></td>

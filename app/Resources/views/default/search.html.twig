@@ -49,6 +49,10 @@
                                 </td>
                                 <td>
                                     <a href="{{ path('showCd',{'id':result.getCd}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
+                                    {% if is_granted('ROLE_PROGRA') %}
+                                        <a href="{{ path('editCd',{'id':result.getCd}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
+                                        <a href="#" onclick="confirmDelCd('{{result.getLibelle}}',{{result.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+                                    {% endif %}
                                 </td>
                             {% elseif class(result)=='Artiste' %}
                                 <td>Artiste</td>

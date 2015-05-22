@@ -38,7 +38,7 @@ class CdType extends AbstractType
                         return $er->createQueryBuilder('s')
                             ->orderBy('s.libelle', 'ASC');
                         },
-                    'data' => 'n/a', 'required' => false
+                    'empty_data' => null, 'required' => false
                 ))
             ->add('type', 'entity', array(
                     'class' => 'AppBundle:Type',
@@ -47,7 +47,7 @@ class CdType extends AbstractType
                         return $er->createQueryBuilder('t')
                             ->orderBy('t.libelle', 'ASC');
                         },
-                    'data' => 'n/a', 'required' => false
+                    'empty_data' => null, 'required' => false
                 ))
             ->add('langue', 'entity', array(
                     'class' => 'AppBundle:Langue',
@@ -56,7 +56,7 @@ class CdType extends AbstractType
                             ->orderBy('l.libelle', 'ASC');
                         },
                     'property' => 'libelle',
-                    'data' => 'n/a', 'required' => false
+                    'empty_data' => null, 'required' => false
                 ))
             ->add('genre', 'entity', array(
                     'class' => 'AppBundle:Genre',
@@ -65,7 +65,7 @@ class CdType extends AbstractType
                         ->orderBy('g.libelle', 'ASC');
                     },
                     'property' => 'libelle',
-                    'data' => 'n/a'
+                    'empty_data' => null
                 ))
             ->add('styles', 'entity', array(
                     'class' => 'AppBundle:Genre',
