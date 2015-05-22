@@ -84,7 +84,7 @@ class LabelController extends DiscoController
     }
 
     /**
-	 * @Route("/label/delete/{id}", name="deleteLabel")
+	 * @Route("/label/delete/{id}", name="deleteLabel", options={"expose"=true})
      */
 	public function deleteAction($id) {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un label.');
@@ -109,8 +109,8 @@ class LabelController extends DiscoController
             return $this->redirect($this->generateUrl('label'));
         } else {
             $this->addFlash('error','Un Label lié à des disques ne peut pas être supprimé !');
-            return $this->redirect($this->generateUrl('showLabel',array('id'=>$label->getLabel())));
         }
+        return $this->redirect($this->generateUrl('showLabel',array('id'=>$label->getLabel())));
 
 	}
 
@@ -134,7 +134,7 @@ class LabelController extends DiscoController
         $form = $this->createForm(new LabelType(),$label);
 
         $form->add('submit', 'submit', array(
-                'label' => 'Finaliser l\'édition',
+                'label' => 'Sauvegarder',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
         $form->handleRequest($request);
@@ -155,13 +155,14 @@ class LabelController extends DiscoController
     }
 
     /**
-     * @Route("/label/create", name="createLabel")
+     * @Route("/label/create/{libelle}", name="createLabel")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $libelle="")
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un label.');
 
         $label = new Label();
+        $label->setLibelle($libelle);
         $form = $this->createForm(new LabelType(),$label);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer le Label',

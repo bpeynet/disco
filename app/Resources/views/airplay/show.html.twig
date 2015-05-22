@@ -19,8 +19,11 @@
 		<thead>
 			<tr>
 				<th>#</th>
+				<th>Pochette</th>
 				<th>Artiste</th>
 				<th>Titre</th>
+				<th>Ecoute</th>
+				<th>Label</th>
 				{% if is_granted('ROLE_PROGRA') %}
 					<th>Année</th>
 					<th>Rotation</th>
@@ -35,8 +38,11 @@
 		{% for ligne in liste %}
 			<tr>
 				<td>{{ligne.ordre}}</td>
+				<td></td>
 				<td>{{ligne.cd.artiste.libelle}}</td>
 				<td>{{ligne.cd.titre}}</td>
+				<td>{% if ligne.cd.ecoute %}<a href="{{ligne.cd.ecoute}}" target="_blank"><span class="glyphicon glyphicon-play"></span></a>{% endif %}</td>
+				<td>{% if ligne.cd.label %}{{ligne.cd.label.libelle}}{% elseif ligne.cd.maison %}{{ligne.cd.maison.libelle}}{% elseif ligne.cd.distrib %}{{ligne.cd.distrib.libelle}}{% endif %}</td>
 				{% if is_granted('ROLE_PROGRA') %}
 					<td>{{ligne.cd.annee}}</td>
 					<td>{% if ligne.cd.rotation and ligne.cd.rotation.rotation %}{{ligne.cd.rotation.libelle}}{% endif %}</td>

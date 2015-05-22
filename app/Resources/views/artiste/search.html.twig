@@ -62,7 +62,7 @@
 						</tr>
 					</thead>
 					{% for artiste in recherche %}
-						<tr>
+						<tr onclick="window.location.href='{{path('showArtiste',{'id':artiste.artiste})}}';">
 							<td>{{artiste.getArtiste}}</td>
 							<td>{{artiste.getLibelle}}</td>
 							<td>

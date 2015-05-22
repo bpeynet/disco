@@ -24,7 +24,7 @@
 				<th>Publication ?</th>
 			</tr>	
 		</thead>
-		<form method="post" action="">
+		<form id="publication" method="post" action="">
 		{% for airplay in airplays %}
 			<tr onclick="seeAirplay({{airplay.airplay}})">
 				<td>{{airplay.dmodif|date("d/m/Y")}}</td>
@@ -32,11 +32,12 @@
 				<td>
 					<a href="{{path('editAirplay',{'id':airplay.airplay})}}"><span class="glyphicon glyphicon-edit" title="Editer"></span></a>
 				</td>	
-				<td><input type="checkbox" name="publie" value="{{airplay.airplay}}" {% if airplay.publie == 1 %}checked{% endif %}></td>
+				<td><input class="checkboxPublie" type="checkbox" name="publie[{{airplay.airplay}}]" value="{{airplay.airplay}}" {% if airplay.publie == 1 %}checked{% endif %}></td>
 			</tr>
 		{% endfor %}
 		
 	</table>
+		<input id="non_publies" name="non_publies" type="text" class="hidden"> 
 		<button type="submit" class="btn btn-success pull-right">Enregistrer</button>
 		</form>
 
@@ -69,6 +70,17 @@
 	function seeAirplay (airplay) {
 		$("iframe").attr('src','/airplay/show/'+airplay);
 	}
+
+	$("#publication").submit(function(event) {
+		$("#non_publies").val('');
+		$(".checkboxPublie").each(function(){
+			if ($(this).prop('checked')==false) {
+				$("#non_publies").val($("#non_publies").val()+$(this).val()+",");
+			}
+		});
+		console.log($("#non_publies").val());
+	})
+
 </script>
 {% endblock %}
 

@@ -50,7 +50,7 @@ class CdController extends DiscoController
 	    	}
 
     		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
-    			->where('c.titre LIKE :titre_l')
+    			->andWhere('c.titre LIKE :titre_l')
     			->setParameter('titre_l','%'.$titre.'%')
                 ->orWhere('c.titre = :titre')
                 ->setParameter('titre',$titre);
@@ -95,6 +95,7 @@ class CdController extends DiscoController
 			}
 
 			$retour = $retour->orderBy('c.titre', 'ASC')
+                ->andWhere('c.suppr != 1')
 				->setMaxResults($limit)
 				->getQuery()
 				->getResult();
@@ -124,6 +125,28 @@ class CdController extends DiscoController
     }
 
     /**
+     * @Route("/cd/a-traiter", name="cdNonTraites")
+     */
+    public function nonTraitesAction()
+    {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs ont accès à cette page.');
+
+        $cds = $this->getDoctrine()->getRepository('AppBundle:Cd')->createQueryBuilder('cd')
+            ->where('cd.retourLabel = 0')
+            ->orderBy('cd.dsaisie', 'ASC')
+            ->orderBy('cd.userProgra', 'ASC')
+            ->orderBy('cd.rotation', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render(
+            'cd/traitements.html.twig',
+            array('cds' => $cds)
+        );
+    }
+
+    /**
      * @Route("/cd/show/{id}", name="showCd")
      */
     public function showAction($id) {
@@ -146,7 +169,7 @@ class CdController extends DiscoController
     }
 
     /**
-	 * @Route("/cd/delete/{id}", name="deleteCd")
+	 * @Route("/cd/delete/{id}", name="deleteCd", options={"expose"=true})
      */
 	public function deleteAction($id) {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un disque.');
@@ -171,6 +194,112 @@ class CdController extends DiscoController
         return $this->redirect($this->generateUrl('cd'));
 	}
 
+    /**
+     * @Route("/cd/edit/{id}", name="editCd")
+     */
+    public function editAction(Request $request, $id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut éditer un disque.');
+
+        $em = $this->getDoctrine()->getManager();
+        $cd = $em->getRepository('AppBundle:Cd')->find($id);
+
+        if(!$cd) {
+            throw $this->createNotFoundException(
+                'Aucun cd trouvé pour cet id : '.$id
+            );
+        }
+
+        $form = $this->createForm(new CdType(),$cd);
+        $form->add('submit', 'submit', array(
+                'label' => 'Sauvegarder le CD',
+                'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
+            ));
+
+        $form->handleRequest($request);
+
+        $req = $request->request->get('appbundle_cd');
+
+        $full_fr = true;
+        $various = false;
+        foreach ($cd->getPistes() as $key => $piste) {
+            if(!$piste->getLangue()) { $full_fr = false;}
+            if($piste->getArtiste() != $cd->getArtiste()) { $various = true; }
+        }
+
+        if ($form->isValid()) {
+            $cd = $form->getData();
+
+            if(!$artiste) {
+                $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
+
+                if($request->request->get('full_fr')) {
+                    $pistes_var['full_fr'] = 1;
+                }
+                $pistes = $this->savePistes($req['nbPiste'],$request);
+            }
+
+            $genre = $em->getRepository('AppBundle:Genre')->find(intval($req['genre']));
+            $cd->setArtiste($artiste);
+            $cd->setGenre($genre);
+
+            $em->persist($cd);
+
+            $em->createQuery(
+                    'DELETE FROM AppBundle:Piste p
+                    WHERE p.cd = :cd'
+                )
+                ->setParameter('cd',$cd)
+                ->getResult();
+
+            for($i = 1; $i <= $req['nbPiste']; $i++) {
+                $piste = new Piste();
+                $piste->setCd($cd);
+                $piste->setTitre($request->request->get('titre_'.$i));
+                if(empty($request->request->get('artiste_'.$i))) {
+                    $p_artiste = $cd->getArtiste();
+                } else {
+                    $p_artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($request->request->get('artiste_'.$i));
+                    if(empty($p_artiste)) { $p_artiste = $cd->getArtiste(); }
+                }
+
+                $piste->setArtiste($p_artiste);
+                if($request->request->get('fr_'.$i)) {
+                    $piste->setLangue(true);
+                } else { $piste->setLangue(false); }
+                if($request->request->get('anim_'.$i)) {
+                    $piste->setAnim(true);
+                } else { $piste->setAnim(false); }
+                if($request->request->get('paulo_'.$i)) {
+                    $piste->setPaulo(true);
+                } else { $piste->setPaulo(false); }
+                if($request->request->get('star_'.$i)) {
+                    $piste->setStar(true);
+                } else { $piste->setStar(false); }
+
+                $em->persist($piste);
+            }
+
+            $em->flush();
+
+        } else {
+            if ($request->isMethod('POST')) {
+                $this->addFlash('error','Les champs on été mal renseignés.');
+            }
+            if($request->request->get('full_fr')) {
+                $pistes_var['full_fr'] = 1;
+            }
+            $pistes = $this->savePistes($req['nbPiste'],$request);
+        }
+
+        return $this->render('cd/edit.html.twig', array(
+                'form' => $form->createView(),
+                'pistes' => $pistes,
+                'full_fr' => $full_fr,
+                'various' => $various
+            ));
+
+    }
 
     /**
      * @Route("/cd/create", name="createCd")
@@ -187,13 +316,14 @@ class CdController extends DiscoController
                 'label' => 'Créer le CD',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
+        
+        $req = $request->request->get('appbundle_cd');
 
         $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $pistes_var['full_fr'] = false;
 
         if($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-
 
             $cd = $form->getData();
 
@@ -201,9 +331,22 @@ class CdController extends DiscoController
             $cd->setMaison(null);
             $cd->setDistrib(null);
 
-            $req = $request->request->get('appbundle_cd');
-
             $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
+
+            if(!$artiste) {
+                $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
+
+                if($request->request->get('full_fr')) {
+                    $pistes_var['full_fr'] = 1;
+                }
+                $pistes = $this->savePistes($req['nbPiste'],$request);
+                return $this->render('cd/create.html.twig',array(
+                    'form'=>$form->createView(),
+                    'pistes' => $pistes,
+                    'pistes_var' => $pistes_var
+                ));
+            }
+
             $genre = $em->getRepository('AppBundle:Genre')->find(intval($req['genre']));
             $cd->setArtiste($artiste);
             $cd->setGenre($genre);
@@ -212,7 +355,6 @@ class CdController extends DiscoController
 
             for($i = 1; $i <= $req['nbPiste']; $i++) {
                 $piste = new Piste();
-                $piste->setPiste($i);
                 $piste->setCd($cd);
                 $piste->setTitre($request->request->get('titre_'.$i));
                 if(empty($request->request->get('artiste_'.$i))) {
@@ -252,8 +394,40 @@ class CdController extends DiscoController
             if ($request->isMethod('POST')) {
                 $this->addFlash('error','Les champs on été mal renseignés.');
             }
-            return $this->render('cd/create.html.twig',array('form'=>$form->createView()));
+            if($request->request->get('full_fr')) {
+                $pistes_var['full_fr'] = 1;
+            }
+            $pistes = $this->savePistes($req['nbPiste'],$request);
+            return $this->render('cd/create.html.twig',array(
+                'form'=>$form->createView(),
+                'pistes' => $pistes,
+                'pistes_var' => $pistes_var
+            ));
         }
+    }
+
+    private function savePistes($nbPistes, $request)
+    {
+        $pistes = null;
+        if ($nbPistes>0) {
+            for ($i=1; $i <= $nbPistes; $i++) {
+                $pistes[$i]['titre'] = $request->request->get('titre_'.$i);
+                $pistes[$i]['artiste'] = $this->getDoctrine()->getManager()->getRepository('AppBundle:Artiste')->find($request->request->get('artiste_'.$i));
+                if($request->request->get('fr_'.$i)){
+                    $pistes[$i]['fr'] = 1;
+                } else { $pistes[$i]['fr'] = 0; }
+                if($request->request->get('paulo_'.$i)){
+                    $pistes[$i]['paulo'] = 1;
+                } else { $pistes[$i]['paulo'] = 0; }
+                if($request->request->get('star_'.$i)){
+                    $pistes[$i]['star'] = 1;
+                } else { $pistes[$i]['star'] = 0; }
+                if($request->request->get('anim_'.$i)){
+                    $pistes[$i]['anim'] = 1;
+                } else { $pistes[$i]['anim'] = 0; }
+            }
+        }
+        return $pistes;
     }
 
     /**
@@ -434,13 +608,13 @@ class CdController extends DiscoController
     }
 
     /**
-     * @Route("/cd/getinfos/{id}", name="getInfosCd")
+     * @Route("/cd/getinfos/{id}", name="getInfosCd", options={"expose"=true})
      */
     public function getInfosAction($id)
     {
         $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
 
-        if(!$cd || $cd->getSuppr()) {
+        if(!$cd || $cd->getSuppr() || $cd->getAirplay()) {
             return null;
         }
 
@@ -448,7 +622,8 @@ class CdController extends DiscoController
             'artiste'=>$cd->getArtiste()->getLibelle(),
             'titre' => $cd->getTitre(),
             'annee' => $cd->getAnnee(),
-            'note' => $cd->getNoteMoy()
+            'note' => $cd->getNoteMoy(),
+            'ecoute' => $cd->getEcoute()
         );
         if ($cd->getRotation()) {
             $tab['rotation'] = $cd->getRotation()->getLibelle();

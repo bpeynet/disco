@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AirplayController extends DiscoController
 {
     /**
-     * @Route("/airplay/{page}", name="airplay")
+     * @Route("/airplay/page/{page}", name="airplay")
      */
     public function indexAction(Request $request, $page = 1)
     {
@@ -23,7 +23,7 @@ class AirplayController extends DiscoController
         $doctrine = $this->getDoctrine();
         $em = $doctrine->getManager();
         $limit = 10;
-
+        if($page < 1 ) {$page = 1;}
         $airplays = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
             ->orderBy('a.airplay','DESC')
             ->setFirstResult(($page-1)*10)
@@ -37,6 +37,37 @@ class AirplayController extends DiscoController
             ->getSingleScalarResult();
 
         $pageMax = ceil($nbAirplay/10);
+
+        $nonPublies = $request->request->get('non_publies');
+        $publies = $request->request->get('publie');
+
+        if($publies or $nonPublies) {
+            if ($nonPublies) {
+                $tabNonPublies = explode(",", $request->request->get('non_publies'));
+
+                foreach ($tabNonPublies as $key => $publication) {
+                    if ($publication) {
+                        $airplay = $em->getRepository('AppBundle:Airplay')->find($publication);
+                        $airplay->setPublie(false);
+                        $em->persist($airplay);
+                    }
+                }                
+            }
+
+            if($publies) {
+                foreach ($publies as $key => $publication) {
+                    $airplay = $em->getRepository('AppBundle:Airplay')->find($publication);
+                    $airplay->setPublie(true);
+                    $em->persist($airplay);
+                }
+            }
+
+            $this->discoLog("a modifié les publications d'Airplays");
+            $this->addFlash('success','Les publications d\'Airplays ont été éditées.');
+
+        }
+
+        $em->flush();
 
         return $this->render('airplay/search.html.twig',array(
                 'airplays'=>$airplays,
@@ -69,6 +100,35 @@ class AirplayController extends DiscoController
                 'liste' => $liste
             ));
 
+    }
+
+    /**
+     * @Route("/airplay/published", name="publishedCd")
+     */
+    public function publishedAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+            $airplays = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
+                ->orderBy('a.airplay', 'DESC')
+                ->setMaxResults(2)
+                ->getQuery()
+                ->getResult();
+
+        if(!$airplays) {
+            $this->addFlash('error','Erreur lors du chargement des airplays.');
+        } else {
+            foreach ($airplays as $key => $airplay) {
+                $listes[$key] = $em->getRepository('AppBundle:AirplayCd')->findBy(
+                        array('airplay' => $airplay->getAirplay()),
+                        array('ordre' => 'asc')
+                    );
+            }
+        }
+
+        return $this->render('airplay/published.html.twig', array(
+                'airplays' => $airplays,
+                'listes' => $listes
+            ));
     }
 
     /**
@@ -110,6 +170,8 @@ class AirplayController extends DiscoController
     private function saveAirplay($airplay, $request, $rq, $cUser = false)
     {
         $em = $this->getDoctrine()->getManager();
+        $ecoute_manquant = 0;
+
         $user = $this->get('security.context')->getToken()->getUser();
         if ($cUser) {
             $airplay->setCuser($user);
@@ -127,6 +189,18 @@ class AirplayController extends DiscoController
         $em->persist($airplay);
         $em->flush();
 
+        $cd_to_edit = $em->createQuery(
+            'SELECT cd FROM AppBundle:AirplayCd ac, AppBundle:Cd cd
+                WHERE ac.airplay = :airplay AND ac.cd = cd.cd'
+            )
+            ->setParameter('airplay',$airplay->getAirplay())
+            ->getResult();
+
+        foreach ($cd_to_edit as $key => $cd) {
+            $cd->setAirplay = null;
+            $em->persist($cd);
+        }
+
         $em->createQuery(
             'DELETE FROM AppBundle:AirplayCd ac
                 WHERE ac.airplay = :airplay'
@@ -142,6 +216,14 @@ class AirplayController extends DiscoController
                     $airplay_cd->setCd($cd);
                     $airplay_cd->setAirplay($airplay);
                     $airplay_cd->setOrdre($key+1);
+                    
+                    //correspond au lien d'écoute
+                    if($rq->get('ecoute')[$row]) {
+                        $cd->setEcoute($rq->get('ecoute')[$row]);
+                        $em->persist($cd);
+                    } else {
+                        $ecoute_manquant++;
+                    }
 
                     $em->persist($airplay_cd);
                 } else {
@@ -151,6 +233,8 @@ class AirplayController extends DiscoController
         }
 
         $em->flush();
+
+        return $ecoute_manquant;
     }
 
     /**
@@ -191,14 +275,14 @@ class AirplayController extends DiscoController
 
         $form = $this->createForm(new AirplayType(),$airplay);
         $form->add('submit', 'submit', array(
-                'label' => 'Editer l\'Airplay',
+                'label' => 'Sauvegarder l\'Airplay',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
 
         $form->handleRequest($request);
 
         $date_mini = $this->dateMini($rq->get('date'));
-        
+
         $generatedAirplay = $em->createQuery(
                 'SELECT cd
                 FROM AppBundle:Cd cd, AppBundle:AirplayCd ac
@@ -216,10 +300,14 @@ class AirplayController extends DiscoController
 
             if ($form->isValid()) {
 
-                $this->saveAirplay($airplay, $request, $rq);
+                $ecoute_manquant = $this->saveAirplay($airplay, $request, $rq);
 
                 $this->discoLog("a modifié l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été modifié !');
+
+                if($ecoute_manquant>0) {
+                    $this->addFlash('info','Il y a '.$ecoute_manquant.' lien(s) d\'écoute non renseigné(s).');
+                }
 
                 return $this->redirect($this->generateUrl('editAirplay',array('id'=>$airplay->getAirplay())));
 
@@ -264,10 +352,14 @@ class AirplayController extends DiscoController
         if($request->isMethod('POST') && !empty($rq->get('appbundle_airplay'))) {
             if ($form->isValid()) {
 
-                $this->saveAirplay($airplay, $request, $rq, true);
+                $ecoute_manquant = $this->saveAirplay($airplay, $request, $rq, true);
 
                 $this->discoLog("a créé l'airplay ".$airplay->getAirplay()." '".$airplay->getLibelle()."'");
                 $this->addFlash('success','L\'Airplay a bien été créé !');
+
+                if($ecoute_manquant>0) {
+                    $this->addFlash('info','Il y a '.$ecoute_manquant.' lien(s) d\'écoute non renseigné(s).');
+                }
 
                 return $this->redirect($this->generateUrl('editAirplay',array('id'=>$airplay->getAirplay())));
 

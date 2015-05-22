@@ -135,6 +135,7 @@
 		</form>
 
 		{% if is_granted('ROLE_PROGRA') %}
+			<a href="{{path('cdNonTraites')}}" class="btn btn-block btn-lg btn-warning">Voir les CD à traiter</a>
 			<a href="{{path('createCd')}}" class="btn btn-block btn-lg btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un CD</a>
 		{% endif %}
 	</div>
@@ -166,7 +167,7 @@
 							</tr>
 						</thead>
 						{% for cd in recherche %}
-							<tr>
+							<tr onclick="window.location.href='{{path('showCd',{'id':cd.cd})}}';">
 								<td>{{cd.getCd}}</td>
 								<td>
 									{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
@@ -176,7 +177,7 @@
 								<td>
 									<a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 									{% if is_granted('ROLE_PROGRA') %}
-										<a href="#" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+										<a href="" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 									{% endif %}
 								</td>
 								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
@@ -213,7 +214,8 @@
 	      delay: 300,
 	      select: function( event, ui ) {
 	        $(this).text(ui.item.libelle);
-	      }
+	      },
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    };
 	    $( "#artiste" ).autocomplete(artisteCompleteParameters);
 
@@ -223,7 +225,8 @@
 	      delay: 300,
 	      select: function( event, ui ) {
 	        log('label',ui.item);
-	    	}
+	    	},
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    });
 
 	    $( "#titre" ).autocomplete({
@@ -232,8 +235,10 @@
 	      delay: 300,
 	      select: function( event, ui ) {
 	        	log('titre',ui.item);
-	    	}
+	    	},
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    });
 	});
+
 </script>
 {% endblock %}

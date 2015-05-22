@@ -17,16 +17,16 @@
 		</small>
 	</h1>
 	
-	<div class="label label-info">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
+	<div class="label label-default">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
 
-	<div class="label label-info">Image</div>
-	{{cd.getImg}}
+	<span class="label label-{% if cd.retourLabel %}success{% else %}warning{% endif %}">{% if cd.retourLabel %}Retour effectué{% elseif not cd.rotation  %}Délivré à un Progra.{% else %}Retour en attente{% endif %}</span>
 
 	{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 
-	{% if cd.getRetourlabel %}<div class="label label-warning">Retour label en attente</div>{% endif %}
 	{% if cd.getAirplay %}<div class="label label-success">Présent dans un airplay</div>{% endif %}
 	{% if cd.getEmprunts %}<div class="label label-success">CD libre</div>{% endif %}
+
+	<hr>
 
 	<div class="row">
 		<div class="col-md-7">
@@ -187,15 +187,15 @@
 					{% if cd.getPistes.toArray != null %}
 					<h4>Pistes en détail</h4>
 					<table class="table table-striped">
-						<thead><tr><th>titre de la piste</th><th>Artiste</th><th>Fr</th><th>Anim</th><th>Rivendell</th><th>Star</th></tr></thead>
+						<thead><tr><th>titre de la piste</th><th>Artiste</th><th  style="width:60px">Fr</th><th style="width:60px">Anim</th><th  style="width:60px">Riven.</th><th  style="width:60px">Star</th></tr></thead>
 						{% for piste in cd.getPistes.toArray %}
 							<tr>
 								<td>{{piste.getTitre}}</td>
 								<td>{% if piste.getArtiste.getArtiste != 0 %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
-								<td {% if piste.getLangue %}class="success"{% endif %}></td>
-								<td class="{% if piste.getAnim %}success{% endif %}"></td>
-								<td class="{% if piste.getPaulo %}success{% endif %}"></td>
-								<td class="{% if piste.getStar %}success{% endif %}"></td>
+								<td {% if piste.getLangue %}class="success"{% endif %}  style="width:60px"></td>
+								<td class="{% if piste.getAnim %}success{% endif %}"  style="width:60px"></td>
+								<td class="{% if piste.getPaulo %}success{% endif %}"  style="width:60px"></td>
+								<td class="{% if piste.getStar %}success{% endif %}"  style="width:60px"></td>
 							</tr>
 						{% endfor %}
 					</table>
@@ -294,7 +294,11 @@
 				</table>
 
 				<h4>Airplays</h4>
-				#TODO
+				{% if cd.airplays %}
+				{% for airplay_cd in cd.airplays %}
+					<a href="{{path('showAirplay',{'id':airplay_cd.airplay.airplay})}}" target="_blank" class="label label-success">{{airplay_cd.airplay.libelle}}</a>
+				{% endfor %}
+				{% endif %}
 
 			</div>
 			<div id="retLabel">
@@ -324,7 +328,7 @@
 			$("#tabs").tabs();
 		});
 
-		$('#tabs a').click(function (e) {
+		$('#tabs ul a').click(function (e) {
 		  e.preventDefault();
 		  $(this).tab('show');
 		})

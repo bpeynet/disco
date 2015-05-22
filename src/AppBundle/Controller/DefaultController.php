@@ -12,16 +12,26 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends DiscoController
 {
 
-	/**
-	 * @Route("/", name="index")
-	 */
- 	public function indexAction() {
+    /**
+     * @Route("/test/mail", name="testMail")
+     */
+    public function testMailAction()
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Test D:')
+            ->setFrom('send@example.com')
+            ->setTo('cc@yopmail.com')
+            ->setBody($this->renderView('mails/retour-label.html.twig', array('name' => 'coucou')))
+        ;
+        $this->get('mailer')->send($message);
 
- 		return $this->redirect($this->generateUrl('search'));
- 	}
+        $this->addFlash('success','Le mail a été envoyé !!!! :DDDDDDD');
+
+        return $this->redirect($this->generateUrl('search'));
+    }
 
     /**
-     * @Route("/search", name="search")
+     * @Route("/", name="index")
      */
     public function search(Request $request) {
 

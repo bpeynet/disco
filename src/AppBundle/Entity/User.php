@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -73,6 +74,10 @@ class User implements UserInterface
     /**
      * @var string
      *
+     * @Assert\Email(
+     *     message = "'{{ value }}' n'est pas un email valide, cela doit-être une adresse mail.",
+     *     checkMX = true
+     * )
      * @ORM\Column(name="email", type="string", length=100, nullable=false)
      */
     private $email = '';

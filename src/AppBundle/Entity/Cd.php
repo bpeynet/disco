@@ -76,6 +76,13 @@ class Cd
     protected $styles;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="AirplayCd", mappedBy="cd")
+     * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     */
+    protected $airplays;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="titre", type="string", length=250, nullable=false)
@@ -310,6 +317,12 @@ class Cd
      */
     private $img = '';
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ecoute", type="string")
+     */
+    private $ecoute = '0';
 
 
     /**
@@ -598,6 +611,29 @@ class Cd
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set airplays
+     *
+     * @param ArrayCollection $airplays
+     * @return Cd
+     */
+    public function setAirplays($airplays)
+    {
+        $this->airplays = $airplays;
+
+        return $this;
+    }
+
+    /**
+     * Get airplays
+     *
+     * @return ArrayCollection
+     */
+    public function getAirplays()
+    {
+        return $this->airplays;
     }
 
     /**
@@ -1209,6 +1245,29 @@ class Cd
     public function getCd()
     {
         return $this->cd;
+    }
+
+    /**
+     * Set ecoute
+     *
+     * @param integer $ecoute
+     * @return AirplayCd
+     */
+    public function setEcoute($ecoute)
+    {
+        $this->ecoute = $ecoute;
+
+        return $this;
+    }
+
+    /**
+     * Get ecoute
+     *
+     * @return integer 
+     */
+    public function getEcoute()
+    {
+        return $this->ecoute;
     }
 
     public function __construct() {

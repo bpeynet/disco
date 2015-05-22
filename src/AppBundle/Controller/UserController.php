@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UserController extends DiscoController
 {
     /**
-     * @Route("/user/delete/{id}", name="deleteUser")
+     * @Route("/user/delete/{id}", name="deleteUser", options={"expose"=true})
      */
     public function deleteAction($id)
     {

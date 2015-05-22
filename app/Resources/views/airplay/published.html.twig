@@ -1,0 +1,66 @@
+<link rel="stylesheet" type="text/css" href="{{ asset('css/airplay.css') }}">
+
+{% if airplays %}
+<p>L’airplay est le classement des 40 albums et 15 ep’s/singles
+les plus défendus par l’équipe de programmation de la radio
+à retrouver sur www.campusgrenoble.org / onglet Airplay</p>
+{% set id = 0 %}
+{% for airplay in airplays %}
+	<h1>{{airplay.libelle}}</h1>
+	{% for ac in listes[id] %}
+		<div class="ligne_classement">
+			<div class="pochette_cd">
+			{% if ac.cd.ecoute %}
+				<a href="{{ac.cd.ecoute}}" target="_blank" title="Ecouter">
+			{% endif %}
+				<img src="{% if ac.cd.img %}{{ac.cd.img}}{% else %}{{ asset('img/cd/default.png') }}{% endif %}" alt="pochette {% if ac.cd.img %}du CD{% else %}par défaut{% endif %}">
+				<span class="rank_cd {% if ac.cd.getDsaisie|date("U") > "-3 months"|date("U") %}new_cd{% endif %}">#{{ac.ordre}}</span>
+			{% if ac.cd.ecoute %}
+				</a>
+			{% endif %}
+			</div>
+			<div class="informations_cd">
+				<div class="titre_cd">
+					<a href="" class="popup">
+						{{ac.cd.titre}}
+						<span>
+							<div class="head">
+								Fiche Disque (#{{ac.cd.cd}}) {% if ac.cd.getDsaisie|date("U") > "-3 months"|date("U") %}<label class="success">Nouveauté</label>{% endif %}
+							</div>
+							<div class="body">
+								Commentaire de la Programmation : <br>
+								{{ac.cd.comment}}
+								<hr>
+								Note moyenne : {% if ac.cd.noteMoy %}{{ac.cd.noteMoy}}/5{% endif %}<br>
+								Fréquence de diffusion : {{ac.cd.rotation.libelle}}
+							</div>
+						</span>
+					</a>
+				</div>
+				<div class="artiste">
+					de 
+					<a href="" class="popup">
+						{{ac.cd.artiste.libelle}}
+						<span class=" cadre">{{ac.cd.artiste.disques|length}} CD(s)</span>
+					</a>
+				</div>
+				<div class="label_cd">
+					Label : 
+					<a href="" class="popup">
+						{% if ac.cd.label %}{{ac.cd.label.libelle}}{% elseif ac.cd.maison %}{{ac.cd.maison.libelle}}{% elseif ac.cd.distrib %}{{ac.cd.distrib.libelle}}{% endif %}
+						<span class=" cadre">
+							{% if ac.cd.label %}{{ac.cd.label.disques|length}}{% elseif ac.cd.maison %}{{ac.cd.maison.disques|length}}{% elseif ac.cd.distrib %}{{ac.cd.distrib.disques|length}}{% endif %} CD(s)
+						</span>
+					</a>
+				</div>
+				<div class="genre">
+					Genre : {{ac.cd.genre.libelle}}
+				</div>
+				<div class="comment_progra">{{ac.cd.comment}}</div>
+			</div>
+		</div>	
+		
+	{% endfor %}
+{% set id=id+1 %}
+{% endfor %}
+{% endif %}

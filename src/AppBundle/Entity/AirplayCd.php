@@ -28,7 +28,7 @@ class AirplayCd
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
      */
     private $cd = '0';
-
+    
     /**
      * @var integer
      *
@@ -105,15 +105,5 @@ class AirplayCd
     public function getOrdre()
     {
         return $this->ordre;
-    }
-
-    /**
-     * Get dbkey
-     *
-     * @return integer 
-     */
-    public function getDbkey()
-    {
-        return $this->dbkey;
     }
 }

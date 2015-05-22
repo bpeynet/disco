@@ -84,7 +84,7 @@ class ArtisteController extends DiscoController
 	}
 
     /**
-     * @Route("/artiste/delete/{id}", name="deleteArtiste")
+     * @Route("/artiste/delete/{id}", name="deleteArtiste", options={"expose"=true})
      */
     public function deleteAction($id) {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un artiste.');
@@ -105,11 +105,11 @@ class ArtisteController extends DiscoController
             $em->remove($artiste);
             $em->flush();
             $this->addFlash('success','Suppression effectuée !');
+            return $this->redirect($this->generateUrl('artiste'));
         } else {
             $this->addFlash('error','Un Artiste lié à des disques ne peut pas être supprimé !');
         }
-
-        return $this->redirect($this->generateUrl('artiste'));
+        return $this->redirect('showArtiste',array('id'=>$artiste->getArtiste()));
     }
 
     /**
@@ -131,7 +131,7 @@ class ArtisteController extends DiscoController
         $form = $this->createForm(new ArtisteType(),$artiste);
 
         $form->add('submit', 'submit', array(
-                'label' => 'Editer l\'Artiste',
+                'label' => 'Sauvegarder l\'Artiste',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
         $form->handleRequest($request);

@@ -1,5 +1,13 @@
+html {
+    background: url('bg-rcg-opac.png') no-repeat center fixed;
+}
+
 body {
     margin-top: 60px;
+}
+
+form {
+    background: none;
 }
 
 .panel-heading h3 {
