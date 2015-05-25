@@ -19,11 +19,13 @@ class DefaultController extends DiscoController
     {
         $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
 
+        $airplays = $this->getDoctrine()->getManager()->getRepository('AppBundle:AirplayCd')->findByCd($cd);
+
         $message = \Swift_Message::newInstance()
             ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." [retour d'écoute]")
             ->setFrom('test@test.fr')
             ->setTo('rcgtest@yopmail.com')
-            ->setBody($this->renderView('mails/retour-label.html.twig', array('cd' => $cd)))
+            ->setBody($this->renderView('mails/retour-label.html.twig', array('cd' => $cd, 'airplays' => $airplays)))
         ;
         $test = $this->get('mailer')->send($message);
 
