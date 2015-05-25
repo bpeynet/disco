@@ -98,7 +98,7 @@
 										{% for piste in pistes %}
 												<td>{{id_piste}}</td>
 												<td><input name='titre_{{id_piste}}' value='{{piste.titre}}'></td>
-												<td><input id='artiste_{{id_piste}}' name='artiste_{{id_piste}}' value='{% if piste.artiste %}{{piste.artiste.libelle}}{% endif %}' class='artiste_autocomplete' {% if cd.various %}style="display:none;"{% endif %}></td>
+												<td><input id='artiste_{{id_piste}}' name='artiste_{{id_piste}}' value='{% if piste.artiste %}{{piste.artiste.libelle}}{% endif %}' class='artiste_autocomplete' {% if not cd.various %}style="display:none;"{% endif %}></td>
 												<td><input type='checkbox' class='fr_input' name='fr_{{id_piste}}' {% if piste.fr %}checked{% endif %}></td>
 												<td><input type='checkbox' name='anim_{{id_piste}}' {% if piste.anim %}checked{% endif %}></td>
 												<td><input type='checkbox' name='paulo_{{id_piste}}' {% if piste.paulo %}checked{% endif %}></td>
