@@ -94,13 +94,6 @@
 			update: classer
 		});
 
-		$(".datepicker").datepicker({
-		    format: 'dd/mm/yyyy',
-		    endDate: '-0d'
-		});
-		var date_mini = "{{date_mini|date('d/m/Y')}}";
-		$(".datepicker").datepicker('setDate',date_mini);
-
 		$( "#newCD" ).autocomplete({
 	      source: "{{path('autocompleteTitre',{'like':1})}}",
 	      minLength: 2,

@@ -252,6 +252,7 @@ class CdController extends DiscoController
             for($i = 1; $i <= $req['nbPiste']; $i++) {
                 $piste = new Piste();
                 $piste->setCd($cd);
+                $piste->setPiste($i);
                 $piste->setTitre($request->request->get('titre_'.$i));
                 if(empty($request->request->get('artiste_'.$i))) {
                     $p_artiste = $cd->getArtiste();
@@ -367,6 +368,7 @@ class CdController extends DiscoController
             for($i = 1; $i <= $req['nbPiste']; $i++) {
                 $piste = new Piste();
                 $piste->setCd($cd);
+                $piste->setPiste($i);
                 $piste->setTitre($request->request->get('titre_'.$i));
                 if(empty($request->request->get('artiste_'.$i))) {
                     $p_artiste = $cd->getArtiste();
@@ -679,6 +681,29 @@ class CdController extends DiscoController
         $response->setData($tab);
         return $response;
 
+    }
+
+    /**
+     * @Route("/cd/retourLabel", name="retourLabel")
+     */
+    public function retourLabelAction(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs peuvent accéder à cette page.');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $cds = $em->createQueryBuilder()
+            ->select('cd')
+            ->from('AppBundle:Cd', 'cd')
+            ->where('cd.airplay = 0')
+            ->setMaxResults(50)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('cd/retour-label.html.twig',array(
+                'cds'=>$cds,
+                'date_mini' => date("d/m/Y",mktime(0,0,0,date("m")-3,date("d"),date("Y")))
+            ));
     }
 
 

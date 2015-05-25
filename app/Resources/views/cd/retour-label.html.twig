@@ -1,0 +1,61 @@
+{% block title %}Gestion des Retours Label{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="row">
+		<h1>Gestion des Retours Label</h1>
+		<form class="form">
+			<input class="date_mini" name="recherche['date']"></input>
+		</form>
+
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<th></th>
+					<th>#</th>
+					<th>Artiste</th>
+					<th>Titre</th>
+					<th>Label</th>
+					<th>Mail Retour</th>
+					<th>Année</th>
+					<th>Sorti le</th>
+					<th>Commentaire</th>
+					<th>Rotation</th>
+					<th>Genre</th>
+					<th>Type</th>
+				</thead>
+				<tbody>
+					{% for cd in cds %}
+						<tr id="retLabel_{{cd.cd}}">
+							<td><input type="checkbox" id="check_retour[{{cd.cd}}]"></td>
+							<td>{{cd.cd}}</td>
+							<td>{{cd.artiste.libelle}}</td>
+							<td>{{cd.titre}}</td>
+							<td>{% if cd.label %}{{cd.label.libelle}}{% endif %}</td>
+							<td>{% if cd.label %}{{cd.label.mailProgra}}{% endif %}</td>
+							<td>{{cd.annee}}</td>
+							<td>{{cd.dsortie|date("d/m/Y")}}</td>
+							<td>{{cd.comment}}</td>
+							<td>{% if cd.rotation %}{{cd.rotation.libelle}}{% endif %}</td>
+							<td>{% if cd.genre %}{{cd.genre.libelle}}{% endif %}</td>
+							<td>{% if cd.type %}{{cd.type.libelle}}{% endif %}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+	$(".datepicker").datepicker({
+	    format: 'dd/mm/yyyy',
+	    endDate: '-0d'
+	});
+	var date_mini = "{{date_mini|date('d/m/Y')}}";
+	$(".datepicker").datepicker('setDate',date_mini);
+</script>
+{% endblock %}
