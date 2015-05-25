@@ -624,13 +624,21 @@ class CdController extends DiscoController
      */
     public function getInfosAction($id)
     {
-        $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
+        if(is_numeric($id)) {
+            $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
+        } else {
+            $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->findByTitre($id);
+        }
 
         if(!$cd || $cd->getSuppr() || $cd->getAirplay()) {
             return null;
         }
 
+        var_dump($cd);
+        die();
+
         $tab = array(
+            'cd' => $cd->getCd(),
             'artiste'=>$cd->getArtiste()->getLibelle(),
             'titre' => $cd->getTitre(),
             'annee' => $cd->getAnnee(),

@@ -116,6 +116,16 @@
 		var date_mini = "{{date_mini|date('d/m/Y')}}";
 		$(".datepicker").datepicker('setDate',date_mini);
 
+		$( "#newCD" ).autocomplete({
+	      source: "{{path('autocompleteTitre',{'like':1})}}",
+	      minLength: 2,
+	      delay: 300,
+	      select: function( event, ui ) {
+	        	$("#newCD").text(ui.item.libelle);
+	    	},
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
+	    });
+
 		$("#addCd").submit(function(event) {
 			var id = $("#newCD").val();
 			var new_row = "<tr class='ui-sortable-handle' id='row_:id'><td class='num_row_airplay'></td><td></td><td class='num_cd'>:id</td><td>:artiste</td><td>:titre</td><td><input type='text' name='ecoute[NNN]' value=':ecoute'></td><td>:annee</td><td>:rotation</td><td>:note</td><td>:star</td><td>:paulo</td><td>:anim</td><td>:genre</td><td>:type</td><td><button onclick='deleteRow(:id)' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";

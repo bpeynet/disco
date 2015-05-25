@@ -212,6 +212,7 @@ class AirplayController extends DiscoController
             if($row && $row != "") {
                 $cd = $em->getRepository('AppBundle:Cd')->find($row);
                 if($cd) {
+                    $cd->setAirplay($airplay);
                     $airplay_cd = new AirplayCd();
                     $airplay_cd->setCd($cd);
                     $airplay_cd->setAirplay($airplay);
