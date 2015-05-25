@@ -1,21 +1,24 @@
 Bonjour,<br>
 <br>
 Le disque {{cd.titre}} - {{cd.artiste.libelle}} {% if cd.refLabel %}(Ref. {{cd.refLabel}}){% endif %} {% if cd.rotation %}{{cd.rotation.retourLabel}}{% else %}n'a pas été retenu dans la diffusion régulière de Radio Campus Grenoble.{% endif %}<br>
+Pistes en rotation :<br>
+{% for piste in cd.pistes %}{% if piste.paulo %}{{piste.piste}} {% endif %}{% endfor %}<br>
 <br>
 {% if cd.retourComment %}
 Commentaire du programmateur :<br>
 {{cd.retourComment}}
 {% elseif cd.comment %}
 Commentaire du programmateur :<br>
-{{cd.comment}}
+{{cd.comment}}<br>
 {% endif %}
+{%if cd.airplay%}
 <br>
+De plus, ce Disque est également présent dans un airplay* :<br>
+<a href="{{path('showAirplay',{'id':airplay.airplay})}}">{{airplay.libelle}}</a>
+<pre>L'airplay est le classement mensuel des disques les plus défendus à l'antenne</pre><br>
+{%endif%}
 <br>
 L'équipe Programmation,<br>
-Radio Campus Grenoble<br>
+<a href="http://campusgrenoble.org/">Radio Campus Grenoble</a><br>
 <br>
 N.B. : Ce mail a été généré automatiquement.<br>
-
-l'airplay est le classement mensuel des disques les plus défendus à l'antenne
-
-+lien
