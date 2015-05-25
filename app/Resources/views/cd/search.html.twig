@@ -240,6 +240,10 @@
 	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    });
 
+	    $('.cdRow').find('a').click(function(e) {
+            e.stopPropagation();
+	    });
+
         $('.cdRow').click(function(e) {
             e.preventDefault();
             e.stopPropagation();
