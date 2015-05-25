@@ -15,46 +15,46 @@
 			<div class="col-md-6">
 				<!-- Text input-->
 				<div class="form-group">
-				  <label class="col-md-5 control-label" for="cd">Par Numéro</label>  
+				  <label class="col-md-5 control-label" for="cd">Par Numéro</label>
 				  <div class="col-md-7">
 				  <input id="cd" name="num" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.num}}"{% endif %} >
-				    
+
 				  </div>
 				</div>
 
 				<!-- Text input-->
 				<div class="form-group">
-				  <label class="col-md-5 control-label" for="titre">Par Titre</label>  
+				  <label class="col-md-5 control-label" for="titre">Par Titre</label>
 				  <div class="col-md-7">
 				  <input id="titre" name="titre" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.titre}}"{% endif %} >
-				    
+
 				  </div>
 				</div>
 
 				<!-- Text input-->
 				<div class="form-group">
-				  <label class="col-md-5 control-label" for="artiste">Par Artiste</label>  
+				  <label class="col-md-5 control-label" for="artiste">Par Artiste</label>
 				  <div class="col-md-7">
 				  <input id="artiste" name="artiste" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.artiste}}"{% endif %} >
-				    
+
 				  </div>
 				</div>
 
 				<!-- Text input-->
 				<div class="form-group">
-				  <label class="col-md-5 control-label" for="label">Par Label</label>  
+				  <label class="col-md-5 control-label" for="label">Par Label</label>
 				  <div class="col-md-7">
 				  <input id="label" name="label" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.label}}"{% endif %} >
-				    
+
 				  </div>
 				</div>
 
 				<!-- Text input-->
 				<div class="form-group">
-				  <label class="col-md-5 control-label" for="annee">Par Annee</label>  
+				  <label class="col-md-5 control-label" for="annee">Par Annee</label>
 				  <div class="col-md-7">
 				  <input id="annee" name="annee" placeholder="" class="form-control input-md" type="text" {% if post %}value="{{post.annee}}"{% endif %} >
-				    
+
 				  </div>
 				</div>
 			</div>
@@ -141,9 +141,9 @@
 	</div>
 </div>
 
-	
 
-{% if recherche %}	
+
+{% if recherche %}
 <div class="row">
 	{% if recherche %}
 	<div class="col-md-12">
@@ -167,18 +167,18 @@
 							</tr>
 						</thead>
 						{% for cd in recherche %}
-							<tr onclick="window.location.href='{{path('showCd',{'id':cd.cd})}}';">
+							<tr id="{{cd.cd}}" class="cdRow">
 								<td>{{cd.getCd}}</td>
 								<td>
 									{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 								</td>
 								<td>{% if cd.getAnnee %}{{cd.getAnnee}}{% endif %}</td>
-								<td>{{cd.getTitre}}</td>
+								<td class="titre">{{cd.getTitre}}</td>
 								<td>
 									<a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 									{% if is_granted('ROLE_PROGRA') %}
 										<a href="{{path('editCd',{'id':cd.cd})}}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-										<a href="" onclick="confirmDelCd('{{cd.getLibelle}}',{{cd.getCd}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+										<a href="{{path('deleteCd',{'id':cd.cd})}}" class="deleteCd"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 									{% endif %}
 								</td>
 								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
@@ -239,6 +239,26 @@
 	    	},
 	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
 	    });
+
+        $('.cdRow').click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var cdId = $(this).closest('.cdRow').attr('id');
+            var route = Routing.generate('showCd', {'id': cdId});
+            window.location.replace(route);
+        });
+
+        $('.deleteCd').click(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var container = $(this).closest('.cdRow');
+            var titre = container.children('.titre').text();
+	        if (confirm("Supprimer le CD "+titre+" ?" )) {
+                var cdId = container.attr('id');
+                var route = Routing.generate('deleteCd', {'id': cdId});
+                window.location.replace(route);
+            }
+        });
 	});
 
 </script>

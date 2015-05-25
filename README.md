@@ -4,6 +4,8 @@ L'application qui gère la discothèque de [Campus Grenoble](http://campusgrenob
 
 Basée sur le framework [Symfony](http://symfony.com/).
 
+Requiert PHP 5.5
+
 **Le développement est encore en cours**.
 
 ## Licence

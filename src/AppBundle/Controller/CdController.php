@@ -147,7 +147,7 @@ class CdController extends DiscoController
     }
 
     /**
-     * @Route("/cd/show/{id}", name="showCd")
+     * @Route("/cd/show/{id}", name="showCd", options={"expose"=true})
      */
     public function showAction($id) {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
@@ -340,7 +340,7 @@ class CdController extends DiscoController
                 'label' => 'Créer le CD',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
-        
+
         $req = $request->request->get('appbundle_cd');
 
         $form->handleRequest($request);
