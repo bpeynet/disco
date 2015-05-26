@@ -57,6 +57,25 @@
 		</form>
 		<input type="checkbox" id="toutCocher"> Tout Sélectionner<br>
 		<input type="checkbox" id="cocherNonTraites"> Selectionner les non traités
+
+		<nav>
+			<ul class="pagination">
+			<li>
+			  <a href="{{path('retourLabel',{'page':'1'})}}" aria-label="Previous">
+			    <span aria-hidden="true">&laquo;</span>
+			  </a>
+			</li>
+			{% for i in 1..pageMax %}
+				<li {% if page == i %}class="active"{% endif %}><a href="{{path('retourLabel',{'page':i})}}">{{i}}</a></li>
+			{% endfor %}
+			<li>
+			  <a href="{{path('retourLabel',{'page':pageMax})}}" aria-label="Next">
+			    <span aria-hidden="true">&raquo;</span>
+			  </a>
+			</li>
+			</ul>
+		</nav>
+
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
@@ -96,6 +115,24 @@
 				</tbody>
 			</table>
 		</div>
+
+		<nav>
+			<ul class="pagination">
+			<li>
+			  <a href="{{path('retourLabel',{'page':'1'})}}" aria-label="Previous">
+			    <span aria-hidden="true">&laquo;</span>
+			  </a>
+			</li>
+			{% for i in 1..pageMax %}
+				<li {% if page == i %}class="active"{% endif %}><a href="{{path('retourLabel',{'page':i})}}">{{i}}</a></li>
+			{% endfor %}
+			<li>
+			  <a href="{{path('retourLabel',{'page':pageMax})}}" aria-label="Next">
+			    <span aria-hidden="true">&raquo;</span>
+			  </a>
+			</li>
+			</ul>
+		</nav>
 	</div>
 	
 {% endblock %}

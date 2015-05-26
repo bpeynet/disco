@@ -696,14 +696,17 @@ class CdController extends DiscoController
     }
 
     /**
-     * @Route("/cd/retourLabel", name="retourLabel")
+     * @Route("/cd/retourLabel/page/{page}", name="retourLabel")
      */
-    public function retourLabelAction(Request $request)
+    public function retourLabelAction(Request $request, $page=1)
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs peuvent accéder à cette page.');
 
+        if($page < 1) { $page=1; }
+
         $em = $this->getDoctrine()->getManager();
         $rq = $request->request;
+        $limit = $this->container->getParameter('listingLimit');
 
         $date_mini = $this->dateMini($rq->get('date_mini'));
 
@@ -722,9 +725,17 @@ class CdController extends DiscoController
                 ->select('cd')
                 ->from('AppBundle:Cd', 'cd')
                 ->orderBy('cd.cd', 'DESC')
+                ->setFirstResult(($page-1)*$limit)
                 ->setMaxResults(50)
                 ->getQuery()
                 ->getResult();
+        
+                $nbRes = $em->createQueryBuilder()
+                    ->select('count(cd)')
+                    ->from('AppBundle:Cd', 'cd')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+
         } else {
             $cds = $em->createQueryBuilder()
                 ->select('cd')
@@ -742,11 +753,34 @@ class CdController extends DiscoController
                 if($label_mail) {
                     $cds = $cds->andWhere($cds->expr()->isNotNull('l.mailProgra'));
                 }
+
                 $cds = $cds->orderBy('cd.cd', 'DESC')
-                ->setMaxResults(50)
+                ->setFirstResult(($page-1)*$limit)
+                ->setMaxResults($limit)
                 ->getQuery()
                 ->getResult();
+
+                $nbRes = $em->createQueryBuilder()
+                ->select('count(cd)')
+                ->from('AppBundle:Cd', 'cd')
+                ->leftJoin('AppBundle:Label', 'l', 'WITH', 'l.label = cd.label')
+                ->where('l.libelle LIKE :label')
+                ->setParameter('label', '%'.$label.'%')
+                ->andWhere('cd.dprogra >= :dprogra')
+                ->setParameter('dprogra', $date_mini)
+                ->andWhere('cd.annee >= :annee')
+                ->setParameter('annee', $annee_mini);
+                if (!$retour_fait) {
+                    $nbRes = $nbRes->andWhere('cd.retourLabel = 0');
+                }
+                if($label_mail) {
+                    $nbRes = $nbRes->andWhere($nbRes->expr()->isNotNull('l.mailProgra'));
+                }
+                $nbRes = $nbRes->getQuery()
+                ->getSingleScalarResult();
         }
+        
+        $pageMax = ceil($nbRes/$limit);
 
         return $this->render('cd/retour-label.html.twig',array(
                 'cds'=>$cds,
@@ -755,7 +789,9 @@ class CdController extends DiscoController
                 'label' => $label,
                 'tout_voir' => $tout_voir,
                 'label_mail' => $label_mail,
-                'retour_fait' => $retour_fait
+                'retour_fait' => $retour_fait,
+                'page' => $page,
+                'pageMax' => $pageMax
             ));
     }
 
