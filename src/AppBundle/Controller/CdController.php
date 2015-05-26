@@ -689,9 +689,9 @@ class CdController extends DiscoController
     private function dateMini($date_mini)
     {
         if(!empty($date_mini)) {
-            return $date_mini = substr($date_mini,6,4).'-'.substr($date_mini,3,2).'-'.substr($date_mini,0,2).' 00:00:00';
+            return substr($date_mini,6,4).'-'.substr($date_mini,3,2).'-'.substr($date_mini,0,2).' 00:00:00';
         } else {
-            return $date_mini = date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
+            return date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
         }
     }
 
@@ -705,19 +705,56 @@ class CdController extends DiscoController
         $em = $this->getDoctrine()->getManager();
         $rq = $request->request;
 
-        $date_mini = $this->dateMini($rq->get('date'));
+        $date_mini = $this->dateMini($rq->get('date_mini'));
+        if($rq->get('anne_mini')) {
+            $annee_mini = $rq->get('annee_mini');
+        } else {
+            $annee_mini = date("Y")-1;
+        }
+        $label = $rq->get('label');
+        $tout_voir = $rq->get('tout_voir');
+        $label_mail = $rq->get('label_mail');
+        $retour_fait = $rq->get('retour_fait');
 
-        $cds = $em->createQueryBuilder()
-            ->select('cd')
-            ->from('AppBundle:Cd', 'cd')
-            ->where('cd.airplay = 0')
-            ->setMaxResults(50)
-            ->getQuery()
-            ->getResult();
+        if($tout_voir) {
+            $cds = $em->createQueryBuilder()
+                ->select('cd')
+                ->from('AppBundle:Cd', 'cd')
+                ->orderBy('cd.cd', 'DESC')
+                ->setMaxResults(50)
+                ->getQuery()
+                ->getResult();
+        } else {
+            $cds = $em->createQueryBuilder()
+                ->select('cd')
+                ->from('AppBundle:Cd', 'cd')
+                ->leftJoin('AppBundle:Label', 'l', 'WITH', 'l.label = cd.label')
+                ->where('l.libelle LIKE :label')
+                ->setParameter('label', '%'.$label.'%')
+                ->andWhere('cd.dprogra >= :dprogra')
+                ->setParameter('dprogra', $date_mini)
+                ->andWhere('cd.annee >= :annee')
+                ->setParameter('annee', $annee_mini);
+                if ($retour_fait) {
+                    $cds = $cds->andWhere('cd.retourProgra = 0');
+                }
+                if($label_mail) {
+                    $cds = $cds->andWhere($cds->expr()->isNotNull('l.mailProgra'));
+                }
+                $cds = $cds->orderBy('cd.cd', 'DESC')
+                ->setMaxResults(50)
+                ->getQuery()
+                ->getResult();
+        }
 
         return $this->render('cd/retour-label.html.twig',array(
                 'cds'=>$cds,
-                'date_mini' => $date_mini
+                'date_mini' => $date_mini,
+                'annee_mini' => $annee_mini,
+                'label' => $label,
+                'tout_voir' => $tout_voir,
+                'label_mail' => $label_mail,
+                'retour_fait' => $retour_fait
             ));
     }
 

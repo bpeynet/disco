@@ -123,9 +123,9 @@ class Label
      *     message = "'{{ value }}' n'est pas un email valide, cela doit-être une adresse mail.",
      *     checkMX = true
      * )
-     * @ORM\Column(name="mail_progra", type="string", length=250, nullable=false)
+     * @ORM\Column(name="mail_progra", type="string", length=250)
      */
-    private $mailProgra = '';
+    private $mailProgra = null;
 
     /**
      * @var string

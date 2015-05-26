@@ -108,3 +108,16 @@ ol, ul {
 #tabs > div {
     min-height:450px;
 }
+
+.infobulle {
+    position: relative;
+}
+
+.infobulle span {
+    display: none;
+    position: absolute;
+}
+
+.infobull:hover span {
+    display: visible;
+}

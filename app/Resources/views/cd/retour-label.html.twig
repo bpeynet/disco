@@ -5,8 +5,50 @@
 
 	<div class="row">
 		<h1>Gestion des Retours Label</h1>
-		<form class="form">
-			<input class="datepicker" name="recherche['date']"></input>
+		<form class="form" method="POST" action="{{path('retourLabel')}}">
+		<fieldset>
+			<legend>Filtrage <small><label for="tout_voir">Tout voir</label> <input id="tout_voir" type="checkbox" name="tout_voir"></small></legend>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group col-md-12">
+						<label for="datemini" class="col-md-4 control-label">Ecoute depuis le : </label>
+						<div class="col-md-6">
+							<input class="datepicker form-control" id="datemini" name="date_mini"></input><br>
+						</div>
+					</div>
+					<div class="form-group col-md-12">
+						<label for="anneemini" class="col-md-4 control-label">Année minimum du CD : </label>
+						<div class="col-md-6">
+							<input id="anneemini" class="form-control" type="number" value="{{annee_mini}}" name="annee_mini">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group col-md-12">
+						<label for="label_rechch" class="col-md-4 control-label">Label : </label>
+						<div class="col-md-6">
+							<input id="label_rechch" type="input" name="label" class="form-control" value="{{label}}">
+						</div>
+					</div>
+
+					<div class="form-group col-md-12">
+						<label for="label_mail" class="col-md-4 control-label">Voir seulement les labels avec un mail : </label>
+						<div class="col-md-6">
+							<input id="label_mail" type="checkbox" name="label_mail" class="form-control">
+						</div>
+					</div>
+						
+					<div class="form-group col-md-12">
+						<label for="retour_fait" class="col-md-4 control-label">Afficher les retours effectuées : </label>
+						<div class="col-md-6">
+							<input id="retour_fait" type="checkbox" name="retour_fait" class="form-control">
+						</div>
+					</div>
+				</div>
+				<button class="btn btn-block btn-info">Filtrer</button>
+			</div>
+				<label ></label>
+		</fieldset>
 		</form>
 
 		<div class="table-responsive">
@@ -36,7 +78,10 @@
 							<td>{% if cd.label %}{{cd.label.mailProgra}}{% endif %}</td>
 							<td>{{cd.annee}}</td>
 							<td>{{cd.dsortie|date("d/m/Y")}}</td>
-							<td>{{cd.comment}}</td>
+							<td class="infobulle">
+								{{cd.retourComment| truncate(30, true, '...')}}
+								<span>{{cd.retourComment}}</span>
+							</td>
 							<td>{% if cd.rotation %}{{cd.rotation.libelle}}{% endif %}</td>
 							<td>{% if cd.genre %}{{cd.genre.libelle}}{% endif %}</td>
 							<td>{% if cd.type %}{{cd.type.libelle}}{% endif %}</td>
@@ -57,5 +102,15 @@
 	});
 	var date_mini = "{{date_mini|date('d/m/Y')}}";
 	$(".datepicker").datepicker('setDate',date_mini);
+
+	$( "#label_rechch" ).autocomplete({
+      source: "{{path('autocompleteLabel',{'like':1})}}",
+      minLength: 2,
+      delay: 300,
+      select: function( event, ui ) {
+        $("#label_rechch").text(ui.item.libelle);
+      },
+	  create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
+    });
 </script>
 {% endblock %}
