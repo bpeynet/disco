@@ -684,6 +684,18 @@ class CdController extends DiscoController
     }
 
     /**
+     * Création d'une date minimale
+     */
+    private function dateMini($date_mini)
+    {
+        if(!empty($date_mini)) {
+            return $date_mini = substr($date_mini,6,4).'-'.substr($date_mini,3,2).'-'.substr($date_mini,0,2).' 00:00:00';
+        } else {
+            return $date_mini = date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
+        }
+    }
+
+    /**
      * @Route("/cd/retourLabel", name="retourLabel")
      */
     public function retourLabelAction(Request $request)
@@ -691,6 +703,9 @@ class CdController extends DiscoController
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs peuvent accéder à cette page.');
 
         $em = $this->getDoctrine()->getManager();
+        $rq = $request->request;
+
+        $date_mini = $this->dateMini($rq->get('date'));
 
         $cds = $em->createQueryBuilder()
             ->select('cd')
@@ -702,7 +717,7 @@ class CdController extends DiscoController
 
         return $this->render('cd/retour-label.html.twig',array(
                 'cds'=>$cds,
-                'date_mini' => date("d/m/Y",mktime(0,0,0,date("m")-3,date("d"),date("Y")))
+                'date_mini' => $date_mini
             ));
     }
 
