@@ -7,8 +7,15 @@
 		<h1>Gestion des Retours Label</h1>
 		<form class="form" method="POST" action="{{path('retourLabel')}}">
 		<fieldset>
-			<legend>Filtrage <small><label for="tout_voir">Tout voir</label> <input id="tout_voir" type="checkbox" name="tout_voir"></small></legend>
-			<div class="row">
+			<legend>
+				<div class="col-md-6">
+					Filtrage <small><label for="tout_voir">Tout voir</label> <input id="tout_voir" type="checkbox" name="tout_voir" {% if tout_voir %}checked{% endif %}></small>
+				</div>
+				<div class="col-md-6">
+					<button class="btn btn-block btn-info">Filtrer</button>
+				</div>
+			</legend>
+			<div class="row" id="filtrage">
 				<div class="col-md-4">
 					<div class="form-group col-md-12">
 						<label for="datemini" class="col-md-4 control-label">Ecoute depuis le : </label>
@@ -34,23 +41,22 @@
 					<div class="form-group col-md-12">
 						<label for="label_mail" class="col-md-4 control-label">Voir seulement les labels avec un mail : </label>
 						<div class="col-md-6">
-							<input id="label_mail" type="checkbox" name="label_mail" class="form-control">
+							<input id="label_mail" type="checkbox" name="label_mail" class="form-control" {% if label_mail %}checked{% endif %}>
 						</div>
 					</div>
 						
 					<div class="form-group col-md-12">
-						<label for="retour_fait" class="col-md-4 control-label">Afficher les retours effectuées : </label>
+						<label for="retour_fait" class="col-md-4 control-label">Afficher les retours effectués : </label>
 						<div class="col-md-6">
-							<input id="retour_fait" type="checkbox" name="retour_fait" class="form-control">
+							<input id="retour_fait" type="checkbox" name="retour_fait" class="form-control" {% if retour_fait %}checked{% endif %}>
 						</div>
 					</div>
 				</div>
-				<button class="btn btn-block btn-info">Filtrer</button>
 			</div>
-				<label ></label>
 		</fieldset>
 		</form>
-
+		<input type="checkbox" id="toutCocher"> Tout Sélectionner<br>
+		<input type="checkbox" id="cocherNonTraites"> Selectionner les non traités
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
@@ -69,13 +75,13 @@
 				</thead>
 				<tbody>
 					{% for cd in cds %}
-						<tr id="retLabel_{{cd.cd}}">
-							<td><input type="checkbox" id="check_retour[{{cd.cd}}]"></td>
+						<tr id="retLabel_{{cd.cd}}" {% if cd.retourLabel %}style="opacity:0.5"{% endif %}>
+							<td><input type="checkbox" id="check_retour[{{cd.cd}}]" name="effectuer_retour[{{cd.cd}}]" {% if cd.retourLabel %}class="retour"{% else %}class="retour aFaire"{% endif %}></td>
 							<td>{{cd.cd}}</td>
 							<td>{{cd.artiste.libelle}}</td>
 							<td>{{cd.titre}}</td>
 							<td>{% if cd.label %}{{cd.label.libelle}}{% endif %}</td>
-							<td>{% if cd.label %}{{cd.label.mailProgra}}{% endif %}</td>
+							<td><input name="mail_retour[{{cd.cd}}]" value="{% if cd.label %}{{cd.label.mailProgra}}{% endif %}"></td>
 							<td>{{cd.annee}}</td>
 							<td>{{cd.dsortie|date("d/m/Y")}}</td>
 							<td class="infobulle">
@@ -96,6 +102,8 @@
 
 {% block javascripts %}
 <script type="text/javascript">
+	verifTout();
+
 	$(".datepicker").datepicker({
 	    format: 'dd/mm/yyyy',
 	    endDate: '-0d'
@@ -112,5 +120,34 @@
       },
 	  create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
     });
+
+    $("#tout_voir").change(function(){ verifTout(); })
+    
+	function verifTout (argument) {
+	    if($("#tout_voir").is(":checked")) {
+	    	$("#filtrage").hide();
+	    } else {
+	    	$("#filtrage").show();
+	    }
+	}
+
+	$("#toutCocher").click(function() {
+		if ($("#toutCocher").is(':checked')) {
+			console.log("nope");
+			$(".retour").prop('checked',true);
+		} else {
+			$(".retour").prop('checked',false);
+		}
+	})
+
+	$("#cocherNonTraites").click(function() {
+		if ($("#cocherNonTraites").is(':checked')) {
+			console.log("nope");
+			$(".aFaire").prop('checked',true);
+		} else {
+			$(".aFaire").prop('checked',false);
+		}
+	})
+
 </script>
 {% endblock %}

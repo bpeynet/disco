@@ -706,7 +706,8 @@ class CdController extends DiscoController
         $rq = $request->request;
 
         $date_mini = $this->dateMini($rq->get('date_mini'));
-        if($rq->get('anne_mini')) {
+
+        if($rq->get('annee_mini')) {
             $annee_mini = $rq->get('annee_mini');
         } else {
             $annee_mini = date("Y")-1;
@@ -735,8 +736,8 @@ class CdController extends DiscoController
                 ->setParameter('dprogra', $date_mini)
                 ->andWhere('cd.annee >= :annee')
                 ->setParameter('annee', $annee_mini);
-                if ($retour_fait) {
-                    $cds = $cds->andWhere('cd.retourProgra = 0');
+                if (!$retour_fait) {
+                    $cds = $cds->andWhere('cd.retourLabel = 0');
                 }
                 if($label_mail) {
                     $cds = $cds->andWhere($cds->expr()->isNotNull('l.mailProgra'));
