@@ -351,7 +351,7 @@ class CdController extends DiscoController
 
         $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
 
-        if(!$artiste or empty($req['artiste'])) {
+        if($request->isMethod('POST') && (!$artiste or empty($req['artiste']))) {
             $this->addFlash('error','L\'artiste renseigné n\'existe pas.');
             $valid = false;
         }
@@ -724,8 +724,7 @@ class CdController extends DiscoController
                     
                     $message = \Swift_Message::newInstance()
                         ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." [retour d'écoute]")
-                        ->setFrom('rcgtest@yopmail.com')
-                        //->setTo($destinataires)
+                        ->setFrom('test@test.fr')
                         ->setTo(array('rcgtest@yopmail.com'))
                         ->setBody($this->renderView('mails/retour-label.html.twig', array('cd' => $cd, 'airplays' => $airplay_cd)))
                     ;

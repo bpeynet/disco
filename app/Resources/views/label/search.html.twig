@@ -61,14 +61,14 @@
 							</tr>
 						</thead>
 						{% for label in recherche %}
-							<tr onclick="window.location.href='{{path('showLabel',{'id':label.label})}}';">
+							<tr id="{{label.label}}" class="labelRow">
 								<td>{{label.getLabel}}</td>
-								<td>{{label.getLibelle}}</td>
+								<td class="libelle">{{label.getLibelle}}</td>
 								<td>
 									<a href="{{ path('showLabel',{'id':label.getLabel}) }}"><span title="Voir" class="glyphicon glyphicon-eye-open"></span></a>
 									{% if is_granted('ROLE_PROGRA') %}
 										<a href="{{ path('editLabel',{'id':label.getLabel}) }}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-										<a href="#" onclick="confirmDelLabel('{{label.getLibelle}}',{{label.getLabel}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+										<a href="{{path('deleteLabel',{'id':label.label})}}" class="deleteLabel"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 									{% endif %}
 								</td>
 								<td>{{label.getEmail}}</td>
@@ -82,4 +82,31 @@
 </div>
 
 {% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+	$('.labelRow').find('a').click(function(e) {
+            e.stopPropagation();
+	    });
 
+    $('.labelRow').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var labelId = $(this).closest('.labelRow').attr('id');
+        var route = Routing.generate('showLabel', {'id': labelId});
+        window.location.replace(route);
+    });
+
+    $('.deleteLabel').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var container = $(this).closest('.labelRow');
+        var libelle = container.children('.libelle').text();
+        if (confirm("Supprimer le Label "+libelle+" ?" )) {
+            var labelId = container.attr('id');
+            var route = Routing.generate('deleteLabel', {'id': labelId});
+            window.location.replace(route);
+        }
+    });
+
+</script>
+{% endblock %}

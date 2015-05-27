@@ -321,7 +321,7 @@ class Cd
      *
      * @ORM\Column(name="ecoute", type="string")
      */
-    private $ecoute = '0';
+    private $ecoute = '';
 
 
     /**

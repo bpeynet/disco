@@ -64,7 +64,7 @@
 					{% for artiste in recherche %}
 						<tr id="{{artiste.artiste}}" class="artisteRow">
 							<td>{{artiste.getArtiste}}</td>
-							<td>{{artiste.getLibelle}}</td>
+							<td class="libelle">{{artiste.getLibelle}}</td>
 							<td>
 								<a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 								{% if is_granted('ROLE_PROGRA') %}
@@ -108,8 +108,8 @@
         e.preventDefault();
         e.stopPropagation();
         var container = $(this).closest('.artisteRow');
-        var titre = container.children('.titre').text();
-        if (confirm("Supprimer l'artiste "+titre+" ?" )) {
+        var libelle = container.children('.libelle').text();
+        if (confirm("Supprimer l'artiste "+libelle+" ?" )) {
             var artisteId = container.attr('id');
             var route = Routing.generate('deleteArtiste', {'id': artisteId});
             window.location.replace(route);
