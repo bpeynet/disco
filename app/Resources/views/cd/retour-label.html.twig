@@ -76,45 +76,49 @@
 			</ul>
 		</nav>
 
-		<div class="table-responsive">
-			<table class="table table-striped">
-				<thead>
-					<th></th>
-					<th>#</th>
-					<th>Artiste</th>
-					<th>Titre</th>
-					<th>Label</th>
-					<th>Mail Retour</th>
-					<th>Année</th>
-					<th>Sorti le</th>
-					<th>Commentaire</th>
-					<th>Rotation</th>
-					<th>Genre</th>
-					<th>Type</th>
-				</thead>
-				<tbody>
-					{% for cd in cds %}
-						<tr id="retLabel_{{cd.cd}}" {% if cd.retourLabel %}style="opacity:0.5"{% endif %}>
-							<td><input type="checkbox" id="check_retour[{{cd.cd}}]" name="effectuer_retour[{{cd.cd}}]" {% if cd.retourLabel %}class="retour"{% else %}class="retour aFaire"{% endif %}></td>
-							<td>{{cd.cd}}</td>
-							<td>{{cd.artiste.libelle}}</td>
-							<td>{{cd.titre}}</td>
-							<td>{% if cd.label %}{{cd.label.libelle}}{% endif %}</td>
-							<td><input name="mail_retour[{{cd.cd}}]" value="{% if cd.label %}{{cd.label.mailProgra}}{% endif %}"></td>
-							<td>{{cd.annee}}</td>
-							<td>{{cd.dsortie|date("d/m/Y")}}</td>
-							<td class="infobulle">
-								{{cd.retourComment| truncate(30, true, '...')}}
-								<span>{{cd.retourComment}}</span>
-							</td>
-							<td>{% if cd.rotation %}{{cd.rotation.libelle}}{% endif %}</td>
-							<td>{% if cd.genre %}{{cd.genre.libelle}}{% endif %}</td>
-							<td>{% if cd.type %}{{cd.type.libelle}}{% endif %}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+		<form class="form" method="POST" action=""> <button type="submit" class="btn btn-info">Envoyer les Mails</button>
+
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<th></th>
+						<th>#</th>
+						<th>Artiste</th>
+						<th>Titre</th>
+						<th>Label</th>
+						<th>Mail Retour</th>
+						<th>Année</th>
+						<th>Sorti le</th>
+						<th>Commentaire</th>
+						<th>Rotation</th>
+						<th>Genre</th>
+						<th>Type</th>
+					</thead>
+					<tbody>
+						{% for cd in cds %}
+							<tr id="retLabel_{{cd.cd}}" {% if cd.retourLabel %}style="opacity:0.5"{% endif %}>
+								<td><input type="checkbox" id="check_retour[{{cd.cd}}]" name="check_retour[{{cd.cd}}]" {% if cd.retourLabel %}class="retour"{% else %}class="retour aFaire"{% endif %}></td>
+								<td>{{cd.cd}}</td>
+								<td>{{cd.artiste.libelle}}</td>
+								<td>{{cd.titre}}</td>
+								<td>{% if cd.label %}{{cd.label.libelle}}{% endif %}</td>
+								<td><input name="mail_retour[{{cd.cd}}]" value="{% if cd.retourMail %}{{cd.retourMail}}{% elseif cd.label %}{{cd.label.mailProgra}}{% endif %}"></td>
+								<td>{{cd.annee}}</td>
+								<td>{{cd.dsortie|date("d/m/Y")}}</td>
+								<td class="infobulle">
+									{{cd.retourComment| truncate(30, true, '...')}}
+									<span>{{cd.retourComment}}</span>
+								</td>
+								<td>{% if cd.rotation %}{{cd.rotation.libelle}}{% endif %}</td>
+								<td>{% if cd.genre %}{{cd.genre.libelle}}{% endif %}</td>
+								<td>{% if cd.type %}{{cd.type.libelle}}{% endif %}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+		</form>
 
 		<nav>
 			<ul class="pagination">

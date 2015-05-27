@@ -12,6 +12,7 @@ use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Validator\Constraints\EmailValidator;
 
 
 class CdController extends DiscoController
@@ -702,11 +703,56 @@ class CdController extends DiscoController
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs peuvent accéder à cette page.');
 
-        if($page < 1) { $page=1; }
-
         $em = $this->getDoctrine()->getManager();
         $rq = $request->request;
         $limit = $this->container->getParameter('listingLimit');
+
+        $retours = $rq->get('check_retour');
+
+        if($request->isMethod('POST') && !empty($retours)) {
+            $nbRetours = 0;
+            foreach ($retours as $key => $retour) {
+                $mail_retour = $rq->get('mail_retour')[$key];
+
+                $testMail = new EmailValidator();
+                $cd = $em->getRepository('AppBundle:Cd')->find($key);
+                
+                if(!empty($mail_retour)) {
+
+                    $airplay_cd = $em->getRepository('AppBundle:AirplayCd')->findByCd($cd);
+                    $destinataires = explode(';', $mail_retour);
+                    
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." [retour d'écoute]")
+                        ->setFrom('rcgtest@yopmail.com')
+                        //->setTo($destinataires)
+                        ->setTo(array('rcgtest@yopmail.com'))
+                        ->setBody($this->renderView('mails/retour-label.html.twig', array('cd' => $cd, 'airplays' => $airplay_cd)))
+                    ;
+                    $test = $this->get('mailer')->send($message);
+
+                    if($test) {
+                        $cd->setRetourMail($mail_retour);
+                        $cd->setRetourLabel(true);
+                    } else {
+                        $this->addFlash('error','Le cd '.$cd->getCd().' n\'a pas pu être envoyé.');
+                    }
+
+                    $nbRetours++;
+                } else {
+                    $this->addFlash('error','Aucune adresse renseignée pour le disque #'.$cd->getCd().'.');
+                }
+
+            }
+            
+            $this->discoLog("a effectué ".$nbRetours." retours Label.");
+            $this->addFlash('success',$nbRetours.' retour(s) Label effectué(s) avec succès.');
+
+            $em->flush();
+        }
+
+
+        if($page < 1) { $page=1; }
 
         $date_mini = $this->dateMini($rq->get('date_mini'));
 
