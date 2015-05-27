@@ -62,14 +62,14 @@
 						</tr>
 					</thead>
 					{% for artiste in recherche %}
-						<tr onclick="window.location.href='{{path('showArtiste',{'id':artiste.artiste})}}';">
+						<tr id="{{artiste.artiste}}" class="artisteRow">
 							<td>{{artiste.getArtiste}}</td>
 							<td>{{artiste.getLibelle}}</td>
 							<td>
 								<a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
 								{% if is_granted('ROLE_PROGRA') %}
 									<a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-edit"></span></a>
-									<a href="#" onclick="confirmDelArtiste('{{artiste.getLibelle}}',{{artiste.getArtiste}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+									<a href="{{path('deleteArtiste',{'id':artiste.artiste})}}" class="deleteArtiste"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 								{% endif %}
 							</td>
 							<td>{{ artiste.getDisques|length }}</td>
@@ -91,5 +91,29 @@
 {% block javascripts %}
 <script>
     $('#artiste').focus();
+
+    $('.artisteRow').find('a').click(function(e) {
+            e.stopPropagation();
+	    });
+
+    $('.artisteRow').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var cdId = $(this).closest('.artisteRow').attr('id');
+        var route = Routing.generate('showArtiste', {'id': artisteId});
+        window.location.replace(route);
+    });
+
+    $('.deleteArtiste').click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var container = $(this).closest('.artisteRow');
+        var titre = container.children('.titre').text();
+        if (confirm("Supprimer l'artiste "+titre+" ?" )) {
+            var artisteId = container.attr('id');
+            var route = Routing.generate('deleteArtiste', {'id': artisteId});
+            window.location.replace(route);
+        }
+    });
 </script>
 {% endblock %}
