@@ -36,10 +36,44 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="{{path('index')}}">Recherche</a></li>
-                    <li><a href="{{path('cd')}}">Disques</a></li>
-                    <li><a href="{{path('artiste')}}">Artistes</a></li>
-                    <li><a href="{{path('label')}}">Labels</a></li>
-                    <li><a href="{{path('airplay')}}">Airplays</a></li>
+                    <li class="dropdown">
+                        <a href="{{path('cd')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Disques <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{path('cd')}}">Rechercher</a></li>
+                            <li><a href="{{path('createCd')}}">Créer</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{{path('retourLabel')}}">Retour Label</a></li>
+                            <li><a href="{{path('testEtiquettes')}}">Etiquettes</a></li>
+                        </ul>
+                    </li>
+                    {% if is_granted('ROLE_PROGRA') %}
+                        <li class="dropdown">
+                            <a href="{{path('artiste')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Artiste <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{path('artiste')}}">Rechercher</a></li>
+                                <li><a href="{{path('createArtiste')}}">Créer</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="{{path('label')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Labels <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{path('label')}}">Rechercher</a></li>
+                                <li><a href="{{path('createLabel')}}">Créer</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="{{path('airplay')}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Airplays <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{path('airplay')}}">Rechercher</a></li>
+                                <li><a href="{{path('createAirplay')}}">Créer</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{{path('cd')}}">Disques</a></li>
+                        <li><a href="{{path('artiste')}}">Artistes</a></li>
+                        <li><a href="{{path('label')}}">Labels</a></li>
+                        <li><a href="{{path('airplay')}}">Airplays</a></li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if is_granted('ROLE_SUPER_ADMIN') %}
