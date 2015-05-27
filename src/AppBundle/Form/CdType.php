@@ -62,6 +62,8 @@ class CdType extends AbstractType
                     'class' => 'AppBundle:Genre',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('g')
+                        ->where('g.principal = :principal')
+                        ->setParameter('principal',true)
                         ->orderBy('g.libelle', 'ASC');
                     },
                     'property' => 'libelle',

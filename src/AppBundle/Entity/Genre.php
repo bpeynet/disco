@@ -31,13 +31,7 @@ class Genre
     /**
      * @var boolean
      *
-     * @ORM\Column(name="actif", type="boolean", nullable=false)
-     */
-    private $actif = '0';
-
-    /**
-     * @var boolean
-     * ORM\Column(name="primaire", type="boolean", nullable=false)
+     * @ORM\Column(name="principal", type="boolean", nullable=false)
      */
     private $principal = false;
 
@@ -90,26 +84,26 @@ class Genre
     }
 
     /**
-     * Set actif
+     * Set principal
      *
-     * @param boolean $actif
+     * @param boolean $principal
      * @return Genre
      */
-    public function setActif($actif)
+    public function setPrincipal($principal)
     {
-        $this->actif = $actif;
+        $this->principal = $principal;
 
         return $this;
     }
 
     /**
-     * Get actif
+     * Get principal
      *
      * @return boolean 
      */
-    public function getActif()
+    public function getPrincipal()
     {
-        return $this->actif;
+        return $this->principal;
     }
 
     /**
@@ -122,15 +116,4 @@ class Genre
         return $this->genre;
     }
 
-    public function setPrincipal($principal)
-    {
-        $this->principal = $principal;
-
-        return $this;
-    }
-
-    public function getPrincipal()
-    {
-        return $this->principal;
-    }
 }
