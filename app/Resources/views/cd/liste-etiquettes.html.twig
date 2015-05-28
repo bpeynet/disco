@@ -1,0 +1,86 @@
+{% block title %}Génération d'étiquettes{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<fieldset>
+		<legend>Génération d'étiquettes</legend>
+		<form id="addCd">
+			<input type="text" id="newCD"><button type="submit" class="btn btn-info">Ajouter le CD</button>
+		</form>
+		<form id="generateEtiquettes" method="POST" action="path('generateEtiquettes')">
+			<input class="hidden" id="liste_etiquettes">
+			<button type="Submit" class="btn btn-success pull-right">Créer les étiquettes</button>
+		</form>
+		<span id="nbEtiquettes">Nombre d'étiquettes : 0</span>
+
+		<div class="row">
+			<div class="table-responsive">
+				<table class="table table-striped" id="tab_etiquettes">
+					<thead>
+						<th>#</th>
+						<th>Artiste</th>
+						<th>Titre</th>
+						<th>Année</th>
+						<th>Rotation</th>
+						<th>Supprimer</th>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</fieldset>
+
+{% endblock %}
+{% block javascripts %}
+	<script type="text/javascript">
+		
+		$( "#newCD" ).autocomplete({
+	      source: "{{path('autocompleteTitre',{'like':1})}}",
+	      minLength: 2,
+	      delay: 300,
+	      select: function( event, ui ) {
+	        	$("#newCD").text(ui.item.libelle);
+	    	},
+	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
+	    });
+
+		$("#addCd").submit(function(event) {
+			var id = $("#newCD").val();
+			var new_row = "<tr class='ui-sortable-handle' id='row_:id'><td class='num_cd'>:id</td><td>:artiste</td><td>:titre</td><td>:annee</td><td>:rotation</td><td><button onclick='deleteRow(:id)' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
+			var route = Routing.generate('getInfosCd', {'id': id})
+			$.get(route, function(cd){
+				if(cd == null) {
+				} else {
+					if ($("#row_"+cd.cd).length == 0) {
+							new_row = new_row.replace(/:id/g,cd.cd).replace(':artiste',cd.artiste).replace(':titre',cd.titre).replace(':annee',cd.annee).replace(':rotation',cd.rotation);
+							$("#tab_etiquettes tbody").prepend(new_row);	
+							editNumRow();
+					};
+				}
+			});
+			event.preventDefault();
+			$("#newCD").val("");
+		});
+
+
+		function deleteRow (cd) {
+			$("#row_"+cd).remove();
+			editNumRow();
+		}
+
+		function editNumRow () {
+			$("#nbEtiquettes").html("Nombre d'étiquettes : " + $("#tab_etiquettes tbody tr").length);
+		};
+
+		$("#generateEtiquettes").submit(function(event){
+			$("#liste_etiquettes").val("");
+			$("#tab_etiquettes .num_cd").each(function(){
+				$("#liste_etiquettes").val($("#liste_etiquettes").val()+$(this).html()+",");
+			});
+			console.log($("#liste_etiquettes").val());
+			event.preventDefault();
+		});
+
+	</script>
+{% endblock %}

@@ -630,15 +630,12 @@ class CdController extends DiscoController
         if(is_numeric($id)) {
             $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($id);
         } else {
-            $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->findByTitre($id);
+            $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->findOneByTitre($id);
         }
-
-        if(!$cd || $cd->getSuppr() || $cd->getAirplay()) {
+        
+        if(!$cd || $cd->getSuppr()) {
             return null;
         }
-
-        var_dump($cd);
-        die();
 
         $tab = array(
             'cd' => $cd->getCd(),
@@ -840,6 +837,13 @@ class CdController extends DiscoController
             ));
     }
 
+    /**
+     * @Route("/cd/etiquettes", name="listeEtiquettes")
+     */
+    public function listeEtiquettesAction()
+    {
+        return $this->render('cd/liste-etiquettes.html.twig');
+    }
 
 }
 

@@ -157,9 +157,9 @@
 								<th>#</th>
 								<th></th>
 								<th>Annee</th>
+								<th>Artiste</th>
 								<th>Titre</th>
 								<th>Action</th>
-								<th>Artiste</th>
 								<th>Label</th>
 								<th>Langue</th>
 								<th>Genre</th>
@@ -174,6 +174,7 @@
 									{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
 								</td>
 								<td>{% if cd.getAnnee %}{{cd.getAnnee}}{% endif %}</td>
+								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
 								<td class="titre">{{cd.getTitre}}</td>
 								<td>
 									<a href="{{ path('showCd',{'id':cd.getCd}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
@@ -182,7 +183,6 @@
 										<a href="{{path('deleteCd',{'id':cd.cd})}}" class="deleteCd"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 									{% endif %}
 								</td>
-								<td><a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a></td>
 								<td>{% if cd.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>
 								<td>{% if cd.getLangue and cd.getLangue.getLangue != 0 %}{{cd.getLangue.getLibelle}}{% endif %}</td>
 								<td>{% if cd.getGenre.getGenre %}{{cd.getGenre.getLibelle}}{% endif %}</td>
