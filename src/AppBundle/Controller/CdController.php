@@ -632,7 +632,7 @@ class CdController extends DiscoController
         } else {
             $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->findOneByTitre($id);
         }
-        
+
         if(!$cd || $cd->getSuppr()) {
             return null;
         }
@@ -843,6 +843,33 @@ class CdController extends DiscoController
     public function listeEtiquettesAction()
     {
         return $this->render('cd/liste-etiquettes.html.twig');
+    }
+
+    /**
+     * @Route("/cd/etiquettes/generate", name="generateEtiquettes")
+     */
+    public function generateEtiquettesAction(Request $request)
+    {
+        $liste = $request->request->get('liste_etiquettes');
+
+        if ($request->isMethod('POST') && !empty($liste)) {
+            $etiquettes = explode(',', $liste);
+            $cds = array();
+
+            foreach ($etiquettes as $key => $etiquette) {
+                $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($etiquette);
+                if($cd) {
+                    $cds[] = $cd;
+                }
+            }
+
+            return $this->render('default/vignettes.html.twig', array('cds' => $cds));
+
+            $this->discoLog("a effectué ".count($cds)." impressions d'étiquettes.");
+        } else {
+            $this->addFlash('error','Les étiquettes n\'ont pas pu être générées.');
+            return $this->redirect($this->generateUrl('listeEtiquettes'));
+        }
     }
 
 }
