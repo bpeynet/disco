@@ -63,7 +63,7 @@
 						<div class="col-md-3">
 							<div class="form-group row">
 								<label for="full_fr">Toutes Fr.</label>
-								<input class="form-control" type="checkbox" name="full_fr" id="full_fr" {% if pistes_var.full_fr %}checked{% endif %}>
+								<input type="checkbox" name="full_fr" id="full_fr" {% if pistes_var.full_fr %}checked{% endif %}>
 							</div>
 						</div>
 					</div>
@@ -258,6 +258,14 @@
   	});
 
   });
+
+	$("#appbundle_cd_langue").change(function(){
+		if($("#appbundle_cd_langue option:selected").text() == "Français") {
+			$("#full_fr").prop("checked",true);
+		} else {
+			$("#full_fr").prop("checked",false);
+		}
+	});
 
 </script>
 {% endblock %}
