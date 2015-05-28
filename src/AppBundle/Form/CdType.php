@@ -109,6 +109,12 @@ class CdType extends AbstractType
                     'required' => false
                 ))
             ->add('comment', 'textarea', array('required' => false))
+            ->add('ecoute','url',array(
+                'required' => false,
+                'attr' => array (
+                    'placeholder'=>'Lien d\'écoute du CD : http://...'
+                    )
+                ))
 
         ;
     }
