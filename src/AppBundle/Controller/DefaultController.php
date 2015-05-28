@@ -79,6 +79,11 @@ class DefaultController extends DiscoController
      */
     public function indexAction(Request $request) {
 
+        if ($this->get('security.context')->isGranted('ROLE_INACTIF')) {
+            $this->addFlash('error','Votre compte est inactif, vous ne pouvez donc pas vous connecter. Si cela est une erreur, prévenez un Admin.');
+            return $this->redirect($this->generateUrl('logout'));
+        }
+
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
 
         $results = array();

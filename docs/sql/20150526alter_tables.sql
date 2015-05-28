@@ -11,3 +11,5 @@ UPDATE `f_genre` SET actif = 1 WHERE genre IN(152,153,154,4,155,156,157,23,2,3,1
 ALTER TABLE `f_genre` CHANGE `actif` `principal` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0';
 
 DROP TABLE f_rappel;
+
+ALTER TABLE `f_user` CHANGE `role` `role` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;

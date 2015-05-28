@@ -26,6 +26,7 @@
 				<div class="form-group">
 					<label for="role" class="control-label">Droits</label>
 					<select id="role" name="role" class="form-control">
+						<option value="ROLE_INACTIF" {% if user.getRoles[0] == "ROLE_INACTIF" %}selected{% endif %}>Inactif</option>
 						<option value="ROLE_USER" {% if user.getRoles[0] == "ROLE_USER" %}selected{% endif %}>Membre</option>
 						<option value="ROLE_PROGRA" {% if user.getRoles[0] == "ROLE_PROGRA" %}selected{% endif %}>Programmateur</option>
 						<option value="ROLE_SUPER_ADMIN" {% if user.getRoles[0] == "ROLE_SUPER_ADMIN" %}selected{% endif %}>Admin</option>
