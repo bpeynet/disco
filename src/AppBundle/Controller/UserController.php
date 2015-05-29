@@ -137,12 +137,12 @@ class UserController extends DiscoController
 
                 $user->setPrenom(ucfirst(strtolower($user->getPrenom())));
                 $user->setNom(strtoupper($user->getNom()));
-                $user->setRoles($request->request->get('role'));
-                if($user->getRoles()[0]=="ROLE_INACTIF") {
+                if($user->getRoles()[0]!="ROLE_INACTIF" && $request->request->get('role')=="ROLE_INACTIF") {
                     $user->setInactif(date("Y-m-d"));
-                } else {
+                } elseif($request->request->get('role')!="ROLE_INACTIF") {
                     $user->setInactif(null);
                 }
+                $user->setRoles($request->request->get('role'));
                 $user->setLibelle($user->getPrenom()." ".$user->getNom());
 
                 $em->persist($user);
