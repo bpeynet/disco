@@ -37,11 +37,11 @@ class User implements UserInterface
     private $suppr = '0';
 
     /**
-     * @var boolean
+     * @var \Date
      *
-     * @ORM\Column(name="inactif", type="boolean", nullable=false)
+     * @ORM\Column(name="inactif", type="date")
      */
-    private $inactif = '0';
+    private $inactif = null;
 
     /**
      * @var string
@@ -166,7 +166,7 @@ class User implements UserInterface
     /**
      * Set inactif
      *
-     * @param boolean $inactif
+     * @param \Date $inactif
      * @return User
      */
     public function setInactif($inactif)
@@ -179,7 +179,7 @@ class User implements UserInterface
     /**
      * Get inactif
      *
-     * @return boolean 
+     * @return \Date
      */
     public function getInactif()
     {
@@ -431,6 +431,11 @@ class User implements UserInterface
     public function getUser()
     {
         return $this->user;
+    }
+
+
+    public function __construct() {
+        $this->inactif = new \Date();
     }
 
 /*

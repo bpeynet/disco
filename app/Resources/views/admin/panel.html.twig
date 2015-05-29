@@ -34,7 +34,16 @@
 								<a href="#" onclick="confirmDelUser('{{user.getLibelle}}',{{user.getUser}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
 							</td>
 							<td>
-								{{user.getRoles[0]}}
+								{%set role = user.getRoles[0]%}
+								{% if role == 'ROLE_INACTIF' %}
+									Inactif (depuis le {{user.inactif|date('d/m/Y')}})
+								{% elseif role == 'ROLE_USER' %}
+									Utilisateur
+								{% elseif role == 'ROLE_PROGRA' %}
+									Programmateur
+								{% else %}
+									Admin
+								{% endif %}
 							</td>
 						</tr>
 					{% endfor %}

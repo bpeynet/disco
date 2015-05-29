@@ -13,3 +13,5 @@ ALTER TABLE `f_genre` CHANGE `actif` `principal` TINYINT(1) UNSIGNED NOT NULL DE
 DROP TABLE f_rappel;
 
 ALTER TABLE `f_user` CHANGE `role` `role` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `f_user` CHANGE `inactif` `inactif` DATE NULL DEFAULT NULL;
