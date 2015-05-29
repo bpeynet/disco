@@ -115,7 +115,6 @@ class CdType extends AbstractType
                     'placeholder'=>'Lien d\'écoute du CD : http://...'
                     )
                 ))
-            ->add('img','file')
 
         ;
     }

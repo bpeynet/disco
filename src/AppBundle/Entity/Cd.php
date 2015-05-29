@@ -308,10 +308,11 @@ class Cd
      * @ORM\Column(name="retour_attendu", type="integer", nullable=false)
      */
     private $retourAttendu = '0';
- 
+
     /**
      * @var string
-     * @ORM\OneToOne(targetEntity="Document", mappedBy="name")
+     *
+     * @ORM\Column(name="img", type="string", length=15, nullable=false)
      */
     private $img = '';
 
