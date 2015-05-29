@@ -15,3 +15,5 @@ DROP TABLE f_rappel;
 ALTER TABLE `f_user` CHANGE `role` `role` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 ALTER TABLE `f_user` CHANGE `inactif` `inactif` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `f_cd` CHANGE `img` `img` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '';

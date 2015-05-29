@@ -317,6 +317,16 @@ class Cd
     private $img = '';
 
     /**
+     * @Assert\Image(
+     *     maxSize = "1024k",
+     *     maxSizeMessage = "La pochette ne peut pas dépasser 1Mo.",
+     *     mimeTypes = {"image/jpeg", "image/png", "image/jpg", "image/gif"},
+     *     mimeTypesMessage = "Ce type de format n'est pas accepté (png, jpeg, jpg ou gif uniquement)."
+     * )
+     */
+    public $file;
+
+    /**
      * @var string
      *
      * @Assert\Url()
@@ -1273,6 +1283,70 @@ class Cd
     public function __construct() {
         $this->dsortie = new \DateTime();
         $this->dsaisie = new \DateTime();
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->img ? null : $this->getUploadRootDir().'/'.$this->img;
+    }
+
+    public function getImgWebPath()
+    {
+        return null === $this->img ? null : $this->getUploadDir().'/'.$this->img;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'../../../web/img/cd/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'img/cd/';
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->file) {
+            // faites ce que vous voulez pour générer un nom unique
+            $this->img = sha1(uniqid(mt_rand(), true)).'.'.$this->file->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->file) {
+            return;
+        }
+
+        // s'il y a une erreur lors du déplacement du fichier, une exception
+        // va automatiquement être lancée par la méthode move(). Cela va empêcher
+        // proprement l'entité d'être persistée dans la base de données si
+        // erreur il y a
+        $this->file->move($this->getUploadRootDir(), $this->img);
+
+        unset($this->file);
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
     }
 
 }

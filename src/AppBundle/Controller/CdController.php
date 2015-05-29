@@ -357,7 +357,6 @@ class CdController extends DiscoController
         }
 
         if($form->isValid() && $valid) {
-
             $cd = $form->getData();
 
             $cd->setLabel(null);

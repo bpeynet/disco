@@ -6,7 +6,7 @@
 	<fieldset>
 		<legend>Création de Cd</legend>
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
-		{{form_start(form)}}
+		{{form_start(form,{'enctype':'multipart/form-data'})}}
 			<div class="row">
 				{{form_errors(form)}}
 
