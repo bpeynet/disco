@@ -324,7 +324,7 @@ class Cd
      *     mimeTypesMessage = "Ce type de format n'est pas accepté (png, jpeg, jpg ou gif uniquement)."
      * )
      */
-    public $file;
+    public $file = null;
 
     /**
      * @var string
@@ -1298,14 +1298,14 @@ class Cd
     protected function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __DIR__.'../../../web/img/cd/'.$this->getUploadDir();
+        return __DIR__.DIRECTORY_SEPARATOR.join(DIRECTORY_SEPARATOR, array('..', '..', '..', 'web')).$this->getUploadDir(); // DIRECTORY_SEPARATOR
     }
 
     protected function getUploadDir()
     {
         // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
         // le document/image dans la vue.
-        return 'img/cd/';
+        return DIRECTORY_SEPARATOR.join(DIRECTORY_SEPARATOR, array('img', 'cd'));
     }
 
     /**

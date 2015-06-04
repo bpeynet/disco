@@ -8,6 +8,10 @@ body {
 	width: 600px;
 }
 
+.ligne_classement:nth-child(2n) {
+	background: #ddd;
+}
+
 .pochette_cd {
 	background: #ddd;
 	width: 100px;

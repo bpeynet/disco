@@ -334,10 +334,10 @@ class CdController extends DiscoController
 
         $valid = true;
 
-        $post = new Cd();
+        $cd = new Cd();
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        if($user != false) { $post->setUserProgra($user); }
-        $form = $this->createForm(new CdType(),$post);
+        if($user != false) { $cd->setUserProgra($user); }
+        $form = $this->createForm(new CdType(),$cd);
         $form->add('submit', 'submit', array(
                 'label' => 'Créer le CD',
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
@@ -357,7 +357,12 @@ class CdController extends DiscoController
         }
 
         if($form->isValid() && $valid) {
-            $cd = $form->getData();
+            //$cd = $form->getData();
+
+            // var_dump(join(DIRECTORY_SEPARATOR, array('\..', '..', '..', 'web')));
+            // die(1);
+
+            $cd->upload();
 
             $cd->setLabel(null);
             $cd->setMaison(null);
