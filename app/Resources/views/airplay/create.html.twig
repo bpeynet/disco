@@ -122,6 +122,7 @@
 	    });
 
 		$("#addCd").submit(function(event) {
+			event.preventDefault();
 			var id = $("#newCD").val();
 			var new_row = "<tr class='ui-sortable-handle' id='row_:id'><td class='num_row_airplay'></td><td></td><td class='num_cd'>:id</td><td>:artiste</td><td>:titre</td><td><input type='text' name='ecoute[NNN]' value=':ecoute'></td><td>:annee</td><td>:rotation</td><td>:note</td><td>:star</td><td>:paulo</td><td>:anim</td><td>:genre</td><td>:type</td><td><button onclick='deleteRow(:id)' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
 			var route = Routing.generate('getInfosCd', {'id': id})
@@ -134,14 +135,13 @@
 							$("#sort_A tbody").prepend(new_row);
 							classer();	
 					} else {
-						alert( "Ce CD (#+"cd.cd"+) ne peut pas être ajouté à la liste (déjà présent dans cette liste)." );
+						alert( "Ce CD (#"+cd.cd+") ne peut pas être ajouté à la liste (déjà présent dans cette liste)." );
 					};
 				}
 			})
 				  .fail(function() {
 				    alert( "CD non trouvé" );
 				  });
-			event.preventDefault();
 			$("#newCD").val("");
 		});
 
