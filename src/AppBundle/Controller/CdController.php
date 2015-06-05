@@ -357,13 +357,6 @@ class CdController extends DiscoController
         }
 
         if($form->isValid() && $valid) {
-            //$cd = $form->getData();
-
-            // var_dump(join(DIRECTORY_SEPARATOR, array('\..', '..', '..', 'web')));
-            // die(1);
-
-            $cd->upload();
-
             $cd->setLabel(null);
             $cd->setMaison(null);
             $cd->setDistrib(null);
@@ -717,12 +710,12 @@ class CdController extends DiscoController
 
                 $testMail = new EmailValidator();
                 $cd = $em->getRepository('AppBundle:Cd')->find($key);
-                
+
                 if(!empty($mail_retour)) {
 
                     $airplay_cd = $em->getRepository('AppBundle:AirplayCd')->findByCd($cd);
                     $destinataires = explode(';', $mail_retour);
-                    
+
                     $message = \Swift_Message::newInstance()
                         ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." [retour d'écoute]")
                         ->setFrom('test@test.fr')
@@ -744,7 +737,7 @@ class CdController extends DiscoController
                 }
 
             }
-            
+
             $this->discoLog("a effectué ".$nbRetours." retours Label.");
             $this->addFlash('success',$nbRetours.' retour(s) Label effectué(s) avec succès.');
 
@@ -775,7 +768,7 @@ class CdController extends DiscoController
                 ->setMaxResults(50)
                 ->getQuery()
                 ->getResult();
-        
+
                 $nbRes = $em->createQueryBuilder()
                     ->select('count(cd)')
                     ->from('AppBundle:Cd', 'cd')
@@ -825,7 +818,7 @@ class CdController extends DiscoController
                 $nbRes = $nbRes->getQuery()
                 ->getSingleScalarResult();
         }
-        
+
         $pageMax = ceil($nbRes/$limit);
 
         return $this->render('cd/retour-label.html.twig',array(
@@ -869,22 +862,22 @@ class CdController extends DiscoController
 
             // //on stocke la vue à convertir en PDF, en n'oubliant pas les paramètres twig si la vue comporte des données dynamiques
             // $html = $this->renderView('default/vignettes.html.twig', array('cds' => $cds));
-             
+
             // //on instancie la classe Html2Pdf_Html2Pdf en lui passant en paramètre
             // //le sens de la page "portrait" => p ou "paysage" => l
             // //le format A4,A5...
             // //la langue du document fr,en,it...
             // $html2pdf = new \Html2Pdf_Html2Pdf('P','A4','fr');
-     
+
             // //SetDisplayMode définit la manière dont le document PDF va être affiché par l’utilisateur
             // //fullpage : affiche la page entière sur l'écran
             // //fullwidth : utilise la largeur maximum de la fenêtre
             // //real : utilise la taille réelle
             // $html2pdf->pdf->SetDisplayMode('real');
-     
+
             // //writeHTML va tout simplement prendre la vue stocker dans la variable $html pour la convertir en format PDF
             // $html2pdf->writeHTML($html);
-     
+
             // //Output envoit le document PDF au navigateur internet avec un nom spécifique qui aura un rapport avec le contenu à convertir (exemple : Facture, Règlement…)
             // $html2pdf->Output('', 'S');
 
