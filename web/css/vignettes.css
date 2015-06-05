@@ -11,15 +11,17 @@ body {
 
 .vignette {
 	display: inline-block;
-	width: 70mm;
-	height: 37mm;
-	margin-right: -4px;
+	width: 62mm;
+	height: 29mm;
+	margin-left: 5px;
+	margin-right: -9px;
+	padding: 4mm;
 }
 
 .vignette .head {
 	height: 10mm;
 	width: 65mm;
-	padding: 2mm;
+	margin-left: 1mm;
 }
 
 .vignette .head h1 {
@@ -44,9 +46,9 @@ body {
 	border: 1px solid black;
 	border-right: none;
 	font-size: 3mm;
-	margin: 1mm 2mm;
-	padding: 1mm;
-	width: 38mm;
+	margin: 4mm 1mm;
+	padding: 1px;
+	width: 32mm;
 }
 
 .vignette .extra .identification {
@@ -54,11 +56,11 @@ body {
 	top: 0mm;
 	right: 2mm;
 	width: 23mm;
-	height: 20mm;
+	height: 16mm;
 }
 
 .vignette .extra .identification .num {
-	font-size: 5mm;
+	font-size: 7mm;
 	font-weight: bold;
 }
 

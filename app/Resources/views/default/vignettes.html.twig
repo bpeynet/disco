@@ -15,13 +15,13 @@
 			<div class="extra">
 				<div class="infos">
 					<div class="rotation">Rotation : {% if cd.rotation %}{{cd.rotation.libelle}}{% endif %}</div>
-					<div class="anim">Anim : 
+					<!--<div class="anim">Anim : 
 						{% for piste in cd.pistes %}
 							{% if piste.anim %}
 								{{piste.piste}}
 							{% endif %}
 						{% endfor %}
-					</div>
+					</div>-->
 					<div class="rivendell">Rivendell : 
 						{% for piste in cd.pistes %}
 							{% if piste.paulo %}
@@ -31,10 +31,10 @@
 					</div>
 
 					<div class="langue">
-						Langue : {% if cd.langue %}{{cd.langue.libelle}}{% endif %}
+						{% if cd.langue %}{{cd.langue.libelle}}{% endif %}
 					</div>
 					<div class="genre">
-						Genre : {% if cd.genre %}{{cd.genre.libelle}}{% endif %}
+						{% if cd.genre %}{{cd.genre.libelle}}{% endif %}
 					</div>
 				</div>
 				<div class="identification">
