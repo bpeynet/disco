@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="f_cd",indexes={@ORM\Index(name="artiste", columns={"artiste"}), @ORM\Index(name="genre", columns={"genre"}), @ORM\Index(name="support", columns={"support"}), @ORM\Index(name="type", columns={"type"}), @ORM\Index(name="airplay", columns={"cd", "airplay"}), @ORM\Index(name="dprogra", columns={"dprogra"}), @ORM\Index(name="jsaisie", columns={"jsaisie"}), @ORM\Index(name="alllabel", columns={"label", "maison", "distrib"}), @ORM\Index(name="jsaisie_anne", columns={"jsaisie", "annee"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Cd
 {
@@ -1273,7 +1274,7 @@ class Cd
     /**
      * Get ecoute
      *
-     * @return integer 
+     * @return integer
      */
     public function getEcoute()
     {

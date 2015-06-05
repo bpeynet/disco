@@ -358,13 +358,6 @@ class CdController extends DiscoController
         }
 
         if($form->isValid() && $valid) {
-            //$cd = $form->getData();
-
-            // var_dump(join(DIRECTORY_SEPARATOR, array('\..', '..', '..', 'web')));
-            // die(1);
-
-            $cd->upload();
-
             $cd->setLabel(null);
             $cd->setMaison(null);
             $cd->setDistrib(null);
@@ -718,12 +711,12 @@ class CdController extends DiscoController
 
                 $testMail = new EmailValidator();
                 $cd = $em->getRepository('AppBundle:Cd')->find($key);
-                
+
                 if(!empty($mail_retour)) {
 
                     $airplay_cd = $em->getRepository('AppBundle:AirplayCd')->findByCd($cd);
                     $destinataires = explode(';', $mail_retour);
-                    
+
                     $message = \Swift_Message::newInstance()
                         ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." [retour d'écoute]")
                         ->setFrom('test@test.fr')
@@ -745,7 +738,7 @@ class CdController extends DiscoController
                 }
 
             }
-            
+
             $this->discoLog("a effectué ".$nbRetours." retours Label.");
             $this->addFlash('success',$nbRetours.' retour(s) Label effectué(s) avec succès.');
 
@@ -776,7 +769,7 @@ class CdController extends DiscoController
                 ->setMaxResults(50)
                 ->getQuery()
                 ->getResult();
-        
+
                 $nbRes = $em->createQueryBuilder()
                     ->select('count(cd)')
                     ->from('AppBundle:Cd', 'cd')
@@ -826,7 +819,7 @@ class CdController extends DiscoController
                 $nbRes = $nbRes->getQuery()
                 ->getSingleScalarResult();
         }
-        
+
         $pageMax = ceil($nbRes/$limit);
 
         return $this->render('cd/retour-label.html.twig',array(
@@ -889,11 +882,11 @@ class CdController extends DiscoController
             //Output envoit le document PDF au navigateur internet avec un nom spécifique qui aura un rapport avec le contenu à convertir (exemple : Facture, Règlement…)
             $html2pdf->Output('', 'S');
 
-            $this->discoLog("a effectué ".count($cds)." impressions d'étiquettes.");
-
             $response->headers->set('Content-Type', 'application/force-download');
             $response->headers->set('Content-disposition', 'filename=tonFichier.pdf');
 
+            $this->discoLog("a effectué ".count($cds)." impressions d'étiquettes.");
+            
             return $response;
             //return $this->render('default/vignettes.html.twig', array('cds' => $cds));
 
