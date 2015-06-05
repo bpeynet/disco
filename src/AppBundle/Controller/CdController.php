@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints\EmailValidator;
+use HTML2PDF;
 
 
 class CdController extends DiscoController
@@ -867,34 +868,34 @@ class CdController extends DiscoController
                 }
             }
 
-            // //on stocke la vue à convertir en PDF, en n'oubliant pas les paramètres twig si la vue comporte des données dynamiques
-            // $html = $this->renderView('default/vignettes.html.twig', array('cds' => $cds));
+            //on stocke la vue à convertir en PDF, en n'oubliant pas les paramètres twig si la vue comporte des données dynamiques
+            $html = $this->renderView('default/vignettes.html.twig', array('cds' => $cds));
              
-            // //on instancie la classe Html2Pdf_Html2Pdf en lui passant en paramètre
-            // //le sens de la page "portrait" => p ou "paysage" => l
-            // //le format A4,A5...
-            // //la langue du document fr,en,it...
-            // $html2pdf = new \Html2Pdf_Html2Pdf('P','A4','fr');
+            //on instancie la classe HTML2PDF en lui passant en paramètre
+            //le sens de la page "portrait" => p ou "paysage" => l
+            //le format A4,A5...
+            //la langue du document fr,en,it...
+            $html2pdf = new \HTML2PDF('P','A4','fr');
      
-            // //SetDisplayMode définit la manière dont le document PDF va être affiché par l’utilisateur
-            // //fullpage : affiche la page entière sur l'écran
-            // //fullwidth : utilise la largeur maximum de la fenêtre
-            // //real : utilise la taille réelle
-            // $html2pdf->pdf->SetDisplayMode('real');
+            //SetDisplayMode définit la manière dont le document PDF va être affiché par l’utilisateur
+            //fullpage : affiche la page entière sur l'écran
+            //fullwidth : utilise la largeur maximum de la fenêtre
+            //real : utilise la taille réelle
+            $html2pdf->pdf->SetDisplayMode('real');
      
-            // //writeHTML va tout simplement prendre la vue stocker dans la variable $html pour la convertir en format PDF
-            // $html2pdf->writeHTML($html);
+            //writeHTML va tout simplement prendre la vue stocker dans la variable $html pour la convertir en format PDF
+            $html2pdf->writeHTML($html);
      
-            // //Output envoit le document PDF au navigateur internet avec un nom spécifique qui aura un rapport avec le contenu à convertir (exemple : Facture, Règlement…)
-            // $html2pdf->Output('', 'S');
+            //Output envoit le document PDF au navigateur internet avec un nom spécifique qui aura un rapport avec le contenu à convertir (exemple : Facture, Règlement…)
+            $html2pdf->Output('', 'S');
 
-            // $this->discoLog("a effectué ".count($cds)." impressions d'étiquettes.");
+            $this->discoLog("a effectué ".count($cds)." impressions d'étiquettes.");
 
-            // $response->headers->set('Content-Type', 'application/force-download');
-            // $response->headers->set('Content-disposition', 'filename=tonFichier.pdf');
+            $response->headers->set('Content-Type', 'application/force-download');
+            $response->headers->set('Content-disposition', 'filename=tonFichier.pdf');
 
-            // return $response;
-            return $this->render('default/vignettes.html.twig', array('cds' => $cds));
+            return $response;
+            //return $this->render('default/vignettes.html.twig', array('cds' => $cds));
 
         } else {
             $this->addFlash('error','Les étiquettes n\'ont pas pu être générées.');

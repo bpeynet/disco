@@ -93,11 +93,9 @@
 	    });
 
 	    var new_row = "<tr class='ui-sortable-handle' id='row_:id'><td class='num_row_airplay'></td><td></td><td class='num_cd'>:id</td><td>:artiste</td><td>:titre</td><td><input type='text' name='ecoute[NNN]' value=':ecoute'></td><td>:annee</td><td>:rotation</td><td>:note</td><td>:star</td><td>:paulo</td><td>:anim</td><td>:genre</td><td>:type</td><td><button onclick='deleteRow(:id)' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
+			
 
-		$("#addCd").submit(function(event) {
-			event.preventDefault();
-			bindAddCd(new_row);
-		});
+		bindAddCd(new_row);
 
 		function deleteRow (cd) {
 			$("#row_"+cd).remove();

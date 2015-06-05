@@ -49,10 +49,7 @@
 
 		var new_row = "<tr class='ui-sortable-handle' id='row_:id'><td class='num_cd'>:id</td><td>:artiste</td><td>:titre</td><td>:annee</td><td>:rotation</td><td><button onclick='deleteRow(:id)' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
 
-		$("#addCd").submit(function(event) {
-			bindAddCd(new_row);
-			event.preventDefault();
-		});
+		bindAddCd(new_row);
 		
 
 		$("#generateEtiquettes").submit(function(event){
