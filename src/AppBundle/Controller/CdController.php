@@ -11,6 +11,7 @@ use AppBundle\Entity\Piste;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints\EmailValidator;
 use HTML2PDF;
@@ -197,6 +198,30 @@ class CdController extends DiscoController
 	}
 
     /**
+     * @Route("/cd/removePochette/{id}", name="removePochette", options={"expose"=true})
+     */
+    public function removePochetteAction($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer une pochette.');
+
+        $cd = $this->getDoctrine()
+            ->getRepository('AppBundle:Cd')
+            ->find($id);
+
+        if(!$cd) {
+            throw $this->createNotFoundException(
+                'Aucun cd trouvé pour cet id : '.$id
+            );
+        }
+
+        $cd->setImg(null);
+        $cd->removeUpload();
+        $this->getDoctrine()->getManager()->flush();
+
+        return new Response();
+    }
+
+    /**
      * @Route("/cd/edit/{id}", name="editCd")
      */
     public function editAction(Request $request, $id)
@@ -229,6 +254,8 @@ class CdController extends DiscoController
 
         if ($form->isValid()) {
             $cd = $form->getData();
+
+            
 
             $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
 

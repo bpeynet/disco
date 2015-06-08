@@ -53,7 +53,6 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>#</th>
 							<th>Nom</th>
 							<th>Action</th>
 							<th>Disques</th>
@@ -63,7 +62,6 @@
 					</thead>
 					{% for artiste in recherche %}
 						<tr id="{{artiste.artiste}}" class="artisteRow">
-							<td>{{artiste.getArtiste}}</td>
 							<td class="libelle">{{artiste.getLibelle}}</td>
 							<td>
 								<a href="{{ path('showArtiste',{'id':artiste.getArtiste}) }}"><span class="glyphicon glyphicon-eye-open"></span></a>

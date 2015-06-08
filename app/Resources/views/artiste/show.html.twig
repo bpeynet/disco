@@ -5,7 +5,7 @@
 	<h1>
         Fiche Artiste
         <small>
-            {{artiste.getLibelle}} (#{{artiste.getArtiste}})
+            {{artiste.getLibelle}}
             {% if is_granted('ROLE_PROGRA') %}
 	            <a href="{{ path('editArtiste',{'id':artiste.getArtiste}) }}" class="label label-info">
 					<span class="glyphicon glyphicon-edit"></span> Editer

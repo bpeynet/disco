@@ -5,7 +5,7 @@
 	<h1>
 		Fiche Label 
 		<small>
-			{{label.getLibelle}} (#{{label.getLabel}})
+			{{label.getLibelle}}
 			{% if is_granted('ROLE_PROGRA') %}
 	            <a href="{{ path('editLabel',{'id':label.getLabel}) }}" class="label label-info">
 					<span class="glyphicon glyphicon-edit"></span> Editer

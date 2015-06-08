@@ -1286,14 +1286,9 @@ class Cd
         $this->dsaisie = new \DateTime();
     }
 
-    public function getAbsolutePath()
-    {
-        return null === $this->img ? null : $this->getUploadRootDir().'/'.$this->img;
-    }
-
     public function getImgWebPath()
     {
-        return null === $this->img ? null : $this->getUploadDir().'/'.$this->img;
+        return null === $this->img ? null : 'img/cd/cd_'.$this->cd.'.'.$this->img;
     }
 
     protected function getUploadRootDir()
@@ -1317,7 +1312,7 @@ class Cd
     {
         if (null !== $this->file) {
             // faites ce que vous voulez pour générer un nom unique
-            $this->img = sha1(uniqid(mt_rand(), true)).'.'.$this->file->guessExtension();
+            $this->img = $this->file->guessExtension();
         }
     }
 
@@ -1335,9 +1330,20 @@ class Cd
         // va automatiquement être lancée par la méthode move(). Cela va empêcher
         // proprement l'entité d'être persistée dans la base de données si
         // erreur il y a
-        $this->file->move($this->getUploadRootDir(), $this->img);
+        $this->file->move($this->getUploadRootDir(), $this->getAbsolutePath());
 
         unset($this->file);
+    }
+
+    // propriété utilisé temporairement pour la suppression
+    private $filenameForRemove;
+
+    /**
+     * @ORM\PreRemove()
+     */
+    public function storeFilenameForRemove()
+    {
+        $this->filenameForRemove = $this->getAbsolutePath();
     }
 
     /**
@@ -1348,6 +1354,11 @@ class Cd
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->img ? null : $this->getUploadRootDir().DIRECTORY_SEPARATOR.'cd_'.$this->cd.'.'.$this->img;
     }
 
 }

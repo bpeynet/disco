@@ -6,7 +6,7 @@
 	<fieldset>
 		<legend>Edition de Cd (#{{cd.cd}}) - {{cd.titre}}</legend>
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
-		{{form_start(form)}}
+		{{form_start(form,{'enctype':'multipart/form-data'})}}
 			<div class="row">
 				{{form_errors(form)}}
 
@@ -119,7 +119,20 @@
 					{{form_row(form.comment)}}
 				</div>
 			</div>
-
+			<div class="row" style="margin-bottom:100px;">
+				<div class="col-xs-4">
+					{{form_row(form.file,{'label':'Pochette'})}}
+				</div>
+				{% if cd.img %}
+				<div class="col-xs-2" id="div_pochette">
+					<label for="pochette_edit">Pochette actuelle :</label>
+					<div id="pochette_edit">
+						<img src="{{asset(cd.getImgWebPath)}}" style="max-height:100%;max-width:100%;">
+						<div id="pochette_delete">Cliquer pour supprimer</div>
+					</div>
+				</div>
+				{% endif %}
+			</div>
 		{{form_end(form)}}
 	</fieldset>
 
@@ -271,6 +284,20 @@
   	});
 
   });
+
+	$("#pochette_delete").click(function(){
+		id = "{{cd.cd}}"
+		if(confirm("Supprimer la pochette actuelle ?")) {
+			route = Routing.generate('removePochette', {'id': id})
+			$.get(route, function(retour){
+				if(retour) {
+					$("#div_pochette").remove();
+				} else {
+					alert("La pochette n'a pas pu être supprimé !")
+				}
+			})
+		}
+	})
 
 </script>
 {% endblock %}
