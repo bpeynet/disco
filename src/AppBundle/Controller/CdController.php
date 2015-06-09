@@ -214,11 +214,12 @@ class CdController extends DiscoController
             );
         }
 
-        $cd->setImg(null);
-        $cd->removeUpload();
+        $cd->removeImg();
         $this->getDoctrine()->getManager()->flush();
 
-        return new Response();
+        $response = new JsonResponse();
+        $response->setData(array('ok'=>true));
+        return $response;
     }
 
     /**
@@ -253,9 +254,7 @@ class CdController extends DiscoController
         }
 
         if ($form->isValid()) {
-            $cd = $form->getData();
-
-            
+            $cd->preUpload();
 
             $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
 

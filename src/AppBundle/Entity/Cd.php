@@ -1312,7 +1312,7 @@ class Cd
     {
         if (null !== $this->file) {
             // faites ce que vous voulez pour générer un nom unique
-            $this->img = $this->file->guessExtension();
+            $this->setImg($this->file->guessExtension());
         }
     }
 
@@ -1332,7 +1332,7 @@ class Cd
         // erreur il y a
         $this->file->move($this->getUploadRootDir(), $this->getAbsolutePath());
 
-        unset($this->file);
+        $this->file = null;
     }
 
     // propriété utilisé temporairement pour la suppression
@@ -1349,9 +1349,10 @@ class Cd
     /**
      * @ORM\PostRemove()
      */
-    public function removeUpload()
+    public function removeImg()
     {
         if ($file = $this->getAbsolutePath()) {
+            $this->img = null;
             unlink($file);
         }
     }

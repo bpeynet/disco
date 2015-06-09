@@ -290,7 +290,7 @@
 		if(confirm("Supprimer la pochette actuelle ?")) {
 			route = Routing.generate('removePochette', {'id': id})
 			$.get(route, function(retour){
-				if(retour) {
+				if(retour.ok) {
 					$("#div_pochette").remove();
 				} else {
 					alert("La pochette n'a pas pu être supprimé !")
