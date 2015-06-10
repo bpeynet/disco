@@ -11,7 +11,7 @@ use AppBundle\Entity\Piste;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints\EmailValidator;
 use HTML2PDF;
@@ -879,42 +879,39 @@ class CdController extends DiscoController
         if ($request->isMethod('POST') && !empty($liste)) {
             $etiquettes = explode(',', $liste);
             $cds = array();
+            $IDs = '';
 
             foreach ($etiquettes as $key => $etiquette) {
                 $cd = $this->getDoctrine()->getManager()->getRepository('AppBundle:Cd')->find($etiquette);
                 if($cd) {
                     $cds[] = $cd;
+                    $IDs .= ', '.$cd->getCd();
                 }
             }
 
-            //on stocke la vue à convertir en PDF, en n'oubliant pas les paramètres twig si la vue comporte des données dynamiques
             $html = $this->renderView('default/vignettes.html.twig', array('cds' => $cds));
-             
-            //on instancie la classe HTML2PDF en lui passant en paramètre
-            //le sens de la page "portrait" => p ou "paysage" => l
-            //le format A4,A5...
-            //la langue du document fr,en,it...
+
             $html2pdf = new \HTML2PDF('P','A4','fr');
-     
+
             //SetDisplayMode définit la manière dont le document PDF va être affiché par l’utilisateur
             //fullpage : affiche la page entière sur l'écran
             //fullwidth : utilise la largeur maximum de la fenêtre
             //real : utilise la taille réelle
             $html2pdf->pdf->SetDisplayMode('real');
-     
-            //writeHTML va tout simplement prendre la vue stocker dans la variable $html pour la convertir en format PDF
+
             $html2pdf->writeHTML($html);
-     
-            //Output envoit le document PDF au navigateur internet avec un nom spécifique qui aura un rapport avec le contenu à convertir (exemple : Facture, Règlement…)
-            $html2pdf->Output('', 'S');
 
-            $response->headers->set('Content-Type', 'application/force-download');
-            $response->headers->set('Content-disposition', 'filename=tonFichier.pdf');
+            $response = new Response($html2pdf->Output('', true));
 
-            $this->discoLog("a effectué ".count($cds)." impressions d'étiquettes.");
-            
+            $response->headers->set('Content-Type', 'application/pdf');
+            $d = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                'etiquettes.pdf'
+            );
+            $response->headers->set('Content-Disposition', $d);
+
+            $this->discoLog("a généré des étiquettes".$IDs);
             return $response;
-            //return $this->render('default/vignettes.html.twig', array('cds' => $cds));
 
         } else {
             $this->addFlash('error','Les étiquettes n\'ont pas pu être générées.');
