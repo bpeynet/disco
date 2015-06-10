@@ -77,9 +77,15 @@ class DefaultController extends DiscoController
         // //Output envoit le document PDF au navigateur internet avec un nom spécifique qui aura un rapport avec le contenu à convertir (exemple : Facture, Règlement…)
         // $html2pdf->Output('','S');
 
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial','B',16);
+        $pdf->Cell(40,10,'Hello World!');
+        $pdf->Output();
+
         $response = new Response();
-        // $response->clearHttpHeaders();
-        // $response->setContent(file_get_contents($fichier));
+        $response->clearHttpHeaders();
+        $response->setContent(file_get_contents($pdf));
         $response->headers->set('Content-Type', 'application/pdf');
         $response->headers->set('Content-disposition', 'filename='. $fichier);
          
