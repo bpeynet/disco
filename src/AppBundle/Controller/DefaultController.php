@@ -50,6 +50,12 @@ class DefaultController extends DiscoController
             ->setMaxResults(24)
             ->getResult();
 
+        foreach ($cds as $key => $cd) {
+            $cd->setEtiquette(true);
+        }
+
+        $this->getDoctrine()->getManager()->flush();
+
         // //on stocke la vue à convertir en PDF, en n'oubliant pas les paramètres twig si la vue comporte des données dynamiques
         // $html = $this->renderView('default/vignettes.html.twig', array('cds' => $cds));
          
