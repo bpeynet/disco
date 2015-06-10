@@ -268,6 +268,21 @@ class CdController extends DiscoController
             } else {
                 $cd->setArtiste($artiste);
             }
+            $label = $em->getRepository('AppBundle:Label')->findOneByLibelle($req['label']);
+
+            if($label) {
+                $cd->setLabel($label);
+            }
+            $maison = $em->getRepository('AppBundle:Label')->findOneByLibelle($req['maison']);
+
+            if($maison) {
+                $cd->setMaison($maison);
+            }
+            $distrib = $em->getRepository('AppBundle:Label')->findOneByLibelle($req['distrib']);
+
+            if($distrib) {
+                $cd->setDistrib($distrib);
+            }
 
 
             $em->createQuery(
@@ -389,6 +404,22 @@ class CdController extends DiscoController
             $cd->setDistrib(null);
 
             $cd->setArtiste($artiste);
+
+            $label = $em->getRepository('AppBundle:Label')->findOneByLibelle($req['label']);
+
+            if($label) {
+                $cd->setLabel($label);
+            }
+            $maison = $em->getRepository('AppBundle:Label')->findOneByLibelle($req['maison']);
+
+            if($maison) {
+                $cd->setMaison($maison);
+            }
+            $distrib = $em->getRepository('AppBundle:Label')->findOneByLibelle($req['distrib']);
+
+            if($distrib) {
+                $cd->setDistrib($distrib);
+            }
 
             for($i = 1; $i <= $req['nbPiste']; $i++) {
                 $piste = new Piste();
