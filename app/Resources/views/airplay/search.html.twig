@@ -30,9 +30,11 @@
 				<td>{{airplay.dmodif|date("d/m/Y")}}</td>
 				<td>{{airplay.libelle}}</td>
 				<td>
-					<a href="{{path('editAirplay',{'id':airplay.airplay})}}"><span class="glyphicon glyphicon-edit" title="Editer"></span></a>
+					{% if not airplay.publie %}
+						<a href="{{path('editAirplay',{'id':airplay.airplay})}}"><span class="glyphicon glyphicon-edit" title="Editer"></span></a>
+					{% endif %}
 				</td>	
-				<td><input class="checkboxPublie" type="checkbox" name="publie[{{airplay.airplay}}]" value="{{airplay.airplay}}" {% if airplay.publie == 1 %}checked{% endif %}></td>
+				<td><input class="checkboxPublie" type="checkbox" name="publie[{{airplay.airplay}}]" value="{{airplay.airplay}}" {% if airplay.publie == 1 %}checked disabled{% endif %}></td>
 			</tr>
 		{% endfor %}
 		
