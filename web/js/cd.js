@@ -4,7 +4,7 @@
       $( "#"+input+"_hidden" ).val( message.num );
     }
  	var artisteCompleteParameters = {
-      source: "{{path('autocompleteArtiste',{'like':1})}}",
+      source: Routing.generate('autocompleteArtiste',{'like':1}),
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -15,7 +15,7 @@
     $( "#artiste" ).autocomplete(artisteCompleteParameters);
 
     $( "#label" ).autocomplete({
-      source: "{{path('autocompleteLabel',{'like':1})}}",
+      source: Routing.generate('autocompleteLabel',{'like':1}),
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -25,7 +25,7 @@
     });
 
     $( "#maison" ).autocomplete({
-      source: "{{path('autocompleteLabel',{'like':1})}}",
+      source: Routing.generate('autocompleteLabel',{'like':1}),
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -35,7 +35,7 @@
     });
 
     $( "#distrib" ).autocomplete({
-      source: "{{path('autocompleteLabel',{'like':1})}}",
+      source: Routing.generate('autocompleteLabel',{'like':1}),
       minLength: 2,
       delay: 300,
       select: function( event, ui ) {
@@ -50,7 +50,7 @@
     $("#artiste").blur(function() {
     	if($("#artiste").val() != "") {
 			$.ajax({
-			  url: "{{path('autocompleteArtiste',{'like':0})}}",
+			  url: Routing.generate('autocompleteArtiste',{'like':0}),
 			  type: 'GET',
 			  data: 'term='+$("#artiste").val()
 			}).done(function(tab_exact){
@@ -58,8 +58,8 @@
 					$("#artiste_hidden").val(tab_exact[0].num);
 				} else {
 		  			if(confirm("Cet Artiste semble ne pas exister... Le créer ?")) {
-		  				var route = "{{path('createArtiste',{'libelle': 'value' })}}";
-		  				window.open(route.replace("value", $('#artiste').val()),"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
+		  				var route = Routing.generate('createArtiste',{'libelle': $('#artiste').val() });
+		  				window.open(route,"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
 			  		} else {
 			  			$("#artiste_hidden").val("");
 			  		};
@@ -72,7 +72,7 @@
   	function labelsVerif (htmlItem,hiddenItem) {
   		if(htmlItem.val() != "") {
 			$.ajax({
-			  url: "{{path('autocompleteLabel',{'like':0})}}",
+			  url: Routing.generate('autocompleteLabel',{'like':0}),
 			  type: 'GET',
 			  data: 'term='+htmlItem.val()
 			}).done(function(tab_exact){
@@ -80,8 +80,8 @@
 					hiddenItem.val(tab_exact[0].num);
 				} else {
 		  			if(confirm("Le Label "+ htmlItem.val() +" semble ne pas exister... Le créer ?")) {
-		  				var route = "{{path('createLabel',{'libelle': 'value' })}}";
-		  				window.open(route.replace("value", htmlItem.val()),"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
+		  				var route = Routing.generate('createLabel',{'libelle': htmlItem.val() });
+		  				window.open(route,"Pop-up","toolbar=0,location=0,directories=0,menuBar=0,resizable=0,scrollbars=yes,width=470,height=400,left=75,top=60");
 			  		} else {
 			  			hiddenItem.val("");
 			  		};

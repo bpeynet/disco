@@ -155,7 +155,7 @@ class LabelController extends DiscoController
     }
 
     /**
-     * @Route("/label/create/{libelle}", name="createLabel")
+     * @Route("/label/create/{libelle}", name="createLabel", options={"expose"=true})
      */
     public function createAction(Request $request, $libelle="")
     {
@@ -193,7 +193,7 @@ class LabelController extends DiscoController
     }
 
     /**
-     *  @Route("/label/autocomplete/{like}", name="autocompleteLabel")
+     *  @Route("/label/autocomplete/{like}", name="autocompleteLabel", options={"expose"=true})
      */
     public function autocompleteAction($like, Request $request)
     {

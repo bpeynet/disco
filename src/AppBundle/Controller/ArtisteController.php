@@ -152,7 +152,7 @@ class ArtisteController extends DiscoController
     }
 
     /**
-     * @Route("/artiste/create/{libelle}", name="createArtiste")
+     * @Route("/artiste/create/{libelle}", name="createArtiste", options={"expose"=true})
      */
     public function createAction(Request $request, $libelle = "")
     {
@@ -197,7 +197,7 @@ class ArtisteController extends DiscoController
 
 
     /**
-     *  @Route("/artiste/autocomplete/{like}", name="autocompleteArtiste")
+     *  @Route("/artiste/autocomplete/{like}", name="autocompleteArtiste", options={"expose"=true})
      */
     public function autocompleteAction($like, Request $request)
     {
