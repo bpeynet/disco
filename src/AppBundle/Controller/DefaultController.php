@@ -80,8 +80,11 @@ class DefaultController extends DiscoController
 
         $pdf = new \FPDF();
         $pdf->AddPage();
-        $pdf->SetFont('Arial','B',16);
-        $pdf->Cell(40,10,'Hello World!');
+        $pdf->SetFont('Arial','B',14);
+
+        foreach ($cds as $key => $cd) {
+            $pdf->Cell(70,30,$cd->getTitre(),1);
+        }
         $response = new Response($pdf->Output('', 'S'));
 
         $response->headers->set('Content-Type', 'application/pdf');

@@ -11,6 +11,7 @@ use AppBundle\Entity\Piste;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints\EmailValidator;
@@ -827,11 +828,11 @@ class CdController extends DiscoController
                 ->getQuery()
                 ->getResult();
 
-                $nbRes = $em->createQueryBuilder()
-                    ->select('count(cd)')
-                    ->from('AppBundle:Cd', 'cd')
-                    ->getQuery()
-                    ->getSingleScalarResult();
+            $nbRes = $em->createQueryBuilder()
+                ->select('count(cd)')
+                ->from('AppBundle:Cd', 'cd')
+                ->getQuery()
+                ->getSingleScalarResult();
 
         } else {
             $cds = $em->createQueryBuilder()
@@ -844,20 +845,20 @@ class CdController extends DiscoController
                 ->setParameter('dprogra', $date_mini)
                 ->andWhere('cd.annee >= :annee')
                 ->setParameter('annee', $annee_mini);
-                if (!$retour_fait) {
-                    $cds = $cds->andWhere('cd.retourLabel = 0');
-                }
-                if($label_mail) {
-                    $cds = $cds->andWhere($cds->expr()->isNotNull('l.mailProgra'));
-                }
+            if (!$retour_fait) {
+                $cds = $cds->andWhere('cd.retourLabel = 0');
+            }
+            if($label_mail) {
+                $cds = $cds->andWhere($cds->expr()->isNotNull('l.mailProgra'));
+            }
 
-                $cds = $cds->orderBy('cd.cd', 'DESC')
+            $cds = $cds->orderBy('cd.cd', 'DESC')
                 ->setFirstResult(($page-1)*$limit)
                 ->setMaxResults($limit)
                 ->getQuery()
                 ->getResult();
 
-                $nbRes = $em->createQueryBuilder()
+            $nbRes = $em->createQueryBuilder()
                 ->select('count(cd)')
                 ->from('AppBundle:Cd', 'cd')
                 ->leftJoin('AppBundle:Label', 'l', 'WITH', 'l.label = cd.label')
@@ -867,13 +868,13 @@ class CdController extends DiscoController
                 ->setParameter('dprogra', $date_mini)
                 ->andWhere('cd.annee >= :annee')
                 ->setParameter('annee', $annee_mini);
-                if (!$retour_fait) {
-                    $nbRes = $nbRes->andWhere('cd.retourLabel = 0');
-                }
-                if($label_mail) {
-                    $nbRes = $nbRes->andWhere($nbRes->expr()->isNotNull('l.mailProgra'));
-                }
-                $nbRes = $nbRes->getQuery()
+            if (!$retour_fait) {
+                $nbRes = $nbRes->andWhere('cd.retourLabel = 0');
+            }
+            if($label_mail) {
+                $nbRes = $nbRes->andWhere($nbRes->expr()->isNotNull('l.mailProgra'));
+            }
+            $nbRes = $nbRes->getQuery()
                 ->getSingleScalarResult();
         }
 
@@ -920,19 +921,101 @@ class CdController extends DiscoController
                 }
             }
 
-            $html = $this->renderView('default/vignettes.html.twig', array('cds' => $cds));
 
-            $html2pdf = new \HTML2PDF('P','A4','fr');
 
-            //SetDisplayMode définit la manière dont le document PDF va être affiché par l’utilisateur
-            //fullpage : affiche la page entière sur l'écran
-            //fullwidth : utilise la largeur maximum de la fenêtre
-            //real : utilise la taille réelle
-            $html2pdf->pdf->SetDisplayMode('real');
+            function personnalFloor($max, $value, $addition)
+            {
+                return floor(($value-1)/$max)*($max*10)+$addition;
+            }
 
-            $html2pdf->writeHTML($html);
+            $pdf = new \FPDF();
+            $pdf->SetAutoPageBreak(false, 0);
 
-            $response = new Response($html2pdf->Output('', true));
+            foreach ($cds as $key => $cd) {
+                if ($key%24 == 0) {
+                    $pdf->addPage();
+                }
+                $pdf->SetFont('Arial','B',14);
+                $pdf->setTextColor(200,200,200);
+                // $pdf->setXY(($key%3)*70,floor($key%24/3)*37);
+                // $pdf->Cell(70,37,"coucou".$key."     ".($key%3)."     ".floor(($key)/3),1);
+
+                ////////////////////////////////////////////////////////////////////////////////
+
+                $pdf->setTextColor(0,0,0);
+                $pdf->SetFont('Arial','B',12);
+
+                $pdf->setXY(($key%3)*70+6,floor($key%24/3)*37+1);
+                $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getTitre()),0,28,"..."));
+
+                $pdf->SetFont('Arial','',10);
+                $pdf->setXY(($key%3)*70+6,floor($key%24/3)*37+5);
+                $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getArtiste()->getLibelle()),0,32,"..."));
+
+                $pdf->SetFont('Arial','',8);
+                $pdf->setXY(($key%3)*70+6,floor($key%24/3)*37+8);
+                if($cd->getLabel()) {
+                    $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getLabel()->getLibelle()),0,35,"..."));
+                } elseif ($cd->getMaison()) {
+                    $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getMaison()->getLibelle()),0,40,"..."));
+                } elseif ($cd->getDistrib()) {
+                    $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getDistrib()->getLibelle()),0,40,"..."));
+                }
+
+                $pdf->setXY(($key%3)*70+7,floor($key%24/3)*37+15);
+                $pdf->Cell(32,18,"","LTB");
+
+
+                $pdf->SetFont('Arial','',7);
+                $pdf->setXY(($key%3)*70+7.5,floor($key%24/3)*37+17);
+                if($cd->getRotation()) {
+                    $pdf->Cell(20,3,"Rotation : ".utf8_decode($cd->getRotation()->getLibelle()));
+                } else {
+                    $pdf->Cell(20,3,"Rotation : ");
+                }
+
+                $pdf->setXY(($key%3)*70+7.5,floor($key%24/3)*37+21);
+                $rivendell = "";
+                foreach ($cd->getPistes() as $key => $piste) {
+                    if($piste->getPaulo()) { $rivendell += $piste->getPiste()." "; }
+                }
+                $pdf->Cell(20,3,"Rivendell : ".utf8_decode($rivendell));
+
+                $pdf->setXY(($key%3)*70+7.5,floor($key%24/3)*37+25);
+                if($cd->getLangue()) {
+                    $pdf->Cell(20,3,utf8_decode($cd->getLangue()->getLibelle()));
+                }
+
+                $pdf->setXY(($key%3)*70+7.5,floor($key%24/3)*37+29);
+                if($cd->getGenre()) {
+                    $pdf->Cell(20,3,utf8_decode($cd->getGenre()->getLibelle()));
+                }
+
+
+                $pdf->SetFont('Arial','B',16);
+                $pdf->setXY(($key%3)*70+38,floor($key%24/3)*37+15);
+                $pdf->Cell(32,6,$cd->getCd());
+
+                $pdf->setXY(($key%3)*70+40,floor($key%24/3)*37+26);
+                $pdf->Image("../web/css/campusGrenoble.png",null,null,25);
+            }
+
+
+            // $pdf->SetFont('Arial','B',12);
+            // foreach ($cds as $key => $cd) {
+            //     $pdf->setXY(($key%3)*70+0.5,floor($key%24/3)*37+0.5);
+            //     $pdf->Cell(60,10,$cd->getTitre());
+            // }
+
+            // $pdf->setXY(0.5,$pdf->getX()-6.5);
+            // foreach ($cds as $key => $cd) {
+            //     //Titre
+            //     $pdf->Cell(4,60,$cd->getTitre());
+            // }
+
+
+
+            $response = new Response($pdf->Output('', 'S'));
 
             $response->headers->set('Content-Type', 'application/pdf');
             $d = $response->headers->makeDisposition(
@@ -941,7 +1024,6 @@ class CdController extends DiscoController
             );
             $response->headers->set('Content-Disposition', $d);
 
-            $this->discoLog("a généré des étiquettes".$IDs);
             return $response;
 
         } else {
