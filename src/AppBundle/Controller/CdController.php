@@ -921,52 +921,51 @@ class CdController extends DiscoController
                 }
             }
 
-
-
-            function personnalFloor($max, $value, $addition)
-            {
-                return floor(($value-1)/$max)*($max*10)+$addition;
-            }
-
             $pdf = new \FPDF();
             $pdf->SetAutoPageBreak(false, 0);
 
             foreach ($cds as $key => $cd) {
-                if ($key%24 == 0) {
+                if ($key % 24 == 0) {
                     $pdf->addPage();
                 }
-                $pdf->SetFont('Arial','B',14);
-                $pdf->setTextColor(200,200,200);
-                // $pdf->setXY(($key%3)*70,floor($key%24/3)*37);
-                // $pdf->Cell(70,37,"coucou".$key."     ".($key%3)."     ".floor(($key)/3),1);
-
-                ////////////////////////////////////////////////////////////////////////////////
-
-                $pdf->setTextColor(0,0,0);
-                $pdf->SetFont('Arial','B',12);
 
                 $pdf->setXY(($key%3)*70+6,floor($key%24/3)*37+1);
-                $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getTitre()),0,28,"..."));
+                $pdf->setTextColor(0,0,0);
+
+                $pdf->SetFont('Arial','B',12);
+                $titre = mb_strimwidth(utf8_decode($cd->getTitre()),0,28,"...");
+                $pdf->Cell(60, 10, $titre);
 
                 $pdf->SetFont('Arial','',10);
                 $pdf->setXY(($key%3)*70+6,floor($key%24/3)*37+5);
-                $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getArtiste()->getLibelle()),0,32,"..."));
+                $artiste = mb_strimwidth(utf8_decode($cd->getArtiste()->getLibelle()),0,28,"...");
+                $pdf->Cell(60, 10, $artiste);
 
-                $pdf->SetFont('Arial','',8);
-                $pdf->setXY(($key%3)*70+6,floor($key%24/3)*37+8);
+                $label = '';
+                $sep = '';
                 if($cd->getLabel()) {
-                    $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getLabel()->getLibelle()),0,35,"..."));
-                } elseif ($cd->getMaison()) {
-                    $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getMaison()->getLibelle()),0,40,"..."));
-                } elseif ($cd->getDistrib()) {
-                    $pdf->Cell(60,10,mb_strimwidth(utf8_decode($cd->getDistrib()->getLibelle()),0,40,"..."));
+                    $label .= $cd->getLabel()->getLibelle();
+                    $sep = ' / ';
+                }
+                if ($cd->getMaison()) {
+                    $label .= $sep.$cd->getMaison()->getLibelle();
+                    $sep = ' / ';
+                }
+                if ($cd->getDistrib()) {
+                    $label .= $sep.$cd->getDistrib()->getLibelle();
+                    $sep = ' / ';
+                }
+                if (!empty($label)) {
+                    $label = mb_strimwidth(utf8_decode($label),0,32,"...");
+                    $pdf->SetFont('Arial','',8);
+                    $pdf->setXY(($key%3)*70+6,floor($key%24/3)*37+8);
+                    $pdf->Cell(60,10,$label);
                 }
 
                 $pdf->setXY(($key%3)*70+7,floor($key%24/3)*37+15);
                 $pdf->Cell(32,18,"","LTB");
-
-
                 $pdf->SetFont('Arial','',7);
+
                 $pdf->setXY(($key%3)*70+7.5,floor($key%24/3)*37+17);
                 if($cd->getRotation()) {
                     $pdf->Cell(20,3,"Rotation : ".utf8_decode($cd->getRotation()->getLibelle()));
@@ -975,11 +974,11 @@ class CdController extends DiscoController
                 }
 
                 $pdf->setXY(($key%3)*70+7.5,floor($key%24/3)*37+21);
-                $rivendell = "";
-                foreach ($cd->getPistes() as $key => $piste) {
-                    if($piste->getPaulo()) { $rivendell += $piste->getPiste()." "; }
+                $rivendell = "Rivendell : ";
+                foreach ($cd->getPistes() as $piste) {
+                    if($piste->getRivendell()) { $rivendell .= $piste->getPiste()." "; }
                 }
-                $pdf->Cell(20,3,"Rivendell : ".utf8_decode($rivendell));
+                $pdf->Cell(20,3,$rivendell);
 
                 $pdf->setXY(($key%3)*70+7.5,floor($key%24/3)*37+25);
                 if($cd->getLangue()) {
@@ -991,7 +990,6 @@ class CdController extends DiscoController
                     $pdf->Cell(20,3,utf8_decode($cd->getGenre()->getLibelle()));
                 }
 
-
                 $pdf->SetFont('Arial','B',16);
                 $pdf->setXY(($key%3)*70+38,floor($key%24/3)*37+15);
                 $pdf->Cell(32,6,$cd->getCd());
@@ -999,21 +997,6 @@ class CdController extends DiscoController
                 $pdf->setXY(($key%3)*70+40,floor($key%24/3)*37+26);
                 $pdf->Image("../web/css/campusGrenoble.png",null,null,25);
             }
-
-
-            // $pdf->SetFont('Arial','B',12);
-            // foreach ($cds as $key => $cd) {
-            //     $pdf->setXY(($key%3)*70+0.5,floor($key%24/3)*37+0.5);
-            //     $pdf->Cell(60,10,$cd->getTitre());
-            // }
-
-            // $pdf->setXY(0.5,$pdf->getX()-6.5);
-            // foreach ($cds as $key => $cd) {
-            //     //Titre
-            //     $pdf->Cell(4,60,$cd->getTitre());
-            // }
-
-
 
             $response = new Response($pdf->Output('', 'S'));
 
