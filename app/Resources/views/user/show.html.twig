@@ -14,6 +14,9 @@
 		<small>
 			 {{user.getLibelle}}
 		</small>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <a href="{{path('editUser', {'id':user.getUser})}}" class="btn btn-info"><span class="glyphicon glyphicon-edit"></span>  Editer</a>
+        {% endif %}
 	{% endif %}
 	</h1>
 
@@ -23,7 +26,7 @@
 				<tr>
 					<th>Nom</th>
 					<td>{{user.nom}}</td>
-				</tr>	
+				</tr>
 				<tr>
 					<th>Prénom</th>
 					<td>{{user.prenom}}</td>
@@ -42,14 +45,14 @@
 				<tr>
 					<th>Username</th>
 					<td>{{user.username}}</td>
-				</tr>	
+				</tr>
 				<tr>
 					<th>Droits</th>
 					<td>{{user.roles[0]}}</td>
 				</tr>
 				{% endif %}
 			</table>
-		</div>	
+		</div>
 	</div>
 
 {% endblock %}

@@ -37,7 +37,7 @@ class User implements UserInterface
     private $suppr = '0';
 
     /**
-     * @var \Date
+     * @var \DateTime
      *
      * @ORM\Column(name="inactif", type="date")
      */
@@ -133,7 +133,7 @@ class User implements UserInterface
     /**
      * Get disquesManipules
      *
-     * @return ArrayCollection 
+     * @return ArrayCollection
      */
     public function getDisquesmanipules()
     {
@@ -156,7 +156,7 @@ class User implements UserInterface
     /**
      * Get suppr
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSuppr()
     {
@@ -202,7 +202,7 @@ class User implements UserInterface
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
@@ -225,7 +225,7 @@ class User implements UserInterface
     /**
      * Get prenom
      *
-     * @return string 
+     * @return string
      */
     public function getPrenom()
     {
@@ -248,7 +248,7 @@ class User implements UserInterface
     /**
      * Get cotisation
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getCotisation()
     {
@@ -272,7 +272,7 @@ class User implements UserInterface
     /**
      * Get emission
      *
-     * @return string 
+     * @return string
      */
     public function getEmission()
     {
@@ -296,7 +296,7 @@ class User implements UserInterface
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -319,7 +319,7 @@ class User implements UserInterface
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -342,7 +342,7 @@ class User implements UserInterface
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -365,7 +365,7 @@ class User implements UserInterface
     /**
      * Get login
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -385,11 +385,11 @@ class User implements UserInterface
      */
     public function setRoles($roles) {
         $this->roles = $roles;
-    } 
+    }
 
     /**
      * Get roles
-     * 
+     *
      * @return Role[]
      */
     public function getRoles() {
@@ -416,7 +416,7 @@ class User implements UserInterface
     /**
      * Get alerteProgra
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAlerteProgra()
     {
@@ -426,7 +426,7 @@ class User implements UserInterface
     /**
      * Get user
      *
-     * @return integer 
+     * @return integer
      */
     public function getUser()
     {
@@ -434,12 +434,8 @@ class User implements UserInterface
     }
 
 
-    public function __construct() {
-        $this->inactif = new \Date();
-    }
-
 /*
-   
+
     public function serialize()
     {
         return serialize(array(

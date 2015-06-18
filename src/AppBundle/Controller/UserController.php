@@ -129,7 +129,6 @@ class UserController extends DiscoController
 
         if($request->isMethod('POST')) {
             if ($form->isValid()) {
-                $user = $form->getData();
                 $em = $this->getDoctrine()->getManager();
 
                 $mdp = $request->request->get('mdp');
@@ -138,7 +137,7 @@ class UserController extends DiscoController
                 $user->setPrenom(ucfirst(strtolower($user->getPrenom())));
                 $user->setNom(strtoupper($user->getNom()));
                 if($user->getRoles()[0]!="ROLE_INACTIF" && $request->request->get('role')=="ROLE_INACTIF") {
-                    $user->setInactif(date("Y-m-d"));
+                    $user->setInactif(new \DateTime());
                 } elseif($request->request->get('role')!="ROLE_INACTIF") {
                     $user->setInactif(null);
                 }
