@@ -3,6 +3,7 @@ body {
 }
 
 .ligne_classement {
+	position: relative;
 	height: 100px;
 	background: #eee;
 	width: 600px;
@@ -60,6 +61,16 @@ body {
 	left: 100px;
 	padding: 5px;
 	max-height: 95px;
+}
+
+.ecoute {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+.ecoute img {
+	width: 100px;
 }
 
 a.popup {

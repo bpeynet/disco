@@ -10,14 +10,8 @@ les plus défendus par l’équipe de programmation de la radio
 	{% for ac in listes[id] %}
 		<div class="ligne_classement">
 			<div class="pochette_cd">
-			{% if ac.cd.ecoute %}
-				<a href="{{ac.cd.ecoute}}" target="_blank" title="Ecouter">
-			{% endif %}
-				<img src="{% if ac.cd.img %}{{ac.cd.img}}{% else %}{{ asset('img/cd/default.png') }}{% endif %}" alt="pochette {% if ac.cd.img %}du CD{% else %}par défaut{% endif %}">
+				<img src="{% if ac.cd.img %}{{asset('img/cd/cd_'~ac.cd.cd~'.'~ac.cd.img)}}{% else %}{{ asset('img/cd/default.png') }}{% endif %}" alt="pochette {% if ac.cd.img %}du CD{% else %}par défaut{% endif %}">
 				<span class="rank_cd {% if ac.cd.getDsaisie|date("U") > "-3 months"|date("U") %}new_cd{% endif %}">#{{ac.ordre}}</span>
-			{% if ac.cd.ecoute %}
-				</a>
-			{% endif %}
 			</div>
 			<div class="informations_cd">
 				<div class="titre_cd">
@@ -56,8 +50,16 @@ les plus défendus par l’équipe de programmation de la radio
 				<div class="genre">
 					Genre : {{ac.cd.genre.libelle}}
 				</div>
+
 				<div class="comment_progra">{{ac.cd.comment}}</div>
 			</div>
+			{% if ac.cd.ecoute %}
+				<div class="ecoute">
+					<a href="{{ac.cd.ecoute}}" target="_blank" title="Ecouter">
+						<img src="{{asset('img/cd/start.png')}}" title="lien d'écoute">
+					</a>
+				</div>
+			{% endif %}
 		</div>	
 		
 	{% endfor %}
