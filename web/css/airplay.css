@@ -73,45 +73,9 @@ body {
 	width: 100px;
 }
 
-a.popup {
-	color: none;
+a {
+	color: grey;
 	text-decoration: none;
-}
-
-a.popup span{
-	position:absolute;                
-	margin-top:23px;
-	margin-left:-50px;
-	color:#09c;
-	background:rgba(0,0,0,.9);
-	border-radius:3px;
-	box-shadow:0 0 2px rgba(0,0,0,.5);
-	transform:scale(0) rotate(-12deg);
-	transition:all .25s;
-	opacity:0;
-	z-index: 10;
-}
-
-a.popup .cadre {
-	padding: 5px;
-}
-
-a.popup:hover span, a:focus span{
-	transform:scale(1) rotate(0);        
-	opacity:1;
-}
-
-a.popup span .head {
-	border-bottom: 1px solid #666;
-	color: white;
-	font-weight: bold;
-	padding: 5px;
-}
-
-a.popup span .body {
-	background: white;
-	color: black;
-	padding: 5px;
 }
 
 label {
@@ -128,3 +92,25 @@ label {
 	background: #5cb85c;
 }
 
+.plus, .minus {
+	position: absolute;
+	top: 0px;
+	right: 100px;
+}
+
+.infos {
+	background: #666;
+	color: #ddd;
+	width: 394px;
+	height: 100px;
+	position: absolute;
+	top: 0px;
+	left: 100px;
+	display: none;
+	padding: 3px;
+	font-size: 10pt;
+}
+
+.doc:hover .infos {
+	display: visible;
+}

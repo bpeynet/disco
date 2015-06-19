@@ -15,44 +15,51 @@ les plus défendus par l’équipe de programmation de la radio
 			</div>
 			<div class="informations_cd">
 				<div class="titre_cd">
-					<a href="" class="popup">
+					<a href="">
 						{{ac.cd.titre}}
-						<span>
-							<div class="head">
-								Fiche Disque (#{{ac.cd.cd}}) {% if ac.cd.getDsaisie|date("U") > "-3 months"|date("U") %}<label class="success">Nouveauté</label>{% endif %}
-							</div>
-							<div class="body">
-								Commentaire de la Programmation : <br>
-								{{ac.cd.comment}}
-								<hr>
-								Note moyenne : {% if ac.cd.noteMoy %}{{ac.cd.noteMoy}}/5{% endif %}<br>
-								Fréquence de diffusion : {{ac.cd.rotation.libelle}}
-							</div>
-						</span>
 					</a>
 				</div>
 				<div class="artiste">
 					de 
-					<a href="" class="popup">
+					<a href="">
 						{{ac.cd.artiste.libelle}}
-						<span class=" cadre">{{ac.cd.artiste.disques|length}} CD(s)</span>
 					</a>
 				</div>
 				<div class="label_cd">
 					Label : 
-					<a href="" class="popup">
+					<a href="">
 						{% if ac.cd.label %}{{ac.cd.label.libelle}}{% elseif ac.cd.maison %}{{ac.cd.maison.libelle}}{% elseif ac.cd.distrib %}{{ac.cd.distrib.libelle}}{% endif %}
-						<span class=" cadre">
-							{% if ac.cd.label %}{{ac.cd.label.disques|length}}{% elseif ac.cd.maison %}{{ac.cd.maison.disques|length}}{% elseif ac.cd.distrib %}{{ac.cd.distrib.disques|length}}{% endif %} CD(s)
-						</span>
 					</a>
 				</div>
 				<div class="genre">
 					Genre : {{ac.cd.genre.libelle}}
 				</div>
-
-				<div class="comment_progra">{{ac.cd.comment}}</div>
 			</div>
+
+			<div class="infos">
+				{% set nbRotation = 0 %}
+				{% set pisteEnRotation = "" %}
+				{% for piste in ac.cd.pistes %}
+					{% if piste.rivendell %}
+						{% set nbRotation = nbRotation+1 %}
+						{% set pisteEnRotation = pisteEnRotation ~ piste.piste  ~ "/" %}
+					{% endif %}
+				{% endfor %}
+				<strong>Pistes en diffusion ({{nbRotation}}) : </strong>{{pisteEnRotation|trim('/')}}
+				
+				<hr>
+				
+				<strong>Commentaire :</strong><br>
+				{{ac.cd.comment}}
+			</div>
+
+			<div class="plus">
+				<img src="{{asset('css/ico_plus.png')}}" title="Voir les infos.">
+			</div>
+			<div class="minus">
+				<img src="{{asset('css/ico_minus.png')}}" title="Masquer">
+			</div>
+
 			{% if ac.cd.ecoute %}
 				<div class="ecoute">
 					<a href="{{ac.cd.ecoute}}" target="_blank" title="Ecouter">
@@ -66,3 +73,24 @@ les plus défendus par l’équipe de programmation de la radio
 {% set id=id+1 %}
 {% endfor %}
 {% endif %}
+
+
+<script src="{{asset('jquery/js/jquery-1.11.2.min.js')}}" type="text/javascript"></script>
+<script src="{{asset('jquery/js/jquery-ui.min.js')}}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+	$(".minus").hide();
+		
+	$(".plus").click(function(){
+		$(this).parent().children(".infos").show('slide',{direction:'left'},400);
+		$(this).parent().children(".minus").show();
+		$(this).hide();
+	});	
+	$(".minus").click(function(){
+		$(this).parent().children(".infos").hide('slide',{direction:'left'},400);
+		$(this).parent().children(".plus").show();
+		$(this).hide();
+	});
+
+</script>
