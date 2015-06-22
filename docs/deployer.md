@@ -13,3 +13,7 @@
     - tranférer `web` dans `www` et le renommer en `disco`
 - et voilà : http://www.campusgrenoble.org/disco/
 
+
+En mutualisé OVH, utiliser mailer_transport: mail
+
+
