@@ -46,12 +46,13 @@ class AirplayController extends DiscoController
                 $airplay->setPublie(true);
                 $em->persist($airplay);
             }
+
+            $this->discoLog("a modifié les publications d'Airplays");
+            $this->addFlash('success','Les publications d\'Airplays ont été éditées.');
+
+            $em->flush();
         }
 
-        $this->discoLog("a modifié les publications d'Airplays");
-        $this->addFlash('success','Les publications d\'Airplays ont été éditées.');
-
-        $em->flush();
 
         return $this->render('airplay/search.html.twig',array(
                 'airplays'=>$airplays,
@@ -201,7 +202,7 @@ class AirplayController extends DiscoController
                     $airplay_cd->setCd($cd);
                     $airplay_cd->setAirplay($airplay);
                     $airplay_cd->setOrdre($key+1);
-                    
+
                     //correspond au lien d'écoute
                     if($rq->get('ecoute')[$row]) {
                         $cd->setEcoute($rq->get('ecoute')[$row]);
@@ -256,7 +257,7 @@ class AirplayController extends DiscoController
             );
         }
 
-        
+
         if($airplay->getPublie()) {
             $this->discoLog("a tenté de modifier un airplay publié.");
             $this->addFlash('error','Un airplay publié n\'est pas modifiable.');
@@ -323,7 +324,7 @@ class AirplayController extends DiscoController
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut créer un airplay.');
 
         $post = new Airplay();
-        
+
         $form = $this->createForm(new AirplayType());
         $form->add('submit', 'submit', array(
                 'label' => 'Créer l\'Airplay',
