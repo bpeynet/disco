@@ -62,7 +62,7 @@ class AirplayController extends DiscoController
     }
 
     /**
-     * @Route("/airplay/show/{id}", name="showAirplay")
+     * @Route("/airplay/show/{id}", name="showAirplay", options={"expose"=true})
      */
     public function showAction($id)
     {
