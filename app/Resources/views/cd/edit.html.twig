@@ -4,7 +4,12 @@
 {% block body %}
 
 	<fieldset>
-		<legend>Edition de Cd (#{{cd.cd}}) - {{cd.titre}}</legend>
+		<legend>
+            Edition de Cd (#{{cd.cd}}) - {{cd.titre}}
+            <a href="{{ path('showCd',{'id':cd.getCd}) }}" style="float:right" class="label label-info">
+				<span class="glyphicon glyphicon-eye-open"></span> Retour à la fiche
+			</a>
+        </legend>
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
 		{{form_start(form,{'enctype':'multipart/form-data'})}}
 			<div class="row">
@@ -44,7 +49,7 @@
 				</div>
 				<div class="col-md-7">
 					<div class="row">
-						<div class="col-md-6">	
+						<div class="col-md-6">
 							{{form_row(form.dvd)}}
 							{{form_row(form.etiquette)}}
 							{{form_row(form.paulo,{'label':'Rivendell'})}}
@@ -53,7 +58,7 @@
 							{{form_row(form.type)}}
 							{{form_row(form.ecoute)}}
 						</div>
-						<div class="col-md-6">	
+						<div class="col-md-6">
 							{{form_row(form.genre)}}
 							{{form_row(form.styles)}}
 						</div>
@@ -105,7 +110,7 @@
 												<td><input class='check_anim' type='checkbox' name='anim_{{id_piste}}' {% if piste.anim %}checked{% endif %}></td>
 												<td><input class='check_paulo' type='checkbox' name='paulo_{{id_piste}}' {% if piste.paulo %}checked{% endif %}></td>
 												<td><input class='check_star' type='checkbox' name='star_{{id_piste}}' {% if piste.star %}checked{% endif %}></td>
-											</tr>	
+											</tr>
 											{% set id_piste = id_piste+1 %}
 										{% endfor %}
 									{% endif %}
