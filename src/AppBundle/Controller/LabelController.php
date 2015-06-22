@@ -21,7 +21,7 @@ class LabelController extends DiscoController
 
     	$doctrine = $this->getDoctrine();
 	    $em = $doctrine->getManager();
-    	$limit = $this->container->getParameter('listingLimit');
+    	$limit = $this->container->getParameter('listinglimit');
 
     	$retour = null;
 
@@ -199,7 +199,7 @@ class LabelController extends DiscoController
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
 
-        $limit = $this->container->getParameter('listingLimit');
+        $limit = $this->container->getParameter('autocompletelimit');
 
         $em = $this->getDoctrine()->getManager();
         $res = $em->getRepository('AppBundle:Label')->createQueryBuilder('l')

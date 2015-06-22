@@ -21,7 +21,6 @@ class AdminController extends DiscoController
 
         $doctrine = $this->getDoctrine();
         $em = $doctrine->getManager();
-        $limit = $this->container->getParameter('listingLimit');
 
         $users = $em->getRepository('AppBundle:User')->createQueryBuilder('u')
             ->orderBy('u.libelle','ASC')

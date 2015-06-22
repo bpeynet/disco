@@ -21,7 +21,7 @@ class ArtisteController extends DiscoController
 
     	$doctrine = $this->getDoctrine();
 	    $em = $doctrine->getManager();
-    	$limit = $this->container->getParameter('listingLimit');
+    	$limit = $this->container->getParameter('listinglimit');
 
     	$retour = null;
 
@@ -201,7 +201,7 @@ class ArtisteController extends DiscoController
      */
     public function autocompleteAction($like, Request $request)
     {
-        $limit = $this->container->getParameter('listingLimit');
+        $limit = $this->container->getParameter('autocompletelimit');
 
         $em = $this->getDoctrine()->getManager();
         $res = $em->getRepository('AppBundle:Artiste')->createQueryBuilder('a')

@@ -20,3 +20,4 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     listinglimit:    50
+    autocompletelimit: 20

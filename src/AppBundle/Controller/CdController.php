@@ -29,7 +29,7 @@ class CdController extends DiscoController
 
     	$doctrine = $this->getDoctrine();
 	    $em = $doctrine->getManager();
-    	$limit = $this->container->getParameter('listingLimit');
+    	$limit = $this->container->getParameter('listinglimit');
 
     	$retour = null;
     	$langues = $doctrine->getRepository('AppBundle:Langue')->findAll();
@@ -507,7 +507,7 @@ class CdController extends DiscoController
     public function autocompleteAction($like, Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour chercher un disque.');
-        $limit = $this->container->getParameter('listingLimit');
+        $limit = $this->container->getParameter('autocompletelimit');
 
         $em = $this->getDoctrine()->getManager();
         $res = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
@@ -758,7 +758,7 @@ class CdController extends DiscoController
 
         $em = $this->getDoctrine()->getManager();
         $rq = $request->request;
-        $limit = $this->container->getParameter('listingLimit');
+        $limit = $this->container->getParameter('listinglimit');
 
         $retours = $rq->get('check_retour');
 
