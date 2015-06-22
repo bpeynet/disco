@@ -166,30 +166,22 @@ class ArtisteController extends DiscoController
                 'attr' => array('class' => 'btn btn-success btn-block','style'=>'font-weight:bold')
             ));
 
-        $form->handleRequest($request);
-
         if($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
             if ($form->isValid()) {
-                $artiste = $form->getData();
                 $em = $this->getDoctrine()->getManager();
 
                 $em->persist($artiste);
                 $em->flush();
 
-                $num = $em->createQuery(
-                        'SELECT max(a.artiste)
-                        FROM AppBundle:Artiste a')
-                    ->getResult()[0][1];
-
                 $this->discoLog("a créé l'artiste ".$artiste->getArtiste()." ".$artiste->getLibelle());
                 $this->addFlash('success','L\'Artiste a bien été créé !');
 
-                return $this->redirect($this->generateUrl('showArtiste',array('id'=>$num)));
+                return $this->redirect($this->generateUrl('showArtiste',array('id'=>$artiste->getArtiste())));
 
             } else {
-                if ($request->isMethod('POST')) {
-                    $this->addFlash('error','Les champs on été mal renseignés.');
-                }
+                $this->addFlash('error','Les champs on été mal renseignés.');
            }
         }
         return $this->render('artiste/create.html.twig',array('form'=>$form->createView()));
