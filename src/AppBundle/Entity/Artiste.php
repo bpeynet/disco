@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Criteria;
 /**
  * Artiste
  *
- * @ORM\Table(name="f_artiste", uniqueConstraints={@ORM\UniqueConstraint(name="artiste", columns={"artiste"})}, indexes={@ORM\Index(name="libelle", columns={"libelle"}), @ORM\Index(name="nom", columns={"nom"})})
+ * @ORM\Table(name="f_artiste", uniqueConstraints={@ORM\UniqueConstraint(name="artiste", columns={"artiste"})}, indexes={@ORM\Index(name="libelle", columns={"libelle"})})
  * @ORM\Entity
  * @UniqueEntity(fields="libelle", message=" Cet artiste existe déjà...")
  */
@@ -31,20 +31,6 @@ class Artiste
      * @ORM\JoinColumn(name="artiste", referencedColumnName="artiste")
      */
     private $disques;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prenom", type="string", length=50, nullable=false)
-     */
-    private $prenom = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=250, nullable=false)
-     */
-    private $nom = '';
 
     /**
      * @var string
@@ -97,52 +83,6 @@ class Artiste
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('suppr', false));
         return $this->disques->matching($criteria);
-    }
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     * @return Artiste
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    /**
-     * Set nom
-     *
-     * @param string $nom
-     * @return Artiste
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    /**
-     * Get nom
-     *
-     * @return string
-     */
-    public function getNom()
-    {
-        return $this->nom;
     }
 
     /**

@@ -16,11 +16,11 @@ class ArtisteType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('siteweb','text', array('required' => false))
-            ->add('myspace','text', array('required' => false))
+            ->add('siteweb','text', array('required' => false, 'label' => "Site Internet"))
+            ->add('myspace','text', array('required' => false, 'label' => "Site d'écoute/réseau social"))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
