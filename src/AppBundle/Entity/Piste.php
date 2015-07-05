@@ -104,7 +104,7 @@ class Piste
     /**
      * Get piste
      *
-     * @return integer 
+     * @return integer
      */
     public function getPiste()
     {
@@ -127,7 +127,7 @@ class Piste
     /**
      * Get cd
      *
-     * @return integer 
+     * @return integer
      */
     public function getCd()
     {
@@ -150,7 +150,7 @@ class Piste
     /**
      * Get disque
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisque()
     {
@@ -173,7 +173,7 @@ class Piste
     /**
      * Get titre
      *
-     * @return string 
+     * @return string
      */
     public function getTitre()
     {
@@ -196,7 +196,7 @@ class Piste
     /**
      * Get artiste
      *
-     * @return integer 
+     * @return integer
      */
     public function getArtiste()
     {
@@ -219,7 +219,7 @@ class Piste
     /**
      * Get langue
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getLangue()
     {
@@ -242,7 +242,7 @@ class Piste
     /**
      * Get anim
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAnim()
     {
@@ -265,32 +265,9 @@ class Piste
     /**
      * Get rivendell
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getRivendell()
-    {
-        return $this->rivendell;
-    }
-
-    /**
-     * Set rivendell
-     *
-     * @param boolean $rivendell
-     * @return Piste
-     */
-    public function setPaulo($rivendell)
-    {
-        $this->rivendell = $rivendell;
-
-        return $this;
-    }
-
-    /**
-     * Get rivendell
-     *
-     * @return boolean 
-     */
-    public function getPaulo()
     {
         return $this->rivendell;
     }
@@ -311,17 +288,38 @@ class Piste
     /**
      * Get star
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getStar()
     {
         return $this->star;
     }
 
+    public function chooseStar() {
+        $this->anim = false;
+        $this->rivendell = false;
+        $this->star = true;
+        return $this;
+    }
+
+    public function chooseAnim() {
+        $this->anim = true;
+        $this->rivendell = false;
+        $this->star = false;
+        return $this;
+    }
+
+    public function chooseRivendell() {
+        $this->anim = false;
+        $this->rivendell = true;
+        $this->star = false;
+        return $this;
+    }
+
     /**
      * Get dbkey
      *
-     * @return integer 
+     * @return integer
      */
     public function getDbkey()
     {

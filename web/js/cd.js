@@ -54,7 +54,7 @@
 			  type: 'GET',
 			  data: 'term='+$("#artiste").val()
 			}).done(function(tab_exact){
-				if ( tab_exact.length == 1) { 
+				if ( tab_exact.length == 1) {
 					$("#artiste_hidden").val(tab_exact[0].num);
 				} else {
 		  			if(confirm("Cet Artiste semble ne pas exister... Le créer ?")) {
@@ -76,7 +76,7 @@
 			  type: 'GET',
 			  data: 'term='+htmlItem.val()
 			}).done(function(tab_exact){
-				if ( tab_exact.length == 1) { 
+				if ( tab_exact.length == 1) {
 					hiddenItem.val(tab_exact[0].num);
 				} else {
 		  			if(confirm("Le Label "+ htmlItem.val() +" semble ne pas exister... Le créer ?")) {
@@ -99,7 +99,7 @@
   	$("#nbPiste").change(function() {
   		var nbPiste = $("#nbPiste").val();
   		var table = $("#pistes > tbody");
-  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN' class='artiste_autocomplete'></td><td><input type='checkbox' class='fr_input' name='fr_NNN'></td><td><input class='check_anim' type='checkbox' name='anim_NNN'></td><td><input class='check_paulo' type='checkbox' name='paulo_NNN'></td><td><input class='check_star' type='checkbox' name='star_NNN'></td></tr>";
+  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN' class='artiste_autocomplete'></td><td><input type='checkbox' class='fr_input' name='fr_NNN'></td><td><input type='radio' name='rot_NNN' value='anim'></td><td><input type='radio' name='rot_NNN' value='rivendell'></td><td><input class='k_star' type='radio' name='rot_NNN' value='star'></td></tr>";
   		table.empty();
   		for (var i = 1; i <= nbPiste; i++) {
   			table.append(template.replace(/NNN/g, i));
@@ -150,19 +150,5 @@
 					alert("La pochette n'a pas pu être supprimé !")
 				}
 			})
-		}
-	})
-
-
-	$(".check_star").change(function(){
-		if($(this).is(":checked")) {
-			$(this).parent().parent("tr").children("td").children(".check_paulo").prop("checked",true);
-			$(this).parent().parent("tr").children("td").children(".check_anim").prop("checked",true);
-		}
-	});
-
-	$(".check_paulo").change(function(){
-		if($(this).is(":checked")) {
-			$(this).parent().parent("tr").children("td").children(".check_anim").prop("checked",true);
 		}
 	});

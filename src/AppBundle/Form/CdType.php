@@ -30,7 +30,7 @@ class CdType extends AbstractType
             ->add('refLabel','text', array('required' => false))
             ->add('dvd','checkbox', array('required' => false))
             ->add('etiquette','checkbox', array('required' => false))
-            ->add('paulo','checkbox', array('required' => false))
+            ->add('rivendell','checkbox', array('required' => false))
             ->add('support', 'entity', array(
                     'class' => 'AppBundle:Support',
                     'property' => 'libelle',
@@ -118,7 +118,7 @@ class CdType extends AbstractType
             ->add('file')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

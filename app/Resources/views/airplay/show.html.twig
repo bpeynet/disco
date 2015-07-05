@@ -33,7 +33,7 @@
 					<th>Anim</th>
 				{% endif %}
 				<th>Genre</th>
-			</tr>	
+			</tr>
 		</thead>
 		{% for ligne in liste %}
 			<tr>
@@ -48,12 +48,12 @@
 					<td>{% if ligne.cd.rotation and ligne.cd.rotation.rotation %}{{ligne.cd.rotation.libelle}}{% endif %}</td>
 					<td>{% if ligne.cd.notemoy %}{{ligne.cd.notemoy|round(1,'ceil')}}{% endif %}</td>
 					<td>{% set star = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.star > 0 %}{% set star = star+1 %}{% endif %}{% endfor %}{{star}}</td>
-					<td>{% set paulo = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.paulo > 0 %}{% set paulo = paulo+1 %}{% endif %}{% endfor %}{{paulo}}</td>
+					<td>{% set rivendell = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.rivendell > 0 %}{% set rivendell = rivendell+1 %}{% endif %}{% endfor %}{{rivendell}}</td>
 					<td>{% set anim = 0 %}{% for piste in ligne.cd.pistes %}{% if piste.anim > 0 %}{% set anim = anim+1 %}{% endif %}{% endfor %}{{anim}}</td>
 				{% endif %}
 				<td>{{ligne.cd.genre.libelle}}</td>
 
-			</tr>	
+			</tr>
 		{% endfor %}
 	</table>
 </div>

@@ -302,22 +302,22 @@ class CdController extends DiscoController
                     $p_artiste = $cd->getArtiste();
                 } else {
                     $p_artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($request->request->get('artiste_'.$i));
-                    if(empty($p_artiste)) { $p_artiste = $cd->getArtiste(); }
+                    if(empty($p_artiste)) {
+                        $p_artiste = $cd->getArtiste();
+                    }
                 }
 
                 $piste->setArtiste($p_artiste);
                 if($request->request->get('fr_'.$i)) {
                     $piste->setLangue(true);
-                } else { $piste->setLangue(false); }
-                if($request->request->get('anim_'.$i)) {
-                    $piste->setAnim(true);
-                } else { $piste->setAnim(false); }
-                if($request->request->get('paulo_'.$i)) {
-                    $piste->setPaulo(true);
-                } else { $piste->setPaulo(false); }
-                if($request->request->get('star_'.$i)) {
-                    $piste->setStar(true);
-                } else { $piste->setStar(false); }
+                } else {
+                    $piste->setLangue(false);
+                }
+                switch($request->request->get('rot_'.$i)) {
+                    case 'anim': $piste->chooseAnim(); break;
+                    case 'rivendell': $piste->chooseRivendell(); break;
+                    case 'star': $piste->chooseStar(); break;
+                }
 
                 $em->persist($piste);
             }
@@ -342,9 +342,9 @@ class CdController extends DiscoController
                     if($piste->getLangue()){
                         $pistes[$i]['fr'] = 1;
                     } else { $pistes[$i]['fr'] = 0; }
-                    if($piste->getPaulo()){
-                        $pistes[$i]['paulo'] = 1;
-                    } else { $pistes[$i]['paulo'] = 0; }
+                    if($piste->getRivendell()){
+                        $pistes[$i]['rivendell'] = 1;
+                    } else { $pistes[$i]['rivendell'] = 0; }
                     if($piste->getStar()){
                         $pistes[$i]['star'] = 1;
                     } else { $pistes[$i]['star'] = 0; }
@@ -437,16 +437,15 @@ class CdController extends DiscoController
                 $piste->setArtiste($p_artiste);
                 if($request->request->get('fr_'.$i)) {
                     $piste->setLangue(true);
-                } else { $piste->setLangue(false); }
-                if($request->request->get('anim_'.$i)) {
-                    $piste->setAnim(true);
-                } else { $piste->setAnim(false); }
-                if($request->request->get('paulo_'.$i)) {
-                    $piste->setPaulo(true);
-                } else { $piste->setPaulo(false); }
-                if($request->request->get('star_'.$i)) {
-                    $piste->setStar(true);
-                } else { $piste->setStar(false); }
+                } else {
+                    $piste->setLangue(false);
+                }
+
+                switch($request->request->get('rot_'.$i)) {
+                    case 'anim': $piste->chooseAnim(); break;
+                    case 'rivendell': $piste->chooseRivendell(); break;
+                    case 'star': $piste->chooseStar(); break;
+                }
 
                 $em->persist($piste);
             }
@@ -487,15 +486,15 @@ class CdController extends DiscoController
                 if($request->request->get('fr_'.$i)){
                     $pistes[$i]['fr'] = 1;
                 } else { $pistes[$i]['fr'] = 0; }
-                if($request->request->get('paulo_'.$i)){
-                    $pistes[$i]['paulo'] = 1;
-                } else { $pistes[$i]['paulo'] = 0; }
-                if($request->request->get('star_'.$i)){
-                    $pistes[$i]['star'] = 1;
-                } else { $pistes[$i]['star'] = 0; }
-                if($request->request->get('anim_'.$i)){
-                    $pistes[$i]['anim'] = 1;
-                } else { $pistes[$i]['anim'] = 0; }
+
+                $pistes[$i]['rivendell'] = 0;
+                $pistes[$i]['star'] = 0;
+                $pistes[$i]['anim'] = 0;
+                switch($request->request->get('rot_'.$i)) {
+                    case 'anim': $pistes[$i]['anim'] = 1; break;
+                    case 'rivendell':  $pistes[$i]['rivendell'] = 1; break;
+                    case 'star': $pistes[$i]['star'] = 1; break;
+                }
             }
         }
         return $pistes;
@@ -718,15 +717,17 @@ class CdController extends DiscoController
         }
 
         $tab['star'] = 0;
-        $tab['paulo'] = 0;
+        $tab['rivendell'] = 0;
         $tab['anim'] = 0;
 
         foreach ($cd->getPistes() as $key => $piste) {
             if($piste->getStar()) {
                 $tab['star']++;
-            }if($piste->getPaulo()) {
-                $tab['paulo']++;
-            }if($piste->getAnim()) {
+            }
+            if($piste->getRivendell()) {
+                $tab['rivendell']++;
+            }
+            if($piste->getAnim()) {
                 $tab['anim']++;
             }
         }

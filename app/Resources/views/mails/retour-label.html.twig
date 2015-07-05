@@ -2,7 +2,7 @@ Bonjour,<br>
 <br>
 Le disque {{cd.titre}} - {{cd.artiste.libelle}} {% if cd.refLabel %}(Ref. {{cd.refLabel}}){% endif %} {% if cd.rotation %}{{cd.rotation.retourLabel}}{% else %}n'a pas été retenu dans la diffusion régulière de Radio Campus Grenoble.{% endif %}<br>
 Pistes en rotation :<br>
-{% for piste in cd.pistes %}{% if piste.paulo %}{{piste.piste}} {% endif %}{% endfor %}<br>
+{% for piste in cd.pistes %}{% if piste.rivendell %}{{piste.piste}} {% endif %}{% endfor %}<br>
 <br>
 {% if cd.retourComment %}
 Commentaire du programmateur :<br>

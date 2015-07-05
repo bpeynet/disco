@@ -4,7 +4,7 @@
 {% block body %}
 	<h1>
 		{% if cd.img %}<img src="{{asset(cd.getImgWebPath)}}" style="max-height:2em;max-width:2em;">{% endif %}
-		Fiche de disque 
+		Fiche de disque
 		<small>
 			{{cd.getTitre}} de {{cd.getArtiste.getLibelle}} (#{{cd.getCD}})
 			{% if is_granted('ROLE_PROGRA') %}
@@ -17,7 +17,7 @@
 			{% endif %}
 		</small>
 	</h1>
-	
+
 	<div class="label label-default">Fiche saisie le {{cd.getDsaisie|date("d M Y")}}</div>
 
 	<span class="label label-{% if cd.retourLabel %}success{% else %}warning{% endif %}">{% if cd.retourLabel %}Retour effectué{% elseif not cd.rotation  %}Délivré à un Progra.{% else %}Retour en attente{% endif %}</span>
@@ -58,19 +58,19 @@
 						<td> {{cd.getAnnee}}</td>
 					</tr>
 					{% endif %}
-					{% if cd.getLabel and cd.getLabel.getLabel != 0 %} 
+					{% if cd.getLabel and cd.getLabel.getLabel != 0 %}
 					<tr>
 						<th>Label</th>
 						<td><a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a></td>
 					</tr>
 					{% endif %}
-					{% if cd.getMaison and cd.getMaison.getLabel != 0 %} 
+					{% if cd.getMaison and cd.getMaison.getLabel != 0 %}
 					<tr>
 						<th>Maison</th>
 						<td><a href="{{ path('showLabel',{'id':cd.getMaison.getLabel}) }}">{{cd.getMaison.getLibelle}}</a></td>
 					</tr>
 					{% endif %}
-					{% if cd.getDistrib and cd.getDistrib.getLabel != 0 %} 
+					{% if cd.getDistrib and cd.getDistrib.getLabel != 0 %}
 					<tr>
 						<th>Distributeur</th>
 						<td><a href="{{ path('showLabel',{'id':cd.getDistrib.getLabel}) }}">{{cd.getDistrib.getLibelle}}</a></td>
@@ -111,7 +111,7 @@
 						<th>Etiquetté</th>
 					</tr>
 					{% endif %}
-					{%if cd.getPaulo%}
+					{%if cd.getRivendell%}
 					<tr>
 						<th>Enregistré dans Rivendel</th>
 					</tr>
@@ -195,7 +195,7 @@
 								<td>{% if piste.getArtiste %}{{piste.getArtiste.getLibelle}}{% else %}{{cd.getArtiste.getLibelle}}{% endif %}</td>
 								<td {% if piste.getLangue %}class="success"{% endif %}  style="width:60px"></td>
 								<td class="{% if piste.getAnim %}success{% endif %}"  style="width:60px"></td>
-								<td class="{% if piste.getPaulo %}success{% endif %}"  style="width:60px"></td>
+								<td class="{% if piste.getRivendell %}success{% endif %}"  style="width:60px"></td>
 								<td class="{% if piste.getStar %}success{% endif %}"  style="width:60px"></td>
 							</tr>
 						{% endfor %}
@@ -264,7 +264,7 @@
 								{% for commentaire in cd.getComments.toArray %}
 									<tr  style="width:100%;" id="comment_{{commentaire.getDbkey}}" class="comment">
 										<td><strong>{{commentaire.getUser.getLibelle}}</strong> - {{commentaire.getChrono|date("d/m/Y - H:i")}}<br>{{commentaire.getComment}}</td>
-									</tr>		
+									</tr>
 								{% endfor %}
 							{% endif %}
 							</tbody>
@@ -274,7 +274,7 @@
 				</div>
 			</div>
 			<div id="divers">
-					
+
 				<h4>Historique des emprunts</h4>
 				<table class="table table-striped">
 					<thead>
@@ -304,10 +304,10 @@
 
 			</div>
 			<div id="retLabel">
-					
+
 					<h4>Retour Label : <span class="label label-{%if cd.getRetourlabel%}success{% else %}warning{% endif %}">{%if cd.getRetourlabel%}Effectué{% else %}En attente{% endif %}</span></h4>
 					{% if cd.getRetourmail %}<h5>Mail de retour</h5><span>{{cd.getRetourmail}}</span>{% endif %}
-					
+
 					<form class="form-horizontal col-md-6" method="post" action="{{path('editRetourLabel',{'id':cd.getCd})}}">
 						<div class="form-group">
 							<textarea name="retour_comment" rows="8" style="width:100%; resize:vertical;">{{cd.getRetourComment}}</textarea>
@@ -351,7 +351,7 @@
 
 		if((".comment:first").length == 0) {
 			var last_comment = $(".comment:first").attr('id').replace('comment_', '');
-		} else {	
+		} else {
 			var last_comment = 1;
 		}
 
@@ -379,7 +379,7 @@
 					setTimeout(refreshComments,5000); /* rappel après 5 secondes = 5000 millisecondes */
 				  });
 		}
-		 
+
 		refreshComments();
 
 

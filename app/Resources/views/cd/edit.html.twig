@@ -52,7 +52,7 @@
 						<div class="col-md-6">
 							{{form_row(form.dvd)}}
 							{{form_row(form.etiquette)}}
-							{{form_row(form.paulo,{'label':'Rivendell'})}}
+							{{form_row(form.rivendell)}}
 							{{form_row(form.langue)}}
 							{{form_row(form.support)}}
 							{{form_row(form.type)}}
@@ -107,9 +107,9 @@
 												<td><input name='titre_{{id_piste}}' value='{{piste.titre}}'></td>
 												<td><input id='artiste_{{id_piste}}' name='artiste_{{id_piste}}' value='{% if piste.artiste %}{{piste.artiste.libelle}}{% endif %}' class='artiste_autocomplete'></td>
 												<td><input type='checkbox' class='fr_input' name='fr_{{id_piste}}' {% if piste.fr %}checked{% endif %}></td>
-												<td><input class='check_anim' type='checkbox' name='anim_{{id_piste}}' {% if piste.anim %}checked{% endif %}></td>
-												<td><input class='check_paulo' type='checkbox' name='paulo_{{id_piste}}' {% if piste.paulo %}checked{% endif %}></td>
-												<td><input class='check_star' type='checkbox' name='star_{{id_piste}}' {% if piste.star %}checked{% endif %}></td>
+												<td><input type='radio' name='rot_{{id_piste}}' value='anim' {% if piste.anim %}checked{% endif %}></td>
+												<td><input type='radio' name='rot_{{id_piste}}' value='rivendell' {% if piste.rivendell %}checked{% endif %}></td>
+												<td><input type='radio' name='rot_{{id_piste}}' value='star' {% if piste.star %}checked{% endif %}></td>
 											</tr>
 											{% set id_piste = id_piste+1 %}
 										{% endfor %}

@@ -1018,29 +1018,6 @@ class Cd
     }
 
     /**
-     * Set paulo
-     *
-     * @param boolean $rivendell
-     * @return Cd
-     */
-    public function setPaulo($rivendell)
-    {
-        $this->rivendell = $rivendell;
-
-        return $this;
-    }
-
-    /**
-     * Get paulo
-     *
-     * @return boolean
-     */
-    public function getPaulo()
-    {
-        return $this->rivendell;
-    }
-
-    /**
      * Set rivendell
      *
      * @param boolean $rivendell
