@@ -140,7 +140,7 @@
   	});
 
 	$("#pochette_delete").click(function(){
-		id = "{{cd.cd}}"
+		id = $(this).attr('num');
 		if(confirm("Supprimer la pochette actuelle ?")) {
 			route = Routing.generate('removePochette', {'id': id})
 			$.get(route, function(retour){

@@ -21,3 +21,6 @@ parameters:
 
     listinglimit:    50
     autocompletelimit: 20
+
+    #  path to CD covers, relative to our Entity folder, so slash at the end or beginning
+    upload_root_dir:     ../../../web

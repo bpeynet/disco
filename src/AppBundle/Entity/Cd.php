@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\AppBundle;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -1263,37 +1264,53 @@ class Cd
         $this->dsaisie = new \DateTime();
     }
 
+    public function getCoverFilename()
+    {
+        return 'cd_'.$this->cd.$this->img;
+    }
+
     public function getImgWebPath()
     {
-        return null === $this->img ? null : 'img/cd/cd_'.$this->cd.'.'.$this->img;
+        return null === $this->img ? null : 'img/cd/'.$this->getCoverFilename();
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->img ? null : $this->getUploadRootDir().DIRECTORY_SEPARATOR.$this->getCoverFilename();
     }
 
     protected function getUploadRootDir()
     {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __DIR__.DIRECTORY_SEPARATOR.join(DIRECTORY_SEPARATOR, array('..', '..', '..', 'web')).$this->getUploadDir(); // DIRECTORY_SEPARATOR
+        return __DIR__.DIRECTORY_SEPARATOR.AppBundle::getUploadRootDir().DIRECTORY_SEPARATOR.join(DIRECTORY_SEPARATOR, array('img', 'cd'));
     }
 
-    protected function getUploadDir()
-    {
-        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
-        // le document/image dans la vue.
-        return DIRECTORY_SEPARATOR.join(DIRECTORY_SEPARATOR, array('img', 'cd'));
-    }
+    private $toBeRemoved = null;
 
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * Si CdType a mis un upload dans $file, alors on doit enregistrer l'extension dans 'img'
+     * en passant cela forcera Doctrine a enregistrer l'entité et donc a appeler ensuite la callback 'upload()'
+     *
+     * on couvre aussi le cas où on upload une nouvelle image, mais avec la même extension:
+     * dans ce cas on ajoute un _ pour être sur que l'entité sera mise à jour (et donc, que upload() sera appelée)
+     * du coup, en cas de mise à jour de la cover le nouveau fichier n'a jamais le même chemin que l'ancien
      */
-    public function preUpload()
+    public function prepareUpload()
     {
         if (null !== $this->file) {
-            // faites ce que vous voulez pour générer un nom unique
-            $this->setImg($this->file->guessExtension());
+            $current = $this->getImg();
+            $this->toBeRemoved = $this->getAbsolutePath();
+
+            $this->setImg('.'.$this->file->guessExtension());
+
+            if ($current == $this->getImg()) {
+                $this->setImg('_'.$current);
+            }
         }
     }
 
     /**
+     * L'éventuel fichier envoyé est enregistré dans cette callback, pour ne le faire que si l'enregistrement en DB s'est bien passé
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
      */
@@ -1303,24 +1320,14 @@ class Cd
             return;
         }
 
-        // s'il y a une erreur lors du déplacement du fichier, une exception
-        // va automatiquement être lancée par la méthode move(). Cela va empêcher
-        // proprement l'entité d'être persistée dans la base de données si
-        // erreur il y a
+        // en cas d'erreur, move lance une exception qui bloquera l'enregistrement
         $this->file->move($this->getUploadRootDir(), $this->getAbsolutePath());
 
+        if ($this->toBeRemoved != null) {
+            unlink($this->toBeRemoved);
+        }
+
         $this->file = null;
-    }
-
-    // propriété utilisé temporairement pour la suppression
-    private $filenameForRemove;
-
-    /**
-     * @ORM\PreRemove()
-     */
-    public function storeFilenameForRemove()
-    {
-        $this->filenameForRemove = $this->getAbsolutePath();
     }
 
     /**
@@ -1333,10 +1340,4 @@ class Cd
             unlink($file);
         }
     }
-
-    public function getAbsolutePath()
-    {
-        return null === $this->img ? null : $this->getUploadRootDir().DIRECTORY_SEPARATOR.'cd_'.$this->cd.'.'.$this->img;
-    }
-
 }

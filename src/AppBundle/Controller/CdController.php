@@ -255,7 +255,7 @@ class CdController extends DiscoController
         }
 
         if ($form->isValid()) {
-            $cd->preUpload();
+            $cd->prepareUpload();
 
             $artiste = $em->getRepository('AppBundle:Artiste')->findOneByLibelle($req['artiste']);
 
