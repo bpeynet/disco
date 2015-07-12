@@ -97,7 +97,7 @@ class CdType extends AbstractType
                     'property' => 'libelle',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('u')
-                            ->orderBy('u.libelle', 'ASC');
+                            ->orderBy('u.prenom', 'ASC');
                         },
                     'empty_value' => '',
                     'required' => false

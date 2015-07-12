@@ -90,13 +90,6 @@ class User implements UserInterface
     private $login = '';
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="alerte_progra", type="boolean", nullable=false)
-     */
-    private $alerteProgra = '0';
-
-    /**
      *  @var Role[]
      *
      * @ORM\Column(name="role", type="string", nullable=false)
@@ -346,29 +339,6 @@ class User implements UserInterface
 
     public function getLibelle() {
       return $this->getPrenom()." ".$this->getNom();
-    }
-
-    /**
-     * Set alerteProgra
-     *
-     * @param boolean $alerteProgra
-     * @return User
-     */
-    public function setAlerteProgra($alerteProgra)
-    {
-        $this->alerteProgra = $alerteProgra;
-
-        return $this;
-    }
-
-    /**
-     * Get alerteProgra
-     *
-     * @return boolean
-     */
-    public function getAlerteProgra()
-    {
-        return $this->alerteProgra;
     }
 
     /**

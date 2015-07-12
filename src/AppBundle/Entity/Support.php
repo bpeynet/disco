@@ -44,13 +44,6 @@ class Support
     /**
      * @var boolean
      *
-     * @ORM\Column(name="alerte_progra", type="boolean", nullable=false)
-     */
-    private $alerteProgra = '0';
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="recep", type="boolean", nullable=false)
      */
     private $recep = '1';
@@ -71,7 +64,7 @@ class Support
     /**
      * Get disques
      *
-     * @return ArrayCollection 
+     * @return ArrayCollection
      */
     public function getDisques()
     {
@@ -94,7 +87,7 @@ class Support
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -117,34 +110,11 @@ class Support
     /**
      * Get actif
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActif()
     {
         return $this->actif;
-    }
-
-    /**
-     * Set alerteProgra
-     *
-     * @param boolean $alerteProgra
-     * @return Support
-     */
-    public function setAlerteProgra($alerteProgra)
-    {
-        $this->alerteProgra = $alerteProgra;
-
-        return $this;
-    }
-
-    /**
-     * Get alerteProgra
-     *
-     * @return boolean 
-     */
-    public function getAlerteProgra()
-    {
-        return $this->alerteProgra;
     }
 
     /**
@@ -163,7 +133,7 @@ class Support
     /**
      * Get recep
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getRecep()
     {
@@ -173,7 +143,7 @@ class Support
     /**
      * Get support
      *
-     * @return integer 
+     * @return integer
      */
     public function getSupport()
     {
