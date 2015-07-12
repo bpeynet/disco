@@ -8,6 +8,12 @@ Requiert PHP 5.5
 
 **Le développement est encore en cours**.
 
+## Pour en faire une nouvelle installation
+
+Créer les tables dans la base de données et importer les données de base (TODO: le fichier SQL).
+
+TODO: action de création du premier utilisateur.
+
 ## Licence
 
 Disco est distribuée sous licence MIT (voir License.md).
