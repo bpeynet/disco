@@ -51,13 +51,6 @@ class CdComment
      */
     private $cd = '0';
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_forum", type="integer", nullable=false)
-     */
-    private $idForum = '0';
-
 
 
     /**
@@ -76,7 +69,7 @@ class CdComment
     /**
      * Get chrono
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getChrono()
     {
@@ -99,7 +92,7 @@ class CdComment
     /**
      * Get user
      *
-     * @return User 
+     * @return User
      */
     public function getUser()
     {
@@ -122,7 +115,7 @@ class CdComment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -145,7 +138,7 @@ class CdComment
     /**
      * Get cd
      *
-     * @return integer 
+     * @return integer
      */
     public function getCd()
     {
@@ -153,32 +146,9 @@ class CdComment
     }
 
     /**
-     * Set idForum
-     *
-     * @param integer $idForum
-     * @return CdComment
-     */
-    public function setIdForum($idForum)
-    {
-        $this->idForum = $idForum;
-
-        return $this;
-    }
-
-    /**
-     * Get idForum
-     *
-     * @return integer 
-     */
-    public function getIdForum()
-    {
-        return $this->idForum;
-    }
-
-    /**
      * Get dbkey
      *
-     * @return integer 
+     * @return integer
      */
     public function getDbkey()
     {
