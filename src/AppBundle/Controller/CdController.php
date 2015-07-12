@@ -140,7 +140,7 @@ class CdController extends DiscoController
             ->orderBy('cd.dsaisie', 'ASC')
             ->orderBy('cd.userProgra', 'ASC')
             ->orderBy('cd.rotation', 'ASC')
-            ->setMaxResults(100)
+            ->setMaxResults($this->container->getParameter('listinglimit'))
             ->getQuery()
             ->getResult();
 
@@ -1017,4 +1017,3 @@ class CdController extends DiscoController
     }
 
 }
-
