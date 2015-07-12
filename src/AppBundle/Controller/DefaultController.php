@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class DefaultController extends DiscoController
 {
-
     /**
      * @Route("/test/mail/{id}", name="testMail")
      */
@@ -48,45 +47,47 @@ class DefaultController extends DiscoController
             return $this->redirect($this->generateUrl('logout'));
         }
 
-        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être identifié.');
 
         $results = array();
         $q = $request->query->get('q');
         if ($q) {
-            $em = $this->getDoctrine()->getManager();
-
-            $max = 50;
-
-            $results = $em->getRepository("AppBundle:Cd")->createQueryBuilder('c')
-                ->where('c.titre LIKE :titre')
-				->setParameter('titre', "%$q%")
-				->setMaxResults($max)
-				->getQuery()
-				->getResult();
-
-            if (count($results) < $max) {
-                $results = array_merge($results,
-                    $em->getRepository("AppBundle:Artiste")->createQueryBuilder('a')
-                        ->where('a.libelle LIKE :lib')
-                        ->setParameter('lib', "%$q%")
-                        ->setMaxResults($max - count($results))
-                        ->getQuery()
-                        ->getResult());
-            }
-
-            if (count($results) < $max) {
-                $results = array_merge($results,
-                    $em->getRepository("AppBundle:Label")->createQueryBuilder('l')
-                        ->where('l.libelle LIKE :lib')
-                        ->setParameter('lib', "%$q%")
-                        ->setMaxResults($max - count($results))
-                        ->getQuery()
-                        ->getResult());
-            }
+          $results = $this->generalSearch($q);
         }
 
         return $this->render('default/search.html.twig', array('results' => $results, 'q' => $q));
     }
 
-}
+    private function generalSearch($q, $max = 50)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $results = $em->getRepository("AppBundle:Cd")->createQueryBuilder('c')
+                    ->where('c.titre LIKE :titre')
+                    ->setParameter('titre', "%$q%")
+                    ->setMaxResults($max)
+                    ->getQuery()
+                    ->getResult();
 
+      if (count($results) < $max) {
+          $results = array_merge($results,
+              $em->getRepository("AppBundle:Artiste")->createQueryBuilder('a')
+                  ->where('a.libelle LIKE :lib')
+                  ->setParameter('lib', "%$q%")
+                  ->setMaxResults($max - count($results))
+                  ->getQuery()
+                  ->getResult());
+      }
+
+      if (count($results) < $max) {
+          $results = array_merge($results,
+              $em->getRepository("AppBundle:Label")->createQueryBuilder('l')
+                  ->where('l.libelle LIKE :lib')
+                  ->setParameter('lib', "%$q%")
+                  ->setMaxResults($max - count($results))
+                  ->getQuery()
+                  ->getResult());
+      }
+
+      return $results;
+    }
+}
