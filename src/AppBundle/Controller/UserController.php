@@ -14,11 +14,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UserController extends DiscoController
 {
     /**
-     * @Route("/user/delete/{id}", name="deleteUser", options={"expose"=true})
+     * @Route("/user/disable/{id}", name="disableUser", options={"expose"=true})
      */
-    public function deleteAction($id)
+    public function disableAction($id)
     {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Seul un admin peut supprimer un utilisateur.');
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Seul un admin peut désactiver un compte utilisateur.');
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('AppBundle:User')->find($id);
 
@@ -28,11 +28,12 @@ class UserController extends DiscoController
             );
         }
 
-        $this->discoLog("a supprimé ".$user->getUsername());
-        $em->remove($user);
+        $this->discoLog("a désactivé ".$user->getUsername());
+        $user->setInactif(new \DateTime());
+        $user->setRoles(array("ROLE_INACTIF"));
         $em->flush();
 
-        $this->addFlash('success','Utilisateur supprimé.');
+        $this->addFlash('success','Compte utilisateur désactivé.');
         return $this->redirect($this->generateUrl('admin'));
     }
 
@@ -142,9 +143,6 @@ class UserController extends DiscoController
                     $user->setInactif(null);
                 }
                 $user->setRoles($request->request->get('role'));
-                $user->setLibelle($user->getPrenom()." ".$user->getNom());
-
-                $em->persist($user);
                 $em->flush();
 
                 $this->discoLog("a édité ".$user->getUsername());
@@ -208,7 +206,6 @@ class UserController extends DiscoController
                     $user->setPrenom(ucfirst(strtolower($user->getPrenom())));
                     $user->setNom(strtoupper($user->getNom()));
                     $user->setRoles($request->request->get('role'));
-                    $user->setLibelle($user->getPrenom()." ".$user->getNom());
 
                     $em->persist($user);
                     $em->flush();
@@ -226,4 +223,3 @@ class UserController extends DiscoController
         return $this->render('user/create.html.twig',array('form'=>$form->createView()));
     }
 }
-

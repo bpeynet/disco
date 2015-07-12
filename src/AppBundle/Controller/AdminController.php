@@ -13,28 +13,31 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class AdminController extends DiscoController
 {
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/admin/{showInactifs}", name="admin")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $showInactifs = false)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'L\'administration vous est interdite.');
+        
+        $em = $this->getDoctrine()->getManager();
 
-        $doctrine = $this->getDoctrine();
-        $em = $doctrine->getManager();
+        $users = $em->getRepository('AppBundle:User')->createQueryBuilder('u');
 
-        $users = $em->getRepository('AppBundle:User')->createQueryBuilder('u')
-            ->orderBy('u.libelle','ASC')
-            ->getQuery()
-            ->getResult();
+        $showInactifs = $showInactifs && true;
 
-        $roles = $em->getRepository('AppBundle:User')->createQueryBuilder('r')
-            ->select('DISTINCT r.roles')
+        if ($showInactifs) {
+          $users = $users->where('u.inactif IS NOT NULL');
+        } else {
+          $users = $users->where('u.inactif IS NULL');
+        }
+
+        $users = $users->orderBy('u.prenom','ASC')
             ->getQuery()
             ->getResult();
 
         return $this->render('admin/panel.html.twig',array(
-                'users'=>$users,
-                'roles'=>$roles
+                'users' => $users,
+                'showInactifs' => $showInactifs
             ));
     }
 

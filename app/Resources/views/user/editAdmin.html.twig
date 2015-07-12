@@ -1,10 +1,10 @@
-{% block title %}Edition de l'Utilisateur {{user.getLibelle}}{% endblock %}
+{% block title %}Edition du compte - {{user.getLibelle}}{% endblock %}
 {% extends 'base.html.twig' %}
 
 {% block body %}
 
 	<fieldset>
-		<legend>Edition d'Utilisateur<small> {{user.getLibelle}}</small></legend>
+		<legend>Edition du compte - <small>{{user.getLibelle}}</small></legend>
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
 		{{form_start(form)}}
 			<div class="row">

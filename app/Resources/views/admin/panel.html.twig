@@ -7,6 +7,14 @@
 	<div class="row">
 		<h1>Liste des utilisateurs <a href="{{path('createUser')}}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un Utilisateur</a></h1>
 
+		<p>
+			{% if showInactifs %}
+				<a href="{{path('admin')}}">Actifs</a> | Inactifs (anciens)
+			{% else %}
+				Actifs | <a href="{{path('admin', {'showInactifs':1})}}">Inactifs (anciens)</a>
+			{% endif %}
+		</p>
+
 		{% if users %}
 			<div class="col-md-6 table-responsive">
 				<table class="table table-striped">
@@ -20,16 +28,18 @@
 					</thead>
                     <tbody>
 					{% for user in users %}
+						{% set role = user.getRoles[0] %}
 						<tr onclick="window.location.href='{{path('showUser',{'id':user.user})}}';">
-							<td>{{user.getUser}}</td>
-							<td>{{user.getLibelle}}</td>
+							<td class="userId">{{user.getUser}}</td>
+							<td class="userLibelle">{{user.getLibelle}}</td>
 							<td>
 								<a href="{{path('showUser',{'id':user.getUser})}}"><span title="Regarder" class="glyphicon glyphicon-eye-open"></span></a>
 								<a href="{{path('editUser',{'id':user.getUser})}}"><span title="Editer" class="glyphicon glyphicon-edit"></span></a>
-								<a href="#" onclick="confirmDelUser('{{user.getLibelle}}',{{user.getUser}})"><span title="Supprimer" class="glyphicon glyphicon-remove"></span></a>
+								{% if role != 'ROLE_INACTIF' %}
+									<a href="#" class="disableButton"><span title="Désactiver" class="glyphicon glyphicon-remove"></span></a>
+								{% endif %}
 							</td>
 							<td>
-								{%set role = user.getRoles[0]%}
 								{% if role == 'ROLE_INACTIF' %}
 									Inactif (depuis le {{user.inactif|date('d/m/Y')}})
 								{% elseif role == 'ROLE_USER' %}
@@ -48,4 +58,19 @@
 		{% endif %}
 	</div>
 
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+	$('.disableButton').click(function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		var uid = $(this).closest('tr').find('.userId').text();
+		var uname = $(this).closest('tr').find('.userLibelle').text();
+		var route = Routing.generate('disableUser', {'id': uid})
+		if (confirm("Désactiver le compte de "+uname+" ?" )) {
+		 	window.location.replace(route);
+		}
+	});
+</script>
 {% endblock %}

@@ -30,13 +30,6 @@ class User implements UserInterface
     private $disquesManipules;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="suppr", type="boolean", nullable=false)
-     */
-    private $suppr = '0';
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="inactif", type="date")
@@ -81,13 +74,6 @@ class User implements UserInterface
      * @ORM\Column(name="email", type="string", length=100, nullable=false)
      */
     private $email = '';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="libelle", type="string", length=400, nullable=false)
-     */
-    private $libelle = '';
 
     /**
      * @var string
@@ -138,29 +124,6 @@ class User implements UserInterface
     public function getDisquesmanipules()
     {
         return $this->disquesManipules;
-    }
-
-    /**
-     * Set suppr
-     *
-     * @param boolean $suppr
-     * @return User
-     */
-    public function setSuppr($suppr)
-    {
-        $this->suppr = $suppr;
-
-        return $this;
-    }
-
-    /**
-     * Get suppr
-     *
-     * @return boolean
-     */
-    public function getSuppr()
-    {
-        return $this->suppr;
     }
 
     /**
@@ -304,29 +267,6 @@ class User implements UserInterface
     }
 
     /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return User
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
-    /**
      * Set password
      *
      * @param string $password
@@ -384,7 +324,11 @@ class User implements UserInterface
      * @return User
      */
     public function setRoles($roles) {
-        $this->roles = $roles;
+        if (is_array($roles)) {
+          $this->roles = $roles[0];
+        } else {
+          $this->roles = $roles;
+        }
     }
 
     /**
@@ -396,8 +340,12 @@ class User implements UserInterface
         if(!empty($this->roles)) {
             return array($this->roles);
         } else {
-            return array('ROLE_USER');
+            return array();
         }
+    }
+
+    public function getLibelle() {
+      return $this->getPrenom()." ".$this->getNom();
     }
 
     /**
@@ -433,33 +381,8 @@ class User implements UserInterface
         return $this->user;
     }
 
-
-/*
-
-    public function serialize()
+    function eraseCredentials()
     {
-        return serialize(array(
-            $this->user,
-            $this->login,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ));
-    }
 
-    public function unserialize($serialized)
-    {
-        list (
-            $this->user,
-            $this->login,
-            $this->password,
-            // see section on salt below
-            // $this->salt
-        ) = unserialize($serialized);
-    }
-*/
-
-    public function eraseCredentials()
-    {
     }
 }

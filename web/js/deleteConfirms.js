@@ -1,8 +1,9 @@
 function confirmDelLabel(label,id) {
-		var route = Routing.generate('deleteLabel', {'id': id})
+	var route = Routing.generate('deleteLabel', {'id': id})
 	if (confirm("Supprimer le Label "+label+" ?" )) {
 	 	window.location.replace(route);
 	}
+	return false;
 }
 
 function confirmDelArtiste(artiste,id) {
@@ -10,12 +11,5 @@ function confirmDelArtiste(artiste,id) {
 	if (confirm("Supprimer l'Artiste "+artiste+" ?" )) {
 	 	window.location.replace(route);
 	}
-}
-
-
-function confirmDelUser(user,id) {
-	var route = Routing.generate('deleteUser', {'id': id})
-	if (confirm("Supprimer l'Utilisateur "+user+" ?" )) {
-	 	window.location.replace(route);
-	}
+	return false;
 }
