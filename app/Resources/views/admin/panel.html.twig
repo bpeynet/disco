@@ -6,12 +6,7 @@
 
 	<div class="row">
 		<h1>Liste des utilisateurs <a href="{{path('createUser')}}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Créer un Utilisateur</a></h1>
-		{% if app.user.getPassword|first != '$' %}
-			<a href="{{path('encryptPwd')}}">Encrypt Password</a>(à ne faire qu'une seule fois, a près avoir passé de plaintext au bon mode d'encrypt : <br>encoders:<br>
-		        AppBundle\Entity\User:<br>
-		            algorithm: bcrypt<br>
-		            cost: 12
-		{% endif %}
+
 		{% if users %}
 			<div class="col-md-6 table-responsive">
 				<table class="table table-striped">
