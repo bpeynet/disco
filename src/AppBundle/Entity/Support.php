@@ -35,20 +35,6 @@ class Support
     private $libelle = '';
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="actif", type="boolean", nullable=false)
-     */
-    private $actif = '0';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="recep", type="boolean", nullable=false)
-     */
-    private $recep = '1';
-
-    /**
      * Set disques
      *
      * @param ArrayCollection $disques
@@ -92,52 +78,6 @@ class Support
     public function getLibelle()
     {
         return $this->libelle;
-    }
-
-    /**
-     * Set actif
-     *
-     * @param boolean $actif
-     * @return Support
-     */
-    public function setActif($actif)
-    {
-        $this->actif = $actif;
-
-        return $this;
-    }
-
-    /**
-     * Get actif
-     *
-     * @return boolean
-     */
-    public function getActif()
-    {
-        return $this->actif;
-    }
-
-    /**
-     * Set recep
-     *
-     * @param boolean $recep
-     * @return Support
-     */
-    public function setRecep($recep)
-    {
-        $this->recep = $recep;
-
-        return $this;
-    }
-
-    /**
-     * Get recep
-     *
-     * @return boolean
-     */
-    public function getRecep()
-    {
-        return $this->recep;
     }
 
     /**
