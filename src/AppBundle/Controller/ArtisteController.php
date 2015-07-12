@@ -101,15 +101,15 @@ class ArtisteController extends DiscoController
 
         $em = $this->getDoctrine()->getManager();
         if($artiste->getDisques()->isEmpty()) {
-            $this->discoLog("a supprimé l'artiste ".$artiste->getArtiste()." - ".$artiste->getLibelle());
             $em->remove($artiste);
             $em->flush();
             $this->addFlash('success','Suppression effectuée !');
+            $this->discoLog("a supprimé l'artiste ".$artiste->getArtiste()." - ".$artiste->getLibelle());
             return $this->redirect($this->generateUrl('artiste'));
         } else {
-            $this->addFlash('error','Un Artiste lié à des disques ne peut pas être supprimé !');
+            $this->addFlash('error','Un artiste lié à des disques ne peut pas être supprimé !');
+            return $this->redirect($this->generateUrl('showArtiste',array('id'=>$id)));
         }
-        return $this->redirect('showArtiste',array('id'=>$artiste->getArtiste()));
     }
 
     /**
@@ -217,4 +217,3 @@ class ArtisteController extends DiscoController
     }
 
 }
-

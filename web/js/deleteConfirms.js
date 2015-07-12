@@ -13,3 +13,11 @@ function confirmDelArtiste(artiste,id) {
 	}
 	return false;
 }
+
+function confirmDelCd(titre,id) {
+	var route = Routing.generate('deleteCd', {'id': id})
+	if (confirm("Supprimer le disque "+titre+" ?" )) {
+	 	window.location.replace(route);
+	}
+	return false;
+}
