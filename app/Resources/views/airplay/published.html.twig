@@ -1,9 +1,14 @@
-<link rel="stylesheet" type="text/css" href="{{ asset('css/airplay.css') }}">
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/airplay.css') }}">
+</head>
+<body>
 {% if airplays %}
-<p>L’airplay est le classement des 40 albums et 15 ep’s/singles
-les plus défendus par l’équipe de programmation de la radio
-à retrouver sur www.campusgrenoble.org / onglet Airplay</p>
+<p>
+	L’airplay est le classement des 40 albums et 15 EPs/singles
+	les plus défendus par l’équipe de programmation de la radio.
+</p>
 {% set id = 0 %}
 {% for airplay in airplays %}
 	<h1>{{airplay.libelle}}</h1>
@@ -20,13 +25,13 @@ les plus défendus par l’équipe de programmation de la radio
 					</a>
 				</div>
 				<div class="artiste">
-					de 
+					de
 					<a href="">
 						{{ac.cd.artiste.libelle}}
 					</a>
 				</div>
 				<div class="label_cd">
-					Label : 
+					Label :
 					<a href="">
 						{% if ac.cd.label %}{{ac.cd.label.libelle}}{% elseif ac.cd.maison %}{{ac.cd.maison.libelle}}{% elseif ac.cd.distrib %}{{ac.cd.distrib.libelle}}{% endif %}
 					</a>
@@ -46,9 +51,9 @@ les plus défendus par l’équipe de programmation de la radio
 					{% endif %}
 				{% endfor %}
 				<strong>Pistes en diffusion ({{nbRotation}}) : </strong>{{pisteEnRotation|trim('/')}}
-				
+
 				<hr>
-				
+
 				<strong>Commentaire :</strong><br>
 				{{ac.cd.comment}}
 			</div>
@@ -67,8 +72,8 @@ les plus défendus par l’équipe de programmation de la radio
 					</a>
 				</div>
 			{% endif %}
-		</div>	
-		
+		</div>
+
 	{% endfor %}
 {% set id=id+1 %}
 {% endfor %}
@@ -81,12 +86,12 @@ les plus défendus par l’équipe de programmation de la radio
 <script type="text/javascript">
 
 	$(".minus").hide();
-		
+
 	$(".plus").click(function(){
 		$(this).parent().children(".infos").show('slide',{direction:'left'},400);
 		$(this).parent().children(".minus").show();
 		$(this).hide();
-	});	
+	});
 	$(".minus").click(function(){
 		$(this).parent().children(".infos").hide('slide',{direction:'left'},400);
 		$(this).parent().children(".plus").show();
@@ -94,3 +99,5 @@ les plus défendus par l’équipe de programmation de la radio
 	});
 
 </script>
+</body>
+</html>
