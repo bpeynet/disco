@@ -53,6 +53,9 @@ class DefaultController extends DiscoController
         $q = $request->query->get('q');
         if ($q) {
           $results = $this->generalSearch($q);
+          if (empty($results)) {
+            $this->addFlash('error',"Rien trouvé !");
+          }
         }
 
         return $this->render('default/search.html.twig', array('results' => $results, 'q' => $q));
