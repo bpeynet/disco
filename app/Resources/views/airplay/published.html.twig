@@ -15,7 +15,7 @@
 	{% for ac in listes[id] %}
 		<div class="ligne_classement">
 			<div class="pochette_cd">
-				<img src="{% if ac.cd.img %}{{asset('img/cd/cd_'~ac.cd.cd~'.'~ac.cd.img)}}{% else %}{{ asset('img/cd/default.png') }}{% endif %}" alt="pochette {% if ac.cd.img %}du CD{% else %}par défaut{% endif %}">
+				<img src="{% if ac.cd.img %}{{asset('img/cd/cd_'~ac.cd.cd~ac.cd.img)}}{% else %}{{ asset('img/cd/default.png') }}{% endif %}" alt="pochette {% if ac.cd.img %}du CD{% else %}par défaut{% endif %}">
 				<span class="rank_cd {% if ac.cd.getDsaisie|date("U") > "-3 months"|date("U") %}new_cd{% endif %}">#{{ac.ordre}}</span>
 			</div>
 			<div class="informations_cd">
