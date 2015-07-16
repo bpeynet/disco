@@ -94,11 +94,12 @@ class AirplayController extends DiscoController
     {
         $em = $this->getDoctrine()->getManager();
             $airplays = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
+                ->andWhere('a.publie = 1')
                 ->orderBy('a.airplay', 'DESC')
                 ->setMaxResults(2)
                 ->getQuery()
                 ->getResult();
-
+        // TODO: airplay albums forcément devant
         if(!$airplays) {
             $this->addFlash('error','Erreur lors du chargement des airplays.');
         } else {

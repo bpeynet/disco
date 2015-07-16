@@ -165,4 +165,18 @@ class Artiste
     {
         return $this->artiste;
     }
+
+    /**
+     * @return siteweb ou mySpace ou null
+     */
+    public function getUrl()
+    {
+      if (!empty($this->siteweb)) {
+        return $this->siteweb;
+      } elseif ($this->myspace) {
+        return $this->myspace;
+      } else {
+        return null;
+      }
+    }
 }

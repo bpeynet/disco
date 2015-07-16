@@ -15,47 +15,38 @@
 	{% for ac in listes[id] %}
 		<div class="ligne_classement">
 			<div class="pochette_cd">
-				<img src="{% if ac.cd.img %}{{asset('img/cd/cd_'~ac.cd.cd~ac.cd.img)}}{% else %}{{ asset('img/cd/default.png') }}{% endif %}" alt="pochette {% if ac.cd.img %}du CD{% else %}par défaut{% endif %}">
+				<img src="{{asset(ac.cd.getImgWebPath())}}" alt="pochette {{ac.cd.artiste.libelle}} - {{ac.cd.titre}}">
 				<span class="rank_cd {% if ac.cd.getDsaisie|date("U") > "-3 months"|date("U") %}new_cd{% endif %}">#{{ac.ordre}}</span>
 			</div>
 			<div class="informations_cd">
 				<div class="titre_cd">
-					<a href="">
-						{{ac.cd.titre}}
-					</a>
+					{{ac.cd.titre}}
 				</div>
 				<div class="artiste">
 					de
-					<a href="">
+					{% set url = ac.cd.artiste.getUrl() %}
+					{% if url %}<a href="{{url}}" target="_blank">{% endif %}
 						{{ac.cd.artiste.libelle}}
-					</a>
+					{% if url %}</a>{% endif %}
 				</div>
+				{% set label = ac.cd.getLabelAAfficher() %}
+				{% if label %}
 				<div class="label_cd">
 					Label :
-					<a href="">
-						{% if ac.cd.label %}{{ac.cd.label.libelle}}{% elseif ac.cd.maison %}{{ac.cd.maison.libelle}}{% elseif ac.cd.distrib %}{{ac.cd.distrib.libelle}}{% endif %}
-					</a>
+					{% if label.siteweb %}<a href="{{label.siteweb}}" target="_blank">{% endif %}
+						{{label.libelle}}
+					{% if label.siteweb %}</a>{% endif %}
 				</div>
+				{% endif %}
 				<div class="genre">
 					Genre : {{ac.cd.genre.libelle}}
 				</div>
 			</div>
 
 			<div class="infos">
-				{% set nbRotation = 0 %}
-				{% set pisteEnRotation = "" %}
-				{% for piste in ac.cd.pistes %}
-					{% if piste.rivendell %}
-						{% set nbRotation = nbRotation+1 %}
-						{% set pisteEnRotation = pisteEnRotation ~ piste.piste  ~ "/" %}
-					{% endif %}
-				{% endfor %}
-				<strong>Pistes en diffusion ({{nbRotation}}) : </strong>{{pisteEnRotation|trim('/')}}
-
+				<strong>Pistes en diffusion : </strong>{{ ac.cd.getDescriptionPistesInRivendell() }}
 				<hr>
-
-				<strong>Commentaire :</strong><br>
-				{{ac.cd.comment}}
+				<strong>Commentaire :</strong><br> {{ac.cd.comment}}
 			</div>
 
 			<div class="plus">
@@ -68,7 +59,7 @@
 			{% if ac.cd.ecoute %}
 				<div class="ecoute">
 					<a href="{{ac.cd.ecoute}}" target="_blank" title="Ecouter">
-						<img src="{{asset('img/cd/start.png')}}" title="lien d'écoute">
+						<img src="{{asset('img/play.png')}}" title="lien d'écoute">
 					</a>
 				</div>
 			{% endif %}

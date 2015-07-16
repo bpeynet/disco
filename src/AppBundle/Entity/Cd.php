@@ -368,11 +368,18 @@ class Cd
     }
 
     /**
-     * Add pistes
-     * @param $piste
+     * @return pistes dans rivendell sous la forme 1 / 2 / 3
      */
-    public function addPistes($piste) {
-
+    public function getDescriptionPistesInRivendell()
+    {
+      $p = array();
+      foreach ($this->pistes as $piste) {
+        if ($piste->getRivendell()) {
+          $p[] = $piste->getPiste();
+        }
+      }
+      sort($p);
+      return join(' / ', $p);
     }
 
     /**
@@ -499,6 +506,20 @@ class Cd
         $this->label = $label;
 
         return $this;
+    }
+
+    /**
+     * @return le label, sinon la maison de disques, sinon le distributeur
+     */
+    public function getLabelAAfficher()
+    {
+      if ($this->label != null) {
+        return $this->label;
+      } elseif ($this->maison != null) {
+        return $this->maison;
+      } elseif ($this->distrib != null) {
+        return $this->distrib;
+      }
     }
 
     /**
@@ -1271,12 +1292,12 @@ class Cd
 
     public function getImgWebPath()
     {
-        return null === $this->img ? null : 'img/cd/'.$this->getCoverFilename();
+        return empty($this->img) ? 'img/default_cd_cover.png' : 'img/cd/'.$this->getCoverFilename();
     }
 
     public function getAbsolutePath()
     {
-        return null === $this->img ? null : $this->getUploadRootDir().DIRECTORY_SEPARATOR.$this->getCoverFilename();
+        return empty($this->img) ? null : $this->getUploadRootDir().DIRECTORY_SEPARATOR.$this->getCoverFilename();
     }
 
     protected function getUploadRootDir()
