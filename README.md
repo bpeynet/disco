@@ -14,6 +14,8 @@ Créer les tables dans la base de données et importer les données de base (TOD
 
 TODO: action de création du premier utilisateur.
 
+Il faut adapter l'e-mail envoyé aux labels, app/Resources/views/mails/retour-label.txt.twig .
+
 ## Licence
 
 Disco est distribuée sous licence MIT (voir License.md).

@@ -1,0 +1,23 @@
+Bonjour,
+
+Le disque "{{cd.titre}}" de {{cd.artiste.libelle}} {% if cd.refLabel %}(Ref. {{cd.refLabel}}) {% endif %}{% if cd.rotation %}{{cd.rotation.retourLabel}}{% else %}n'a pas été retenu dans la diffusion régulière de Radio Campus Grenoble.{% endif %}
+Pistes en rotation : {{ cd.getDescriptionPistesInRivendell() }}
+
+{% if cd.retourComment %}
+Commentaire du programmateur :
+{{cd.retourComment}}
+{% elseif cd.comment %}
+Commentaire du programmateur :
+{{cd.comment}}
+{% endif %}
+
+{% if airplays %}
+De plus, ce Disque est également présent dans {{airplays|length}} airplay(s)* (classement mensuel des disques les plus défendus à l'antenne), affiché sur http://campusgrenoble.org/airplay/ .
+{%endif%}
+
+
+L'équipe Programmation de Radio Campus Grenoble
+
+http://campusgrenoble.org/
+
+N.B. : Ce mail a été généré automatiquement.

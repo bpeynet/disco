@@ -768,7 +768,6 @@ class CdController extends DiscoController
             foreach ($retours as $key => $retour) {
                 $mail_retour = $rq->get('mail_retour')[$key];
 
-                $testMail = new EmailValidator();
                 $cd = $em->getRepository('AppBundle:Cd')->find($key);
 
                 if(!empty($mail_retour)) {
@@ -776,13 +775,17 @@ class CdController extends DiscoController
                     $airplay_cd = $em->getRepository('AppBundle:AirplayCd')->findByCd($cd);
                     $destinataires = explode(';', $mail_retour);
 
-                    $message = \Swift_Message::newInstance()
-                        ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." [retour d'écoute]")
+                    $mailer = $this->get('mailer');
+
+                    $message = $mailer->createMessage()
+                        ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." / retour d'écoute")
                         ->setFrom('test@test.fr')
                         ->setTo(array('rcgtest@yopmail.com'))
-                        ->setBody($this->renderView('mails/retour-label.html.twig', array('cd' => $cd, 'airplays' => $airplay_cd)))
-                    ;
-                    $test = $this->get('mailer')->send($message);
+                        ->setBody(
+                          $this->renderView('mails/retour-label.txt.twig', array('cd' => $cd, 'airplays' => $airplay_cd)),
+                          'text/plain'
+                        );
+                    $test = $mailer->send($message);
 
                     if($test) {
                         $cd->setRetourMail($mail_retour);
