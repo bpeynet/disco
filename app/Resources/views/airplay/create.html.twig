@@ -65,14 +65,20 @@
 							{% for cd in generation %}
 							<tr id="row_{{cd.cd}}">
 								<td class="num_row_airplay visible">{{ordre}}</td>
-								<td>{% if cd.img %}<img src="{{asset('img/cd/cd_'~cd.cd~'.'~cd.img)}}" style="height: 50px;">{% else %}NaN{% endif %}</td>
+								<td class="pochette">
+									{% if cd.img %}
+										<img src="{{ asset(cd.getImgWebPath()) }}">
+									{% else %}
+										<a href="{{ path('editCd',{'id':cd.cd}) }}" target="_blank">Editer</a>
+									{% endif %}
+								</td>
 								<td class="num_cd">{{cd.cd}}</td>
 								<td title="{{cd.artiste.libelle}}">{{cd.artiste.libelle | truncate(20, true, '...')}}</td>
 								<td title="{{cd.titre}}">{{cd.titre | truncate(20, true, '...')}}</td>
 								<td>
 									<input type="text" name="ecoute[{{cd.cd}}]" {% if cd.ecoute %}value="{{cd.ecoute}}"{% endif %}>
 								</td>
-								<td title="{{cd.comment}}">{{cd.comment | truncate(30, true, '...')}}</td>
+								<td>{{cd.comment | truncate(30, true, '...')}}</td>
 								<td>{{cd.annee}}</td>
 								<td>{% if cd.rotation and cd.rotation.rotation %}{{cd.rotation.libelle}}{% endif %}</td>
 								<td>{% if cd.notemoy %}{{cd.notemoy|round(1,'ceil')}}{% endif %}</td>
@@ -103,23 +109,32 @@
 		});
 
 		$(".datepicker").datepicker({
-		    format: 'dd/mm/yyyy',
-		    endDate: '-0d'
+				format: 'dd/mm/yyyy',
+				endDate: '-0d'
 		});
 		var date_mini = "{{date_mini|date('d/m/Y')}}";
 		$(".datepicker").datepicker('setDate',date_mini);
 
 		$( "#newCD" ).autocomplete({
-	      source: "{{path('autocompleteTitre',{'like':1})}}",
-	      minLength: 2,
-	      delay: 300,
-	      select: function( event, ui ) {
-	        	$("#newCD").text(ui.item.libelle);
-	    	},
-	      create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
-	    });
+				source: "{{path('autocompleteTitre',{'like':1})}}",
+				minLength: 2,
+				delay: 300,
+				select: function( event, ui ) {
+						$("#newCD").text(ui.item.libelle);
+				},
+				create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
+		});
 
-		var new_row = "<tr class='ui-sortable-handle' id='row_:id'><td class='num_row_airplay'></td><td></td><td class='num_cd'>:id</td><td>:artiste</td><td>:titre</td><td><input type='text' name='ecoute[NNN]' value=':ecoute'></td><td>:annee</td><td>:rotation</td><td>:note</td><td>:star</td><td>:rivendell</td><td>:anim</td><td>:genre</td><td>:type</td><td><button onclick='deleteRow(:id)' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span></button></td></tr>";
+		var new_row = "<tr class='ui-sortable-handle' id='row_:id'>";
+		new_row += "<td class='num_row_airplay'></td><td class='pochette'>:img</td>";
+		new_row += "<td class='num_cd'>:id</td><td>:artiste</td><td>:titre</td>";
+		new_row += "<td><input type='text' name='ecoute[NNN]' value=':ecoute'></td>";
+		new_row += "<td>:commentaire</td>";
+		new_row += "<td>:annee</td><td>:rotation</td><td>:note</td>";
+		new_row += "<td>:star</td><td>:rivendell</td><td>:anim</td>";
+		new_row += "<td>:genre</td><td>:type</td>";
+		new_row += "<td><button onclick='deleteRow(:id)' class='btn btn-danger'><span class='glyphicon glyphicon-remove'></span></button></td>";
+		new_row += "</tr>";
 
 		bindAddCd(new_row);
 

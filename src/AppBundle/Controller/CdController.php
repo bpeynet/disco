@@ -689,7 +689,9 @@ class CdController extends DiscoController
         }
 
         if(!$cd || $cd->getSuppr()) {
-            return null;
+          $response = new JsonResponse();
+          $response->setData(array('erreur' => 'CD non trouvé'));
+          return $response;
         }
 
         $tab = array(
@@ -730,6 +732,14 @@ class CdController extends DiscoController
             if($piste->getAnim()) {
                 $tab['anim']++;
             }
+        }
+
+        $tab['commentaire'] = mb_strimwidth(utf8_decode($cd->getComment()),0,28,"...");
+
+        if (empty($cd->getImg())) {
+          $tab['editImg'] = $this->generateUrl('editCd', array('id' => $cd->getCd()));
+        } else {
+          $tab['img'] = $this->getRequest()->getUriForPath('/'.$cd->getImgWebPath());
         }
 
         $response = new JsonResponse();

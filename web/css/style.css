@@ -29,7 +29,7 @@ form {
 }
 
 #menu_gauche {
-	
+
 }
 
 .ui-autocomplete-loading {
@@ -146,4 +146,8 @@ ol, ul {
 
 #pochette_edit:hover #pochette_delete {
     opacity: 0.5;
+}
+
+td.pochette img {
+  height: 50px;
 }
