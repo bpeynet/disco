@@ -107,13 +107,18 @@ label {
 	background: #666;
 	color: #ddd;
 	width: 394px;
-	height: 100px;
+	min-height: 100px;
 	position: absolute;
 	top: 0px;
 	left: 100px;
 	display: none;
 	padding: 3px;
 	font-size: 10pt;
+	z-index: 1;
+}
+
+.minus {
+	z-index: 2;
 }
 
 .doc:hover .infos {
