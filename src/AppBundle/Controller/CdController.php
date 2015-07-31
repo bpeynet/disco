@@ -734,7 +734,7 @@ class CdController extends DiscoController
             }
         }
 
-        $tab['commentaire'] = mb_strimwidth(utf8_decode($cd->getComment()),0,28,"...");
+        $tab['commentaire'] = mb_strimwidth($cd->getComment(),0,28,"...");
 
         if (empty($cd->getImg())) {
           $tab['editImg'] = $this->generateUrl('editCd', array('id' => $cd->getCd()));
