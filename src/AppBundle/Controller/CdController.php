@@ -749,18 +749,6 @@ class CdController extends DiscoController
     }
 
     /**
-     * Création d'une date minimale
-     */
-    private function dateMini($date_mini)
-    {
-        if(!empty($date_mini)) {
-            return substr($date_mini,6,4).'-'.substr($date_mini,3,2).'-'.substr($date_mini,0,2).' 00:00:00';
-        } else {
-            return date("Y-m-d H:i:s", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
-        }
-    }
-
-    /**
      * @Route("/cd/retourLabel/page/{page}", name="retourLabel")
      */
     public function retourLabelAction(Request $request, $page=1)
@@ -770,8 +758,11 @@ class CdController extends DiscoController
         $em = $this->getDoctrine()->getManager();
         $rq = $request->request;
         $limit = $this->container->getParameter('listinglimit');
+        $from = $this->container->getParameter('retourLabelFromAddress');
+        $erreurs = array();
 
         $retours = $rq->get('check_retour');
+
 
         if($request->isMethod('POST') && !empty($retours)) {
             $nbRetours = 0;
@@ -788,27 +779,33 @@ class CdController extends DiscoController
                     $mailer = $this->get('mailer');
 
                     $message = $mailer->createMessage()
-                        ->setSubject("Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre()." / retour d'écoute")
-                        ->setFrom('test@test.fr')
-                        ->setTo(array('rcgtest@yopmail.com'))
+                        ->setSubject("Retour d'écoute Radio Campus Grenoble / ".$cd->getArtiste()->getLibelle()." - ".$cd->getTitre())
+                        ->setFrom($from)
+                        ->setTo($destinataires)
                         ->setBody(
                           $this->renderView('mails/retour-label.txt.twig', array('cd' => $cd, 'airplays' => $airplay_cd)),
                           'text/plain'
                         );
-                    $test = $mailer->send($message);
 
-                    if($test) {
+                    if($mailer->send($message, $failures)) {
                         $cd->setRetourMail($mail_retour);
                         $cd->setRetourLabel(true);
+                        $nbRetours++;
                     } else {
-                        $this->addFlash('error','Le cd '.$cd->getCd().' n\'a pas pu être envoyé.');
+                        foreach($failures as $fail) {
+                          $erreurs[$cd->getCd()] = $fail;
+                        }
                     }
 
-                    $nbRetours++;
                 } else {
                     $this->addFlash('error','Aucune adresse renseignée pour le disque #'.$cd->getCd().'.');
                 }
+            }
 
+            if (!empty($erreurs)) {
+              foreach($erreurs as $numCd => $erreur) {
+                $this->addFlash('error',"L'adresse $erreur n'a pas pour fonctionné pour le disque $numCd.");
+              }
             }
 
             $this->discoLog("a effectué ".$nbRetours." retours Label.");
@@ -855,8 +852,8 @@ class CdController extends DiscoController
                 ->leftJoin('AppBundle:Label', 'l', 'WITH', 'l.label = cd.label')
                 ->where('l.libelle LIKE :label')
                 ->setParameter('label', '%'.$label.'%')
-                ->andWhere('cd.dprogra >= :dprogra')
-                ->setParameter('dprogra', $date_mini)
+                ->andWhere('cd.dsaisie >= :dsaisie')
+                ->setParameter('dsaisie', $date_mini)
                 ->andWhere('cd.annee >= :annee')
                 ->setParameter('annee', $annee_mini);
             if (!$retour_fait) {
@@ -878,8 +875,8 @@ class CdController extends DiscoController
                 ->leftJoin('AppBundle:Label', 'l', 'WITH', 'l.label = cd.label')
                 ->where('l.libelle LIKE :label')
                 ->setParameter('label', '%'.$label.'%')
-                ->andWhere('cd.dprogra >= :dprogra')
-                ->setParameter('dprogra', $date_mini)
+                ->andWhere('cd.dsaisie >= :dsaisie')
+                ->setParameter('dsaisie', $date_mini)
                 ->andWhere('cd.annee >= :annee')
                 ->setParameter('annee', $annee_mini);
             if (!$retour_fait) {
@@ -906,6 +903,19 @@ class CdController extends DiscoController
                 'pageMax' => $pageMax
             ));
     }
+
+    /**
+     * Création d'une date minimale
+     */
+    private function dateMini($date_mini)
+    {
+        if(!empty($date_mini)) {
+            return substr($date_mini,6,4).'-'.substr($date_mini,3,2).'-'.substr($date_mini,0,2);
+        } else {
+            return date("Y-m-d", mktime(0,0,0,date("m")-3, date("d"), date("Y")));
+        }
+    }
+
 
     /**
      * @Route("/cd/etiquettes", name="listeEtiquettes")
