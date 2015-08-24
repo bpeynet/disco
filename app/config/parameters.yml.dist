@@ -24,3 +24,6 @@ parameters:
 
     #  path to CD covers, relative to our Entity folder, so slash at the end or beginning
     upload_root_dir:     ../../../web
+
+    # addresse d'origine des e-mails de retour d'écoute aux labels
+    retourLabelFromAddress: programmation@campusgrenoble.org
