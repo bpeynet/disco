@@ -1,6 +1,7 @@
 Bonjour,
 
 Le disque "{{cd.titre}}" de {{cd.artiste.libelle}} {% if cd.refLabel %}(Ref. {{cd.refLabel}}) {% endif %}{% if cd.rotation %}{{cd.rotation.retourLabel}}{% else %}n'a pas été retenu dans la diffusion régulière de Radio Campus Grenoble.{% endif %}
+
 Pistes en rotation : {{ cd.getDescriptionPistesInRivendell() }}
 
 {% if cd.retourComment %}
