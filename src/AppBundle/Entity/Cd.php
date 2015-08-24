@@ -374,7 +374,7 @@ class Cd
     {
       $p = array();
       foreach ($this->pistes as $piste) {
-        if ($piste->getRivendell()) {
+        if ($piste->getRivendell() || $piste->getStar()) {
           $p[] = $piste->getPiste();
         }
       }
