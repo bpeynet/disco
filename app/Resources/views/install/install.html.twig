@@ -1,0 +1,11 @@
+{% block title %}Installation{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<p>
+  Les identifiants du premier utilisateur sont {{username}} et {{generatedPass}}.
+  C'est le premier administrateur de l'application :
+  vous pouvez maintenant les utiliser pour vous connecter, changer ses coordonnés
+  et son mot de passe, et commencer à créer des utilisateurs, disques, etc.
+</p>
+{% endblock %}
