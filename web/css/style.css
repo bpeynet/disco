@@ -151,3 +151,9 @@ ol, ul {
 td.pochette img {
   height: 50px;
 }
+
+.lastComment .info {
+  display: block;
+  color: #999;
+  font-style: italic;
+}

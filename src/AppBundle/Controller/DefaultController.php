@@ -50,15 +50,27 @@ class DefaultController extends DiscoController
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être identifié.');
 
         $results = array();
+        $lastDiscussions = false;
         $q = $request->query->get('q');
         if ($q) {
           $results = $this->generalSearch($q);
           if (empty($results)) {
             $this->addFlash('error',"Rien trouvé !");
           }
+        } else {
+          $em = $this->getDoctrine()->getManager();
+          $lastDiscussions = $em->getRepository("AppBundle:CdComment")->createQueryBuilder('c')
+              ->select('c')
+              ->orderBy('c.dbkey','DESC')
+              ->setMaxResults(10)
+              ->getQuery()
+              ->getResult();
         }
 
-        return $this->render('default/search.html.twig', array('results' => $results, 'q' => $q));
+        return $this->render('default/search.html.twig', array(
+          'results' => $results,
+          'q' => $q,
+          'lastDiscussions' => $lastDiscussions));
     }
 
     private function generalSearch($q, $max = 50)

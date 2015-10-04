@@ -91,6 +91,20 @@
         </div>
 
         {% endif %}
+
+        {% if lastDiscussions %}
+          <h2>Dernières discussions</h2>
+
+          {% for comment in lastDiscussions %}
+            <p class="lastComment">
+              <a class="info" href="{{ path('showCd',{'id':comment.cd.cd}) }}">
+                {{ comment.user.libelle }} sur "{{comment.cd.titre}}" par {{comment.cd.artiste.libelle}}
+            </a>
+              {{ comment.comment }}
+            </p>
+          {% endfor %}
+
+        {% endif %}
     </div>
 </div>
 
