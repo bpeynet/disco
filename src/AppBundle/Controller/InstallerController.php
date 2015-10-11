@@ -26,18 +26,15 @@ class InstallerController extends DiscoController
         $user = new User();
         $em = $this->getDoctrine()->getManager();
 
-        //Encodage du MDP
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*_";
+        $generatedPass = substr( str_shuffle( $chars ), 0, 8 );
         $encoder = $this->container->get('security.password_encoder');
-
-        //// TODO: génerer un mot de passe
-        $generatedPass = "TODO";
-        $username = "admin";
         $encoded = $encoder->encodePassword($user, $generatedPass);
 
         $user->setPassword($encoded);
 
         //Mise en forme des infos concernant l'utilisateur
-        $user->setUsername($username);
+        $user->setUsername("admin");
         $user->setPrenom("Premier");
         $user->setNom("Utilisateur");
         $user->setRoles("ROLE_SUPER_ADMIN");
@@ -49,7 +46,7 @@ class InstallerController extends DiscoController
         $this->addFlash('success','Le premier utilisateur a été créé');
         return $this->render('install/install.html.twig',array(
                 'generatedPass' => $generatedPass,
-                'username' => $username
+                'username' => $user->getUsername()
             ));
       } else {
         return $this->redirect($this->generateUrl('index'));
