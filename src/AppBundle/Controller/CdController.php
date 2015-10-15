@@ -947,6 +947,8 @@ class CdController extends DiscoController
 
             $pdf = new \FPDF();
             $pdf->SetAutoPageBreak(false, 0);
+            
+            $logo = __DIR__.DIRECTORY_SEPARATOR.$this->container->getParameter('upload_root_dir').DIRECTORY_SEPARATOR."css/campusGrenoble.png";
 
             foreach ($cds as $key => $cd) {
                 if ($key % 24 == 0) {
@@ -1019,7 +1021,7 @@ class CdController extends DiscoController
                 $pdf->Cell(32,6,$cd->getCd());
 
                 $pdf->setXY(($key%3)*70+40,floor($key%24/3)*37+26);
-                $pdf->Image("../web/css/campusGrenoble.png",null,null,25);
+                $pdf->Image($logo,null,null,25);
             }
 
             $response = new Response($pdf->Output('', 'S'));
