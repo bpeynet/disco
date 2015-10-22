@@ -78,7 +78,8 @@ class CdType extends AbstractType
                         },
                     'expanded'=>false,
                     'multiple'=>true,
-                    'required'=>false
+                    'required'=>false,
+                    'label' => "Styles (Ctrl+clic pour plusieurs)"
                 ))
 
 
