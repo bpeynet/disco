@@ -590,60 +590,51 @@ class CdController extends DiscoController
     public function noteAction(Request $request, $id)
     {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seuls les programmateurs peuvent noter un CD.');
+        $note = $request->request->get('note');
+        if(is_numeric($note) && $note >= 0 && $note <= 20) {
+            $note = round($note);
 
-        if(!empty($request->request->get('note'))) {
-            $note = $request->request->get('note');
-            $note = str_replace(',', '.', $note);
+            $em = $this->getDoctrine()->getManager();
 
-            if(is_numeric($note) && $note >= 0 && $note <= 5) {
-                round($note, 1);
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $cd = $em->getRepository('AppBundle:Cd')->find($id);
 
-                $em = $this->getDoctrine()->getManager();
+            if(!$cd) {
+                throw $this->createNotFoundException(
+                    'Aucun cd trouvé pour cet id : '.$id
+                );
+            }
 
-                $user = $this->get('security.token_storage')->getToken()->getUser();
-                $cd = $em->getRepository('AppBundle:Cd')->find($id);
+            $repository = $em->getRepository('AppBundle:CdNote');
+            $verif_note = $repository->findOneBy(array('user'=>$user,'cd'=>$cd));
 
-                if(!$cd) {
-                    throw $this->createNotFoundException(
-                        'Aucun cd trouvé pour cet id : '.$id
-                    );
-                }
+            if(!$verif_note) {
+                $cd_note = new CdNote();
+                $cd_note->setCd($cd);
+                $cd_note->setUser($user);
+                $cd_note->setNote($note);
 
-                $repository = $em->getRepository('AppBundle:CdNote');
-                $verif_note = $repository->findOneBy(array('user'=>$user,'cd'=>$cd));
+                $em->persist($cd_note);
 
-                if(!$verif_note) {
-                    $cd_note = new CdNote();
-                    $cd_note->setCd($cd);
-                    $cd_note->setUser($user);
-                    $cd_note->setNote($note);
+                $note_moy = $em->getRepository('AppBundle:CdNote')->createQueryBuilder('n')
+                    ->select('avg(n.note)')
+                    ->where('n.cd = :cd')
+                    ->setParameter('cd',$cd)
+                    ->getQuery()
+                    ->getResult();
 
-                    $em->persist($cd_note);
+                $cd->setNoteMoy($note_moy[0][1]);
 
-                    $note_moy = $em->getRepository('AppBundle:CdNote')->createQueryBuilder('n')
-                        ->select('avg(n.note)')
-                        ->where('n.cd = :cd')
-                        ->setParameter('cd',$cd)
-                        ->getQuery()
-                        ->getResult();
+                $em->persist($cd);
+                $em->flush();
 
-                    $cd->setNoteMoy($note_moy[0][1]);
-
-                    $em->persist($cd);
-                    $em->flush();
-
-                    $this->addFlash('success','La note que vous avez choisie a été affectée au CD.');
-                } else {
-                    $this->addFlash('error','Impossible de noter deux fois un CD.');
-                }
-
-
+                $this->addFlash('success','La note que vous avez choisie a été affectée au CD.');
             } else {
-                $this->addFlash('error','La note d\'un CD doit être numérique, comprise entre 0 et 5.');
+                $this->addFlash('error','Impossible de noter deux fois un CD.');
             }
 
         } else {
-            $this->addFlash('error','Une erreur est survenue lors de la notation du CD !');
+            $this->addFlash('error','La note d\'un CD doit être numérique, comprise entre 0 et 20.');
         }
 
         return $this->redirect($this->generateUrl('showCd',array('id'=>$id)));
@@ -947,7 +938,7 @@ class CdController extends DiscoController
 
             $pdf = new \FPDF();
             $pdf->SetAutoPageBreak(false, 0);
-            
+
             $logo = __DIR__.DIRECTORY_SEPARATOR.$this->container->getParameter('upload_root_dir').DIRECTORY_SEPARATOR."css/campusGrenoble.png";
 
             foreach ($cds as $key => $cd) {

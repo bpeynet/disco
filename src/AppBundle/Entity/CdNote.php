@@ -38,11 +38,11 @@ class CdNote
     private $user = '0';
 
     /**
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(name="note", type="float", precision=2, scale=1, nullable=false)
+     * @ORM\Column(name="note", type="integer", nullable=false)
      */
-    private $note = '0.0';
+    private $note = '10';
 
 
 
@@ -62,7 +62,7 @@ class CdNote
     /**
      * Get cd
      *
-     * @return Cd 
+     * @return Cd
      */
     public function getCd()
     {
@@ -85,7 +85,7 @@ class CdNote
     /**
      * Get user
      *
-     * @return User 
+     * @return User
      */
     public function getUser()
     {
@@ -108,7 +108,7 @@ class CdNote
     /**
      * Get note
      *
-     * @return float 
+     * @return float
      */
     public function getNote()
     {
@@ -118,7 +118,7 @@ class CdNote
     /**
      * Get dbkey
      *
-     * @return integer 
+     * @return integer
      */
     public function getDbkey()
     {

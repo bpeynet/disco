@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS f_cd_note (
   dbkey int(10) unsigned NOT NULL AUTO_INCREMENT,
   cd int(10) unsigned NOT NULL DEFAULT '0',
   `user` int(10) unsigned NOT NULL DEFAULT '0',
-  note float(2,1) NOT NULL DEFAULT '0.0',
+  note INT UNSIGNED NOT NULL DEFAULT '10',
   PRIMARY KEY (dbkey),
   KEY cd (cd)
 );
