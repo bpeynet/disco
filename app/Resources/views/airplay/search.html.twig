@@ -34,7 +34,14 @@
 						<a href="{{path('editAirplay',{'id':airplay.airplay})}}"><span class="glyphicon glyphicon-edit" title="Editer"></span></a>
 					{% endif %}
 				</td>
-				<td><input class="checkboxPublie" type="checkbox" name="publie[{{airplay.airplay}}]" value="{{airplay.airplay}}" {% if airplay.publie == 1 %}checked disabled{% endif %}></td>
+				{% if airplay.publie == 1 %}
+					{% set attribs = 'checked disabled' %}
+				{% elseif not is_granted('ROLE_SUPER_ADMIN') %}
+					{% set attribs = 'disabled' %}
+				{% else %}
+					{% set attribs = '' %}
+				{% endif %}
+				<td><input class="checkboxPublie" type="checkbox" name="publie[{{airplay.airplay}}]" value="{{airplay.airplay}}" {{attribs}}></td>
 			</tr>
 		{% endfor %}
 
@@ -85,4 +92,3 @@
 
 </script>
 {% endblock %}
-

@@ -41,6 +41,8 @@ class AirplayController extends DiscoController
         $publies = $request->request->get('publie');
 
         if($publies) {
+            $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Seul un super-admin peut publier les airplays.');
+          
             foreach ($publies as $key => $publication) {
                 $airplay = $em->getRepository('AppBundle:Airplay')->find($publication);
                 $airplay->setPublie(true);
