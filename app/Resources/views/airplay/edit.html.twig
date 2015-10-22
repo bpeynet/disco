@@ -7,7 +7,9 @@
 	<fieldset>
 		<legend>Edition d'Airplay</legend>
 		<form id="addCd">
-			<input type="text" id="newCD"><button type="submit" class="btn btn-info">Ajouter le CD</button>
+			<label for="newCD">Titre ou n° :</label>
+			<input type="text" id="newCD">
+			<button type="submit" class="btn btn-info">Ajouter le CD</button>
 		</form>
 
 		{% form_theme form 'bootstrap_3_layout.html.twig' %}
