@@ -69,6 +69,10 @@ class AirplayController extends DiscoController
         $em = $this->getDoctrine()->getManager();
         $airplay = $em->getRepository('AppBundle:Airplay')->find($id);
 
+        if (!$airplay->getPublie()) {
+          $this->denyAccessUnlessGranted('ROLE_USER', null, 'Vous devez être connecté pour voir cette page.');
+        }
+
         if(!$airplay) {
             throw $this->createNotFoundException(
                 'Aucun airplay trouvé pour cet id : '.$id
@@ -99,7 +103,7 @@ class AirplayController extends DiscoController
                 ->setMaxResults(2)
                 ->getQuery()
                 ->getResult();
-        
+
         if(!$airplays) {
             $this->addFlash('error','Erreur lors du chargement des airplays.');
         } else {
