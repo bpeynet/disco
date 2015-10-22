@@ -42,11 +42,20 @@ class AirplayController extends DiscoController
 
         if($publies) {
             $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Seul un super-admin peut publier les airplays.');
-          
+
             foreach ($publies as $key => $publication) {
                 $airplay = $em->getRepository('AppBundle:Airplay')->find($publication);
                 $airplay->setPublie(true);
-                $em->persist($airplay);
+            }
+
+            $nonPublies = explode(",", $request->request->get('non_publies'));
+            foreach ($nonPublies as $id) {
+              if (!empty($id)) {
+                $airplay = $em->getRepository('AppBundle:Airplay')->find($id);
+                if ($airplay) {
+                  $airplay->setPublie(false);
+                }
+              }
             }
 
             $this->discoLog("a modifié les publications d'Airplays");
@@ -171,12 +180,6 @@ class AirplayController extends DiscoController
         $airplay->setMuser($user);
 
         $classement = explode(",", $request->request->get('classement'));
-
-        if($rq->get('publier')) {
-            $airplay->setPublie(true);
-        } else {
-            $airplay->setPublie(false);
-        }
 
         $em->persist($airplay);
         $em->flush();
