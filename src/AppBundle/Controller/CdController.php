@@ -608,7 +608,13 @@ class CdController extends DiscoController
             $repository = $em->getRepository('AppBundle:CdNote');
             $verif_note = $repository->findOneBy(array('user'=>$user,'cd'=>$cd));
 
-            if(!$verif_note) {
+            if($verif_note) {
+                $ex = $verif_note->getNote();
+                $verif_note->setNote($note);
+                $em->flush();
+
+                $this->addFlash('success',"Votre note a été mise à jour (ancienne note: $ex)");
+            } else {
                 $cd_note = new CdNote();
                 $cd_note->setCd($cd);
                 $cd_note->setUser($user);
@@ -629,8 +635,6 @@ class CdController extends DiscoController
                 $em->flush();
 
                 $this->addFlash('success','La note que vous avez choisie a été affectée au CD.');
-            } else {
-                $this->addFlash('error','Impossible de noter deux fois un CD.');
             }
 
         } else {
