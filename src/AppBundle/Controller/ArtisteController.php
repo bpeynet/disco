@@ -216,4 +216,54 @@ class ArtisteController extends DiscoController
         return $response;
     }
 
+    /**
+     *  @Route("/artiste/doublons", name="antiDoublonsArtiste")
+     */
+    public function antiDoublonsAction(Request $request)
+    {
+      $rep = $this->getDoctrine()->getRepository('AppBundle:Artiste');
+
+      $artisteAConserver = false;
+      $artiste = false;
+
+      if ($request->isMethod('POST')) {
+        $artisteAConserver = $rep->findOneBy(array('libelle' => $request->request->get('artisteAConserver')));
+        $artiste = $rep->findOneBy(array('libelle' => $request->request->get('artiste')));
+        if ($artiste && $artisteAConserver) {
+          $step = $request->request->getInt('step',1);
+          if ($step == 1) {
+            $this->addFlash('info',"Vérifiez et confirmez en bas de la page");
+          } else if ($step == 2) {
+            if ($request->request->get('confirm') == "oui") {
+
+              foreach($artiste->getDisques() as $cd) {
+                $cd->setArtiste($artisteAConserver);
+              }
+
+              $exId = $artiste->getArtiste();
+              $exNom = $artiste->getLibelle();
+
+              $em = $this->getDoctrine()->getManager();
+              $em->remove($artiste);
+              $em->flush();
+              $this->addFlash('success',$exNom.' a été remplacé par '.$artisteAConserver->getLibelle());
+              $this->discoLog("a remplacé $exNom ($exId) par ".$artisteAConserver->getLibelle());
+              return $this->redirect($this->generateUrl('artiste'));
+
+            } else {
+              $this->addFlash('error',"C'est votre dernier mot ?");
+            }
+          }
+        } else if (!$artiste) {
+          $this->addFlash('error','Impossible de trouver '.$request->request->get('artiste'));
+        } else {
+          $this->addFlash('error','Impossible de trouver '.$request->request->get('artisteAConserver'));
+        }
+      }
+
+      return $this->render('artiste/doublons.html.twig',array(
+        'artiste' => $artiste,
+        'artisteAConserver' => $artisteAConserver
+      ));
+    }
 }

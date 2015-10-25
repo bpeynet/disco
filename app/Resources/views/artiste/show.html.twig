@@ -25,31 +25,7 @@
 	</table>
 
 	{% if artiste.getDisques.toArray %}
-		<div class="panel panel-primary">
-			<div class="panel-heading">Disques :</div>
-			<table class="table table-striped">
-				<theading>
-					<tr>
-						<th>#</th>
-						<th></th>
-						<th>Titre</th>
-						<th>Label</th>
-						<th>Date</th>
-					</tr>
-				</theading>
-				{% for cd in artiste.getDisques.toArray %}
-					<tr>
-						<td>{{cd.getCd}}</td>
-						<td>
-							{% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
-						</td>
-						<td><a href="{{ path('showCd',{'id':cd.getCd}) }}">{{cd.getTitre}}</a></td>
-						<td>{% if cd.getLabel and cd.getLabel.getLabel %}<a href="{{ path('showLabel',{'id':cd.getLabel.getLabel}) }}">{{cd.getLabel.getLibelle}}</a>{% endif %}</td>
-						<td>{{cd.getAnnee}}</td>
-					</tr>
-				{% endfor %}
-			</table>
-		</div>
+		{% include 'artiste/discs_listing.html.twig' %}
 	{% endif %}
 
 {% endblock %}

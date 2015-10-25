@@ -1,0 +1,84 @@
+{% block title %}Anti-doublons{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<form class="form-horizontal" method="post" >
+
+<div class="row">
+	<div class="col-sm-8">
+		<fieldset>
+
+		<legend>Supression d'artiste en double</legend>
+
+    <p>Entrez les deux noms sous lesquels l'artiste est enregistré</p>.
+
+		<div class="row col-lg-12">
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="artiste">Doublon</label>
+			  <div class="col-md-8">
+			  <input id="artiste" name="artiste" placeholder="" class="form-control input-md" type="text" {% if artiste %}value="{{artiste.libelle}}"{% endif %} >
+
+			  </div>
+			</div>
+    </div>
+    <div class="row col-lg-12">
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="artisteAConserver">A conserver</label>
+			  <div class="col-md-8">
+			  <input id="artisteAConserver" name="artisteAConserver" placeholder="" class="form-control input-md" type="text" {% if artiste %}value="{{artisteAConserver.libelle}}"{% endif %} >
+
+			  </div>
+			</div>
+		</div>
+
+    {% if not artiste %}
+    <button name="search" type="submit" class="btn btn-block btn-info btn-lg">
+      Test <span class="glyphicon glyphicon-eye-open"></span>
+    </button>
+    {% endif %}
+
+    </fieldset>
+	</div>
+</div>
+
+{% if artiste and artiste.getDisques.toArray %}
+  <h3>
+    Les disques suivants vont être attribués à {{artisteAConserver.getLibelle}} :
+  </h3>
+  {% include 'artiste/discs_listing.html.twig' %}
+
+  <input type="hidden" name="step" value="2">
+
+  <h3>Et {{artiste.getLibelle}} sera supprimé de la base.</h3>
+
+  <p>
+    <input type="checkbox" name="confirm" value="oui" id="confirmation">
+    <label for="confirmation">C'est mon dernier mot, Jean-Pierre.</label>
+  </p>
+
+  <button name="search" type="submit" class="btn btn-block btn-warning btn-lg">
+    Au revoir, {{artiste.getLibelle}} <span class="glyphicon glyphicon-ok-circle"></span>
+  </button>
+
+{% endif %}
+
+</form>
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+var artisteCompleteParameters = {
+    source: Routing.generate('autocompleteArtiste',{'like':1}),
+    minLength: 2,
+    delay: 300,
+    select: function( event, ui ) {
+      $(this).text(ui.item.libelle);
+    },
+    create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
+};
+$( "#artiste" ).autocomplete(artisteCompleteParameters);
+$( "#artisteAConserver" ).autocomplete(artisteCompleteParameters);
+
+</script>
+{% endblock %}
