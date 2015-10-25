@@ -222,5 +222,73 @@ class LabelController extends DiscoController
         return $response;
     }
 
-}
+    /**
+     *  @Route("/label/doublons", name="antiDoublonsLabel")
+     */
+    public function antiDoublonsAction(Request $request)
+    {
+      $rep = $this->getDoctrine()->getRepository('AppBundle:Label');
 
+      $labelAConserver = false;
+      $label = false;
+      $distrib = false;
+      $maison = false;
+
+      if ($request->isMethod('POST')) {
+        $labelAConserver = $rep->findOneBy(array('libelle' => $request->request->get('labelAConserver')));
+        $label = $rep->findOneBy(array('libelle' => $request->request->get('label')));
+
+        if ($label && $labelAConserver) {
+          $disques = $rep = $this->getDoctrine()->getRepository('AppBundle:Cd');
+          $distrib = $disques->findBy(array('distrib' => $label->getLabel()));
+          $maison  = $disques->findBy(array('maison'  => $label->getLabel()));
+
+          $step = $request->request->getInt('step',1);
+          if ($step == 1) {
+            $this->addFlash('info',"Vérifiez et confirmez en bas de la page");
+
+          } else if ($step == 2) {
+            if ($request->request->get('confirm') == "oui") {
+
+              foreach($label->getDisques() as $cd) {
+                $cd->setLabel($labelAConserver);
+              }
+
+              foreach($distrib as $cd){
+                $cd->setDistrib($labelAConserver);
+              }
+
+              foreach($maison as $cd) {
+                $cd->setMaison($labelAConserver);
+              }
+
+              $exId = $label->getLabel();
+              $exNom = $label->getLibelle();
+
+              $em = $this->getDoctrine()->getManager();
+              $em->remove($label);
+              $em->flush();
+              $this->addFlash('success',$exNom.' a été remplacé par '.$labelAConserver->getLibelle());
+              $this->discoLog("a remplacé $exNom ($exId) par ".$labelAConserver->getLibelle());
+              return $this->redirect($this->generateUrl('label'));
+
+            } else {
+              $this->addFlash('error',"C'est votre dernier mot ?");
+            }
+          }
+        } else if (!$artiste) {
+          $this->addFlash('error','Impossible de trouver '.$request->request->get('label'));
+        } else {
+          $this->addFlash('error','Impossible de trouver '.$request->request->get('labelAConserver'));
+        }
+      }
+
+      return $this->render('label/doublons.html.twig',array(
+        'label' => $label,
+        'labelAConserver' => $labelAConserver,
+        'distrib' => $distrib,
+        'maison' => $maison
+      ));
+    }
+
+}

@@ -1,0 +1,101 @@
+{% block title %}Anti-doublons{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<form class="form-horizontal" method="post" >
+
+<div class="row">
+	<div class="col-sm-8">
+		<fieldset>
+
+		<legend>Supression de labels en double</legend>
+
+    <p>Entrez les deux noms sous lesquels le label est enregistré</p>.
+
+		<div class="row col-lg-12">
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="label">Doublon</label>
+			  <div class="col-md-8">
+			  <input id="label" name="label" placeholder="" class="form-control input-md" type="text" {% if label %}value="{{label.libelle}}"{% endif %} >
+
+			  </div>
+			</div>
+    </div>
+    <div class="row col-lg-12">
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="labelAConserver">A conserver</label>
+			  <div class="col-md-8">
+			  <input id="labelAConserver" name="labelAConserver" placeholder="" class="form-control input-md" type="text" {% if labelAConserver %}value="{{labelAConserver.libelle}}"{% endif %} >
+
+			  </div>
+			</div>
+		</div>
+
+    {% if not label or not labelAConserver %}
+    <button name="search" type="submit" class="btn btn-block btn-info btn-lg">
+      Test <span class="glyphicon glyphicon-eye-open"></span>
+    </button>
+    {% endif %}
+
+    </fieldset>
+	</div>
+</div>
+
+{% if label and labelAConserver %}
+  <h3>
+    Les disques suivants vont être attribués à {{labelAConserver.getLibelle}} :
+  </h3>
+  {% set disques=label.getDisques.toArray %}
+  {% include 'label/discs_listing.html.twig' %}
+
+  {% if maison %}
+    <h3>
+      Les disques suivants vont être attribués à {{labelAConserver.getLibelle}} (comme maison de disques) :
+    </h3>
+    {% set disques=maison %}
+    {% include 'label/discs_listing.html.twig' %}
+  {% endif %}
+
+  {% if distrib %}
+    <h3>
+      Les disques suivants vont être attribués à {{labelAConserver.getLibelle}} (comme distributeur) :
+    </h3>
+    {% set disques=distrib %}
+    {% include 'label/discs_listing.html.twig' %}
+  {% endif %}
+
+  <input type="hidden" name="step" value="2">
+
+  <h3>Et {{label.getLibelle}} sera supprimé de la base.</h3>
+
+  <p>
+    <input type="checkbox" name="confirm" value="oui" id="confirmation">
+    <label for="confirmation">C'est mon dernier mot, Jean-Pierre, j'ai vérifié qu'on ne perd pas d'adresses.</label>
+  </p>
+
+  <button name="search" type="submit" class="btn btn-block btn-warning btn-lg">
+    Au revoir, {{label.getLibelle}} <span class="glyphicon glyphicon-ok-circle"></span>
+  </button>
+
+{% endif %}
+
+</form>
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+var labelCompleteParameters = {
+    source: Routing.generate('autocompleteLabel',{'like':1}),
+    minLength: 2,
+    delay: 300,
+    select: function( event, ui ) {
+      $(this).text(ui.item.libelle);
+    },
+    create : function( event, ui ){$(".ui-helper-hidden-accessible").remove();}
+};
+$( "#label" ).autocomplete(labelCompleteParameters);
+$( "#labelAConserver" ).autocomplete(labelCompleteParameters);
+
+</script>
+{% endblock %}

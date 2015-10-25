@@ -1,0 +1,25 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">Disques :</div>
+  <table class="table table-striped">
+    <theading>
+      <tr>
+        <th>#</th>
+        <th></th>
+        <th>Titre</th>
+        <th>Artiste</th>
+        <th>Date</th>
+      </tr>
+    </theading>
+    {% for cd in disques %}
+      <tr>
+        <td>{{cd.getCd}}</td>
+        <td>
+          {% if cd.getDsaisie|date("U") > "-3 months"|date("U") %}<div class="label label-success">Nouveauté</div>{% endif %}
+        </td>
+        <td><a href="{{ path('showCd',{'id':cd.getCd}) }}">{{cd.getTitre}}</a></td>
+        <td>{% if cd.getArtiste.getArtiste %}<a href="{{ path('showArtiste',{'id':cd.getArtiste.getArtiste}) }}">{{cd.getArtiste.getLibelle}}</a>{% endif %}</td>
+        <td>{{cd.getAnnee}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
