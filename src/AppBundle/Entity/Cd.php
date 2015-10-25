@@ -39,6 +39,7 @@ class Cd
      *
      * @ORM\OneToMany(targetEntity="Piste", mappedBy="cd")
      * @ORM\JoinColumn(name="cd", referencedColumnName="cd")
+     * @ORM\OrderBy({"piste" = "ASC"})
      */
     protected $pistes = array();
 
