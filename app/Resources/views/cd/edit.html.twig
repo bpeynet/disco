@@ -107,9 +107,9 @@
 												<td><input name='titre_{{id_piste}}' value='{{piste.titre}}'></td>
 												<td><input id='artiste_{{id_piste}}' name='artiste_{{id_piste}}' value='{% if piste.artiste %}{{piste.artiste.libelle}}{% endif %}' class='artiste_autocomplete'></td>
 												<td><input type='checkbox' class='fr_input' name='fr_{{id_piste}}' {% if piste.fr %}checked{% endif %}></td>
-												<td><input type='radio' name='rot_{{id_piste}}' value='anim' {% if piste.anim %}checked{% endif %}></td>
-												<td><input type='radio' name='rot_{{id_piste}}' value='rivendell' {% if piste.rivendell %}checked{% endif %}></td>
-												<td><input type='radio' name='rot_{{id_piste}}' value='star' {% if piste.star %}checked{% endif %}></td>
+												<td><input type='checkbox' name='anim_{{id_piste}}' value='1' {% if piste.anim %}checked{% endif %}></td>
+												<td><input type='checkbox' name='rivendell_{{id_piste}}' value='1' {% if piste.rivendell %}checked{% endif %}></td>
+												<td><input type='checkbox' name='star_{{id_piste}}' value='1' {% if piste.star %}checked{% endif %}></td>
 											</tr>
 											{% set id_piste = id_piste+1 %}
 										{% endfor %}

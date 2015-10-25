@@ -313,10 +313,14 @@ class CdController extends DiscoController
                 } else {
                     $piste->setLangue(false);
                 }
-                switch($request->request->get('rot_'.$i)) {
-                    case 'anim': $piste->chooseAnim(); break;
-                    case 'rivendell': $piste->chooseRivendell(); break;
-                    case 'star': $piste->chooseStar(); break;
+                if ($request->request->get('anim_'.$i)) {
+                  $piste->chooseAnim();
+                }
+                if ($request->request->get('rivendell_'.$i)) {
+                  $piste->chooseRivendell();
+                }
+                if ($request->request->get('star_'.$i)) {
+                  $piste->chooseStar();
                 }
 
                 $em->persist($piste);
@@ -441,10 +445,14 @@ class CdController extends DiscoController
                     $piste->setLangue(false);
                 }
 
-                switch($request->request->get('rot_'.$i)) {
-                    case 'anim': $piste->chooseAnim(); break;
-                    case 'rivendell': $piste->chooseRivendell(); break;
-                    case 'star': $piste->chooseStar(); break;
+                if ($request->request->get('anim_'.$i)) {
+                  $piste->chooseAnim();
+                }
+                if ($request->request->get('rivendell_'.$i)) {
+                  $piste->chooseRivendell();
+                }
+                if ($request->request->get('star_'.$i)) {
+                  $piste->chooseStar();
                 }
 
                 $em->persist($piste);
@@ -487,14 +495,9 @@ class CdController extends DiscoController
                     $pistes[$i]['fr'] = 1;
                 } else { $pistes[$i]['fr'] = 0; }
 
-                $pistes[$i]['rivendell'] = 0;
-                $pistes[$i]['star'] = 0;
-                $pistes[$i]['anim'] = 0;
-                switch($request->request->get('rot_'.$i)) {
-                    case 'anim': $pistes[$i]['anim'] = 1; break;
-                    case 'rivendell':  $pistes[$i]['rivendell'] = 1; break;
-                    case 'star': $pistes[$i]['star'] = 1; break;
-                }
+                $pistes[$i]['rivendell'] = $request->request->get('rivendell_'.$i) ? 1 : 0;
+                $pistes[$i]['star'] = $request->request->get('star_'.$i) ? 1 : 0;
+                $pistes[$i]['anim'] = $request->request->get('anim_'.$i) ? 1 : 0;
             }
         }
         return $pistes;

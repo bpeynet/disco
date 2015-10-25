@@ -99,7 +99,7 @@
   	$("#nbPiste").change(function() {
   		var nbPiste = $("#nbPiste").val();
   		var table = $("#pistes > tbody");
-  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN' class='artiste_autocomplete'></td><td><input type='checkbox' class='fr_input' name='fr_NNN'></td><td><input type='radio' name='rot_NNN' value='anim'></td><td><input type='radio' name='rot_NNN' value='rivendell'></td><td><input class='k_star' type='radio' name='rot_NNN' value='star'></td></tr>";
+  		var template = "<tr id='track_NNN'><td>NNN</td><td><input name='titre_NNN' value='Track NNN'></td><td><input id='artiste_NNN' name='artiste_NNN' class='artiste_autocomplete'></td><td><input type='checkbox' class='fr_input' name='fr_NNN'></td><td><input type='checkbox' name='anim_NNN' value='1'></td><td><input type='checkbox' name='rivendell_NNN' value='1'></td><td><input class='k_star' type='checkbox' name='star_NNN' value='1'></td></tr>";
   		table.empty();
   		for (var i = 1; i <= nbPiste; i++) {
   			table.append(template.replace(/NNN/g, i));
