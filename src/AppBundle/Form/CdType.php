@@ -23,7 +23,7 @@ class CdType extends AbstractType
                     'input' => 'datetime',
                     'format' => 'dd/MM/yyyy',
                     'required' => false))
-            ->add('annee','text', array('required' => true, 'data' => date('Y')))
+            ->add('annee','text', array('required' => true))
             ->add('label', 'text', array('required' => false, 'mapped' => false))
             ->add('maison', 'text', array('required' => false,'mapped' => false))
             ->add('distrib', 'text', array('required' => false, 'mapped' => false))

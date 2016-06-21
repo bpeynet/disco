@@ -128,7 +128,7 @@ class Cd
      *
      * @ORM\Column(name="annee", type="string", length=4, nullable=false)
      */
-    private $annee = '';
+    private $annee = '0000';
 
     /**
      * @var Type
@@ -336,6 +336,12 @@ class Cd
      * @ORM\Column(name="ecoute", type="string")
      */
     private $ecoute = null;
+
+    public function __construct() {
+        $this->dsortie = new \DateTime();
+        $this->dsaisie = new \DateTime();
+        $this->annee = date('Y');
+    }
 
 
     /**
@@ -1279,11 +1285,6 @@ class Cd
     public function getEcoute()
     {
         return $this->ecoute;
-    }
-
-    public function __construct() {
-        $this->dsortie = new \DateTime();
-        $this->dsaisie = new \DateTime();
     }
 
     public function getCoverFilename()
