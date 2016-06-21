@@ -13,6 +13,10 @@
 
 <h1>Liste des derniers Airplays <a href="{{path('createAirplay')}}" class="btn btn-success">Nouvel Airplay</a></h1>
 
+<p>
+	<b>Note :</b> la page "Airplay" du site affiche les deux premiers de la liste ci-dessous, dans cet ordre (ils sont classés par date de modification).
+</p>
+
 {% if airplays %}
 <div class="responsive-table">
 	<table class="table table-striped table-hover">
@@ -27,7 +31,7 @@
 		<form id="publication" method="post" action="">
 		{% for airplay in airplays %}
 			<tr onclick="seeAirplay({{airplay.airplay}})">
-				<td>{{airplay.dmodif|date("d/m/Y")}}</td>
+				<td>{{airplay.dmodif|date("d/m/Y H:i")}}</td>
 				<td>{{airplay.libelle}}</td>
 				<td>
 					{% if not airplay.publie %}
@@ -40,7 +44,7 @@
 
 	</table>
 		<input id="non_publies" name="non_publies" type="text" class="hidden">
-		<button type="submit" class="btn btn-success pull-right">Enregistrer</button>
+		<button type="submit" class="btn btn-success pull-right">Enregistrer les publications</button>
 		</form>
 
 </div>

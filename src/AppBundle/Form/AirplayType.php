@@ -18,7 +18,7 @@ class AirplayType extends AbstractType
             ->add('libelle','text')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

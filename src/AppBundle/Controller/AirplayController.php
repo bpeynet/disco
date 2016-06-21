@@ -25,7 +25,7 @@ class AirplayController extends DiscoController
         $limit = 10;
         if($page < 1 ) {$page = 1;}
         $airplays = $em->getRepository('AppBundle:Airplay')->createQueryBuilder('a')
-            ->orderBy('a.airplay','DESC')
+            ->orderBy('a.dmodif','DESC')
             ->setFirstResult(($page-1)*10)
             ->setMaxResults($limit)
             ->getQuery()
@@ -168,16 +168,17 @@ class AirplayController extends DiscoController
     /**
      * Permet de sauver l'état de l'Airplay
      */
-    private function saveAirplay($airplay, $request, $rq, $cUser = false)
+    private function saveAirplay($airplay, $request, $rq, $isCreation = false)
     {
         $em = $this->getDoctrine()->getManager();
         $ecoute_manquant = 0;
 
         $user = $this->get('security.context')->getToken()->getUser();
-        if ($cUser) {
+        if ($isCreation) {
             $airplay->setCuser($user);
         }
         $airplay->setMuser($user);
+        $airplay->setDmodif(new \DateTime());
 
         $classement = explode(",", $request->request->get('classement'));
 
@@ -243,7 +244,8 @@ class AirplayController extends DiscoController
             'generation'=>$generatedAirplay,
             'types' => $types,
             'date_mini' => $date_mini,
-            'types_check' => $type
+            'types_check' => $type,
+            'airplay' => $form->getData()
         ));
     }
 

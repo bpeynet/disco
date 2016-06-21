@@ -7,9 +7,11 @@
 
 	<fieldset>
 		<legend>Création d'Airplay</legend>
+{#
 		<form id="addCd">
 			<input type="text" id="newCD"><button type="submit" class="btn btn-info">Ajouter le CD</button>
 		</form>
+#}
 		<div class="row">
 			<form method="post" action="{{path('createAirplay')}}" id="types_table">
 				<div class="col-md-8">
@@ -115,6 +117,7 @@
 		var date_mini = "{{date_mini|date('d/m/Y')}}";
 		$(".datepicker").datepicker('setDate',date_mini);
 
+{#
 		$( "#newCD" ).autocomplete({
 				source: "{{path('autocompleteTitre',{'like':1})}}",
 				minLength: 2,
@@ -137,6 +140,7 @@
 		new_row += "</tr>";
 
 		bindAddCd(new_row);
+#}
 
 		$("#airplay_form").submit(function(event){
 			$("#classement").val("");
