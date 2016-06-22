@@ -11,7 +11,7 @@ Disco permet de:
  * répertorier les Albums/EPs/Compilations/Singles
  * les retrouver par artiste, par label, par style(s), par langue(s), par support
  * distinguer quelles pistes sont en Français, dans l'automate de diffusion, ou recommandées aux animateurs
- * publier [l'Airplay](http://www.campusgrenoble.org/disco/airplay/published) du moment
+ * publier [l'Airplay](http://campusgrenoble.org/airplay/) du moment
  * imprimer des paquets d'étiquettes (pour conserver les supports physiques)
  * faire un retour d'écoute et de sélection par e-mail au(x) label(s)
 
