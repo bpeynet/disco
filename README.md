@@ -2,11 +2,27 @@
 
 L'application qui gère la discothèque de [Campus Grenoble](http://campusgrenoble.org)!
 
-Basée sur le framework [Symfony](http://symfony.com/).
+Elle est faite pour faciliter la programmation musicale collaborative,
+de garder une trace et évaluation des milliers de disques sur les étagères de la radio,
+et de la transmettre aux labels, au réseau Campus France ou aux auditeurs.
 
-Requiert PHP 5.5
+Disco permet de:
+
+ * répertorier les Albums/EPs/Compilations/Singles
+ * les retrouver par artiste, par label, par style(s), par langue(s), par support
+ * distinguer quelles pistes sont en Français, dans l'automate de diffusion, ou recommandées aux animateurs
+ * publier [l'Airplay](http://www.campusgrenoble.org/disco/airplay/published) du moment
+ * imprimer des paquets d'étiquettes (pour conserver les supports physiques)
+ * faire un retour d'écoute et de sélection par e-mail au(x) label(s)
+
+Dans Disco on distingue trois rôles. Le principal est celui de Programmateur, il
+permet notamment de renseigner de nouveaux disques/artistes/labels, de les noter/commenter et
+d'éditer un airplay. Le second rôle permet la consultation, et le troisième la gestion des accès.
+
 
 ## Installation
+
+Disco est basée sur le framework [Symfony](http://symfony.com/), et requiert PHP 5.5 et MySQL.
 
 Créer les tables dans la base de données et importer les données de base :
 tout est dans le script docs/sql/base_vide.sql
