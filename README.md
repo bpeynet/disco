@@ -2,9 +2,10 @@
 
 L'application qui gère la discothèque de [Campus Grenoble](http://campusgrenoble.org)!
 
-Elle est faite pour faciliter la programmation musicale collaborative,
-de garder une trace et évaluation des milliers de disques sur les étagères de la radio,
-et de la transmettre aux labels, au réseau Campus France ou aux auditeurs.
+Elle est faite pour faciliter la programmation musicale collaborative.
+L'appli garde une trace des milliers de disques sur les étagères de la radio,
+mais aussi des sélections de morceaux et leur évaluation.
+On peut ensuite les transmettre aux labels, au réseau Campus France ou au public.
 
 Disco permet de:
 
