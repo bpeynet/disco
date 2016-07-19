@@ -12,6 +12,13 @@ class ClassTwigExtension extends \Twig_Extension
         );
     }
 
+    public function getFilters()
+    {
+        return array(
+            'music_length' => new \Twig_Filter_Method($this, 'lengthFilter')
+        );
+    }
+
     public function getName()
     {
         return 'class_twig_extension';
@@ -21,4 +28,13 @@ class ClassTwigExtension extends \Twig_Extension
     {
         return (new \ReflectionClass($object))->getShortName();
     }
+
+    public function lengthFilter($ms) {
+        $h = floor($ms/3600/1000);
+        $m = floor($ms/60/1000) % 60;
+        $s = floor($ms/1000) % 60;
+        return "{$h}h {$m}min {$s}s";
+    }
+
+
 }

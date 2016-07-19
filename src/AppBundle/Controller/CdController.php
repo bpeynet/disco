@@ -8,6 +8,7 @@ use AppBundle\Entity\Cd;
 use AppBundle\Entity\CdNote;
 use AppBundle\Entity\CdComment;
 use AppBundle\Entity\Piste;
+use AppBundle\Entity\Audio;
 use AppBundle\Form\CdType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +17,17 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Validator\Constraints\EmailValidator;
 use HTML2PDF;
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Component\Debug\Debug;
+use Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\Debug\ExceptionHandler;
+
+Debug::enable();
+ErrorHandler::register();
+ExceptionHandler::register();
 
 class CdController extends DiscoController
 {
@@ -25,10 +36,10 @@ class CdController extends DiscoController
      */
     public function indexAction(Request $request)
     {
+        
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Une connexion est nécessaire.');
-
     	$doctrine = $this->getDoctrine();
-	    $em = $doctrine->getManager();
+	$em = $doctrine->getManager(); 
     	$limit = $this->container->getParameter('listinglimit');
 
     	$retour = null;
@@ -109,13 +120,15 @@ class CdController extends DiscoController
             }
 
     	} else {
-    		$retour = $em->getRepository('AppBundle:Cd')->createQueryBuilder('c')
-                ->where('c.suppr != 1')
-    			->orderBy('c.cd','DESC')
-    			->setMaxResults($limit)
-    			->getQuery()
-    			->getResult();
+    		$retour = $em->getRepository('AppBundle:Cd')
+                    ->createQueryBuilder('c')
+                    ->where('c.suppr != 1')
+                    ->orderBy('c.cd','DESC')
+                    ->setMaxResults($limit)
+                    ->getQuery()
+                    ->getResult();
     	}
+        
 
         return $this->render('cd/search.html.twig',array(
 	        	'recherche'=>$retour,
@@ -177,18 +190,17 @@ class CdController extends DiscoController
      */
 	public function deleteAction($id) {
         $this->denyAccessUnlessGranted('ROLE_PROGRA', null, 'Seul un programmateur peut supprimer un disque.');
+        $em = $this->getDoctrine()->getManager();
+        $cd = $this->getDoctrine()
+            ->getRepository('AppBundle:Cd')
+            ->find($id);
 
-		$cd = $this->getDoctrine()
-			->getRepository('AppBundle:Cd')
-			->find($id);
-
-		if(!$cd) {
-			throw $this->createNotFoundException(
+	if(!$cd) {
+            throw $this->createNotFoundException(
             	'Aucun cd trouvé pour cet id : '.$id
-        	);
-		}
+            );
+        }
 
-		$em = $this->getDoctrine()->getManager();
         $cd->setSuppr(1);
         $em->persist($cd);
         $em->flush();
@@ -391,7 +403,6 @@ class CdController extends DiscoController
             ));
 
         $req = $request->request->get('appbundle_cd');
-
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
         $pistes_var['full_fr'] = false;
@@ -404,6 +415,7 @@ class CdController extends DiscoController
         }
 
         if($form->isValid() && $valid) {
+                
             $cd->setLabel(null);
             $cd->setMaison(null);
             $cd->setDistrib(null);
@@ -426,7 +438,8 @@ class CdController extends DiscoController
                 $cd->setDistrib($distrib);
             }
 
-            for($i = 1; $i <= $req['nbPiste']; $i++) {
+            $nbPiste = $req['nbPiste'];
+            for($i = 1; $i <= $nbPiste ; $i++) {
                 $piste = new Piste();
                 $piste->setCd($cd);
                 $piste->setPiste($i);
@@ -460,13 +473,13 @@ class CdController extends DiscoController
 
             $em->persist($cd);
             $em->flush();
-
             $num = $cd->getCd();
-
-            $this->discoLog("a créé le CD $num ".$cd->getTitre());
-            $this->addFlash('success','Le CD a bien été créé !');
-
-            return $this->redirect($this->generateUrl('showCd',array('id'=>$num)));
+            
+            $this->discoLog("a créé le CD ".$num." '".$cd->getTitre()."'");
+            //Quand le formulaire validé a été traité, on redirige
+            //vers les pages d'upload en commençant par la première piste.
+            //Cela va déclencher la méthode uploadAction.
+            return $this->redirect($this->generateUrl('upload',array('id'=>$num, 'nbPiste' => $nbPiste, 'track' => 1)));
 
         } else {
             if ($request->isMethod('POST')) {
@@ -1038,5 +1051,108 @@ class CdController extends DiscoController
             return $this->redirect($this->generateUrl('listeEtiquettes'));
         }
     }
+    
+    /**
+     * @Template()
+     * @Route("/cd/upload/{id}/{nbPiste}/{track}", name="upload")
+     */
+    public function uploadAction(Request $request, $id, $nbPiste, $track) {
+        $audio = new Audio();
+        $audio->setCd($id);
+        $audio->setPiste($track);
+        
+        // Vérifie s'il nous reste des pistes à traiter
+        if($track<= $nbPiste) {
+            //Trouve le CD qui vient d'être ajouté dans Disco.
+            $cd = $this->getDoctrine()
+                            ->getRepository('AppBundle:Cd')
+                            ->find($id);
+            // Vérifie si on veut envoyer la piste à Rivendell
+            if(!$cd->getPistes()[$track-1]->getRivendell()) {
+                //Si on ne veut pas envoyer cette piste, on passe à la suivante.
+                $track ++;
+                return $this->redirect($this->generateUrl('upload',array('id'=>$id,'nbPiste'=>$nbPiste,'track'=>$track)));
+            }
+            //Préparation du formulaire
+            $form = $this->createFormBuilder($audio)
+                ->add('file')
+                ->getForm();
 
+            $form->handleRequest($request);
+            $em = $this->getDoctrine()->getManager();
+            
+           if($form->isValid()) {
+                $em->persist($audio);
+                $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $stylesArray = $cd->getStyles();
+                $styles = array();
+                //On récupère pour chaque objet Genre associé au CD
+                //l'id associé à ce genre.
+                for($i=0;$i<count($stylesArray);$i++) {
+                    $styles[] = $stylesArray[$i]->getGenre();
+                }
+                //On prépare un tableau contenant tous les détails qui concernent
+                //cette piste.
+                $dataArray = array('titre' => $cd->getPistes()[$track-1]->getTitre(),
+                            'artiste'=> $cd->getArtiste()->getLibelle(),
+                            'album' => $cd->getTitre(),
+                            'genre' => $cd->getGenre()->getGenre(),
+                            'styles' => $styles,
+                            'fr' => $cd->getPistes()[$track-1]->getLangue(),
+                            'numPiste' => $track
+                );
+                $dataJson = json_encode($dataArray);
+                //Signature du tableau de données formaté en JSON
+                $sign = hash_hmac("sha256", $dataJson, $this->container->getParameter('api_key'), false);
+                //Signature du fichier
+                $f_sign = hash_hmac_file("sha256", $audio->getAbsolutePath(), $this->container->getParameter('api_key'), false);
+                //XOR des deux signatures
+                $x = bin2hex(pack('H*',$sign) ^ pack('H*',$f_sign));
+                //Au cas où la chaîne renvoyée par le XOR ne fait pas 64 caractères
+                //on rajoute devant les 0.
+                $x = str_repeat("0", 64-strlen($x)).$x;
+                //Préparation de ce qu'il va falloir envoyer dans la requête HTTP
+                //dans le corps
+                $data = array('data' => $dataJson, 
+                            'multifile_0' => new \CURLFile($audio->getAbsolutePath()),
+                            'accept' => 'on' 
+                        );
+                //et en en-tête
+                $httpheaders = array(
+                    "Signature:$x"
+                );
+                //Envoi
+                $this->triggerHTTP($data, 'importer',0,$httpheaders);
+                $em->remove($audio);
+                $em->flush();
+                $this->discoLog("a envoyé la piste $track du CD $id sur Rivendell");
+                //On passe à la suite
+                $track++;
+                return $this->redirect($this->generateUrl('upload',array('id'=>$id,'nbPiste'=>$nbPiste,'track'=>$track)));
+           }
+           
+           return $this->render('cd/upload.html.twig',array('form' => $form->createView(), 'id' => $id, 'nbPiste' => $nbPiste, 'track' => $track));
+        }
+        else {
+        //A la fin des uploads, retour sur la fiche du CD
+            $this->addFlash('success','Le CD a bien été créé !');
+            return $this->redirect($this->generateUrl('showCd',array('id'=>$id)));           
+        }
+    }
+    
+    /**
+     * @Route("/cd/skip/{id}/{nbPiste}/{track}", name="skip")
+     */
+    public function skipAction(Request $request, $id, $nbPiste, $track){
+        $em = $this->getDoctrine()->getManager();
+        $cd = $this->getDoctrine()
+                            ->getRepository('AppBundle:Cd')
+                            ->find($id);
+        $cd->getPistes()[$track-1]->setRivendell(false);
+        $em->persist($cd);
+        $em->flush();
+        $track ++;
+        return $this->redirect($this->generateUrl('upload',array('id'=>$id,'nbPiste'=>$nbPiste,'track'=>$track)));
+    }
 }
