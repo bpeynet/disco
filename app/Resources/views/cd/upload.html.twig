@@ -1,0 +1,19 @@
+{% block title %}Téléchargement de Titre{% endblock %}
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+	<fieldset>
+		<legend>Téléchargement de la piste n°{{track}} </legend>
+                
+                {{ form_start(form) }}
+		<div class="col-xs-4">
+                    {{form_row(form.file,{'label':'Fichier audio'})}}
+                </div>
+                <a href="{{ path('skip',{'id':id, 'nbPiste' :nbPiste, 'track' :track}) }}" class="btn btn-default">Skip</a>
+                <input type="submit" class="btn btn-default"/>
+                {{ form_end(form) }}
+	</fieldset>
+
+{% endblock %}

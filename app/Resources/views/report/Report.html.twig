@@ -1,0 +1,106 @@
+{% block title %}Demande de rapport{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <fieldset>
+        <legend>Rapport de diffusion selon les logs
+            {% if choix['begin_date'] == choix['end_date'] %}
+                du {{ choix['begin_date'] }}
+            {% else %}
+                entre le
+                {{ choix['begin_date'] }} et le {{ choix['end_date'] }}
+            {% endif %}
+        </legend>
+        Pour les styles :
+        {% for style in choix['styles'] %}
+            {% for genre in genres %}
+                {% if genre.genre == style %}
+                    {{genre.libelle}}
+                {% endif %}
+            {% endfor %}
+            {% if loop.index < loop.length-1 %}- {% endif %}
+        {% endfor %}
+    </fieldset>
+        {% if resultat is null %}
+            <br><p style='font-weight: bold'>Le serveur Rails n'a pas répondu.</p>
+        {% elseif resultat['error'] is defined %}
+            <p>Pas d'archive accessible pour cette date (<20/09/2014)</p>
+        {% else %}
+            <br>
+
+        <p>La somme des pourcentages n'est pas nécessairement égale à 100% car certains titres peuvent appartenir à plusieurs genres.</p>
+        <div class="col-md-12">
+            <table class="table" style="text-align: center">
+                <thead>
+                    <tr>
+                        <th style="text-align: center">Style</th>
+                        <th style="text-align: center">Nombre de morceaux</th>
+                        <th style="text-align: center">Nombre de morceaux distincts</th>
+                        <th style="text-align: center">Temps selon les logs</th>
+                        <th style="text-align: center">Pourcentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for style in choix['styles'] %}
+                        <tr>
+                            <td>
+                                {% for genre in genres %}
+                                    {% if genre.genre == style %}
+                                        {{genre.libelle}}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if resultat[style]['count'] is null %}
+                                    {{"Style inconnu dans Rivendell"}}
+                                {% else %}
+                                    {{resultat[style]['count']}}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if resultat[style]['count'] is null %}
+                                {% else %}
+                                    {{resultat[style]['distinct']}}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if resultat[style]['count'] is null %}
+                                {% else %}
+                                    {{resultat[style]['length']|music_length}}
+                                {% endif %}
+                            </td>
+                            <td>    
+                                {% set pourcent = (100*resultat[style]['length']/resultat['total']['length'])|number_format(0) %}
+                                {{pourcent}}%
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>Playlist</td>
+                        <td>{{resultat['playlist']['count']}}</td>
+                        <td>{{resultat['playlist']['distinct']}}</td>
+                        <td>{{resultat['playlist']['length']|music_length}}</td>
+                        <td>
+                            {% set pourcent = (100*resultat['playlist']['length']/resultat['total']['length'])|number_format(0) %}
+                            {{pourcent}}%
+                        </td>
+                    </tr>
+                </tbody>
+                <thead>
+                    <tr>
+                        <th style="text-align: center">Total</th>
+                        <th style="text-align: center">{{resultat['total']['count']}}</th>
+                        <th style="text-align: center">{{resultat['total']['distinct']}}</th>
+                        <th style="text-align: center">{{resultat['total']['length']|music_length}}</th>
+                        <th style="text-align: center">100%</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{asset('js/cd.js')}}"></script>
+{% endblock %}

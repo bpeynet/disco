@@ -1,0 +1,39 @@
+{% block title %}Demande de rapport{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <fieldset>
+        <legend>Demande de rapport</legend>
+        <form role="form" action="report/asked" method="post">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="begin_date">Date de début</label>
+                    <input type="date" class="form-control" id="begin_date"
+                           name="begin_date"  placeholder="Entrer une date au format dd/mm/yyyy" required>
+                </div>
+                <div class="form-group">
+                    <label for="end_date">Date de fin</label>
+                    <input type="date" class="form-control" id="end_date"
+                           name="end_date" placeholder="Entrer une date au format dd/mm/yyyy" required>
+                </div>
+            </div>
+            <div class="select col-md-3 text-center form-group">
+                <label style="display:block">Styles</label>
+                <select id='genres' name='styles[]' style='height:200px' multiple required>
+                    {% for genre in genres %}
+                        <option value={{genre.genre}}>{{genre.libelle}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <button type="submit" class="btn btn-default">Demander</button>
+            </div>
+        </form>
+    </fieldset>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{asset('js/cd.js')}}"></script>
+{% endblock %}
